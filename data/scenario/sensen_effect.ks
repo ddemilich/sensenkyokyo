@@ -61,7 +61,7 @@ class StepByStepEffect extends Effect {
             return;
         }
 
-        selfDisp.charaInstance.changeSp(50);
+        selfDisp.charaInstance.changeSp(1);
         console.log(`[${selfDisp.charaInstance.name}] のSPが 1 上昇しました。残り: ${selfDisp.charaInstance.sp}`);
         dispatch('CHARA_SPBAR_REFRESH', {
             source: selfDisp,
@@ -220,6 +220,9 @@ class BuddyBonding extends Effect {
             selfDisp.charaInstance.applyMultiplicativeApBuff('BuddyBonding', 1.5);
             // アクション＋１
             selfDisp.charaInstance.applyActionCountBuff('BuddyBonding', 1);
+            dispatch('HEROINE_ENABLE_BUDDY_BONDING', {
+                heroine: selfDisp
+            });
         }
     }
 }

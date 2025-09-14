@@ -139,7 +139,7 @@ class LambdaGuardCounter extends Action {
             targetCharaInstance.takeDamage(actualDamage.actualTotalDamage);
             console.log(`[${source.charaInstance.name}] が [${targetCharaInstance.name}] に ${damage} ダメージを与えました。残りLP: ${targetCharaInstance.lp}`);
 
-            dispatch('HEROINE_DAMAGE_DISPLAY_FIT', {
+            dispatch('HEROINE_DAMAGE_GUARD_COUNTER', {
                 source: source,
                 target: targetCharaDispData,
                 amount: actualDamage.actualTotalDamage,
@@ -158,7 +158,6 @@ class LightningSunday extends Action {
     constructor() {
         super('LightningSunday', 'Ultimate');
         this.needTarget = false;
-        this.execCount = 0;
     }
     decideTargetCharaDisplayData(source, allEnemies, allHeroines) {
         return null;
@@ -167,10 +166,11 @@ class LightningSunday extends Action {
         // 全SP消費
         source.charaInstance.useSpByUltimate();
         let healAmount = source.charaInstance.maxLp;
-        if (this.execCount != 0) {
+        if (source.charaInstance.ultimateUsed) {
             healAmount = Math.floor(source.charaInstance.maxLp * 0.3);
+        } else {
+            source.charaInstance.ultimateUsed = true;
         }
-        this.execCount += 1;
         source.charaInstance.heal(healAmount);
         source.charaInstance.wearLevel = 1;
         source.charaInstance.er = 0;

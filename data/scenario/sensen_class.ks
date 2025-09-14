@@ -474,8 +474,10 @@ class Heroine extends Character {
         this.activeEffects.push(new CooldownEffect());
         this.activeEffects.push(new BuddyBonding());
 
-        // アルティメット使用
+        // アルティメット選択
         this.decideUltimate = false;
+        // アルティメット使用済
+        this.ultimateUsed = false;
         // 救出使用
         this.decideRescue = false;
     }

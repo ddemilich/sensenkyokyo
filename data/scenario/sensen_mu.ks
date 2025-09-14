@@ -84,7 +84,7 @@ class MuChargeBurst extends Action {
 
             console.log(`[${source.charaInstance.name}] が [${targetCharaInstance.name}] に ${damage} ダメージを与えました。残りLP: ${targetCharaInstance.lp}`);
 
-            dispatch('HEROINE_DAMAGE_DISPLAY_FIT', {
+            dispatch('HEROINE_DAMAGE_MU_CHARGE', {
                 source: source,
                 target: targetCharaDispData,
                 amount: actualDamage.actualTotalDamage,
@@ -138,7 +138,7 @@ class MuGuardCounter extends Action {
             targetCharaInstance.takeDamage(actualDamage.actualTotalDamage);
             console.log(`[${source.charaInstance.name}] が [${targetCharaInstance.name}] に ${damage} ダメージを与えました。残りLP: ${targetCharaInstance.lp}`);
 
-            dispatch('HEROINE_DAMAGE_DISPLAY_FIT', {
+            dispatch('HEROINE_DAMAGE_GUARD_COUNTER', {
                 source: source,
                 target: targetCharaDispData,
                 amount: actualDamage.actualTotalDamage,
@@ -156,7 +156,6 @@ class AdrenalineRush extends Action {
     constructor() {
         super('AdrenalineRush', 'Ultimate');
         this.needTarget = false;
-        this.execCount = 0;
     }
     decideTargetCharaDisplayData(source, allEnemies, allHeroines) {
         return null;
@@ -165,10 +164,11 @@ class AdrenalineRush extends Action {
         // 全SP消費
         source.charaInstance.useSpByUltimate();
         let healAmount = source.charaInstance.maxLp;
-        if (this.execCount != 0) {
+        if (source.charaInstance.ultimateUsed) {
             healAmount = Math.floor(source.charaInstance.maxLp * 0.3);
+        } else {
+            source.charaInstance.ultimateUsed = true;
         }
-        this.execCount += 1;
         source.charaInstance.heal(healAmount);
         source.charaInstance.wearLevel = 1;
         source.charaInstance.er = 0;
@@ -384,63 +384,74 @@ class HeroineMu extends Heroine {
 window.HeroineMu = HeroineMu;
 [endscript]
 ; ゲーム開始時にキャラクタ定義する
+[macro name="adrenaline_rush"]
+    ;mp.mu_disp
+    ;mp.amount
+    [anim name="&mp.mu_disp.charaInstance.name" left="-=50" time="100" effect="easeInCirc"][wa]
+    [heal_to chara="&mp.mu_disp.charaInstance" healValue="&mp.amount" x="&mp.mu_disp.x" y="&mp.mu_disp.y"]
+    [heroine_mod heroine="&mp.mu_disp.charaInstance" time="100"]
+    [anim name="&mp.mu_disp.charaInstance.name" left="+=50" time="100" effect="easeInCirc"][wa]
+    [image layer="8" folder="fgimage" storage="chara/effects/AdrenalineRush.webp" left="&mp.mu_disp.x" top="&mp.mu_disp.y" width="&mp.mu_disp.charaInstance.width" wait="false"]
+    [wait time="1000"]
+    [freeimage layer="8" wait="true"]
+[endmacro]
 [chara_new name="mu" storage="chara/mu/mu_base.png" width="500" height="702"]
     [chara_face name="mu" face="base" storage="chara/mu/mu_base.png"]
-        [chara_layer name="mu" part="wear" id="base1"storage="chara/mu/mu_base_wear_1.png" zindex="1"]
-        [chara_layer name="mu" part="wear" id="base2"storage="chara/mu/mu_base_wear_2.png" zindex="1"]
-        [chara_layer name="mu" part="wear" id="base3"storage="chara/mu/mu_base_wear_3.png" zindex="1"]
-        [chara_layer name="mu" part="head" id="base1"storage="chara/mu/mu_base_head_1.webp" zindex="10"]
-        [chara_layer name="mu" part="head" id="base2"storage="chara/mu/mu_base_head_2.webp" zindex="10"]
-        [chara_layer name="mu" part="head" id="base3"storage="chara/mu/mu_base_head_3.webp" zindex="10"]
+        [chara_layer name="mu" part="wear" id="base1" storage="chara/mu/mu_base_wear_1.png" zindex="1"]
+        [chara_layer name="mu" part="wear" id="base2" storage="chara/mu/mu_base_wear_2.png" zindex="1"]
+        [chara_layer name="mu" part="wear" id="base3" storage="chara/mu/mu_base_wear_3.png" zindex="1"]
+        [chara_layer name="mu" part="head" id="base1" storage="chara/mu/mu_base_head_1.webp" zindex="10"]
+        [chara_layer name="mu" part="head" id="base2" storage="chara/mu/mu_base_head_2.webp" zindex="10"]
+        [chara_layer name="mu" part="head" id="base3" storage="chara/mu/mu_base_head_3.webp" zindex="10"]
     [chara_face name="mu" face="attack" storage="chara/mu/mu_attack.png"]
-        [chara_layer name="mu" part="wear" id="attack1"storage="chara/mu/mu_attack_wear_1.png" zindex="1"]
-        [chara_layer name="mu" part="wear" id="attack2"storage="chara/mu/mu_attack_wear_2.png" zindex="1"]
-        [chara_layer name="mu" part="wear" id="attack3"storage="chara/mu/mu_attack_wear_3.png" zindex="1"]
-        [chara_layer name="mu" part="head" id="attack1"storage="chara/mu/mu_attack_head_1.png" zindex="10"]
-        [chara_layer name="mu" part="head" id="attack2"storage="chara/mu/mu_attack_head_2.png" zindex="10"]
-        [chara_layer name="mu" part="head" id="attack3"storage="chara/mu/mu_attack_head_3.png" zindex="10"]
+        [chara_layer name="mu" part="wear" id="attack1" storage="chara/mu/mu_attack_wear_1.png" zindex="1"]
+        [chara_layer name="mu" part="wear" id="attack2" storage="chara/mu/mu_attack_wear_2.png" zindex="1"]
+        [chara_layer name="mu" part="wear" id="attack3" storage="chara/mu/mu_attack_wear_3.png" zindex="1"]
+        [chara_layer name="mu" part="head" id="attack1" storage="chara/mu/mu_attack_head_1.png" zindex="10"]
+        [chara_layer name="mu" part="head" id="attack2" storage="chara/mu/mu_attack_head_2.png" zindex="10"]
+        [chara_layer name="mu" part="head" id="attack3" storage="chara/mu/mu_attack_head_3.png" zindex="10"]
         [chara_layer name="mu" part="attacking_l" id="default" storage="none" zindex="11"]
-        [chara_layer name="mu" part="attacking_l" id="wait1"storage="chara/mu/mu_attack_left_wear_1.png" zindex="11"]
-        [chara_layer name="mu" part="attacking_l" id="wait2"storage="chara/mu/mu_attack_left_wear_1.png" zindex="11"]
+        [chara_layer name="mu" part="attacking_l" id="wait1" storage="chara/mu/mu_attack_left_wear_1.png" zindex="11"]
+        [chara_layer name="mu" part="attacking_l" id="wait2" storage="chara/mu/mu_attack_left_wear_1.png" zindex="11"]
         [chara_layer name="mu" part="attacking_l" id="wait3" storage="chara/mu/mu_attack_left_wear_2.png" zindex="11"]
-        [chara_layer name="mu" part="attacking_l" id="attacking1"storage="chara/mu/mu_attack_l_01_animation_loop.webp" zindex="11"]
-        [chara_layer name="mu" part="attacking_l" id="attacking2"storage="chara/mu/mu_attack_l_01_animation_loop.webp" zindex="11"]
+        [chara_layer name="mu" part="attacking_l" id="attacking1" storage="chara/mu/mu_attack_l_01_animation_loop.webp" zindex="11"]
+        [chara_layer name="mu" part="attacking_l" id="attacking2" storage="chara/mu/mu_attack_l_01_animation_loop.webp" zindex="11"]
         [chara_layer name="mu" part="attacking_l" id="attacking3" storage="chara/mu/mu_attack_l_01_animation_loop.webp" zindex="11"]
         [chara_layer name="mu" part="attacking_r" id="default" storage="none" zindex="-1"]
-        [chara_layer name="mu" part="attacking_r" id="wait1"storage="chara/mu/mu_attack_right_wear_1.png" zindex="-1"]
-        [chara_layer name="mu" part="attacking_r" id="wait2"storage="chara/mu/mu_attack_right_wear_1.png" zindex="-1"]
+        [chara_layer name="mu" part="attacking_r" id="wait1" storage="chara/mu/mu_attack_right_wear_1.png" zindex="-1"]
+        [chara_layer name="mu" part="attacking_r" id="wait2" storage="chara/mu/mu_attack_right_wear_1.png" zindex="-1"]
         [chara_layer name="mu" part="attacking_r" id="wait3" storage="chara/mu/mu_attack_right_wear_2.png" zindex="-1"]
-        [chara_layer name="mu" part="attacking_r" id="attacking1"storage="chara/mu/mu_attack_r_01_animation_loop.webp" zindex="-1"]
-        [chara_layer name="mu" part="attacking_r" id="attacking2"storage="chara/mu/mu_attack_r_01_animation_loop.webp" zindex="-1"]
+        [chara_layer name="mu" part="attacking_r" id="attacking1" storage="chara/mu/mu_attack_r_01_animation_loop.webp" zindex="-1"]
+        [chara_layer name="mu" part="attacking_r" id="attacking2" storage="chara/mu/mu_attack_r_01_animation_loop.webp" zindex="-1"]
         [chara_layer name="mu" part="attacking_r" id="attacking3" storage="chara/mu/mu_attack_r_01_animation_loop.webp" zindex="-1"]
     [chara_face name="mu" face="guard" storage="chara/mu/mu_guard.png"]
-        [chara_layer name="mu" part="wear" id="guard1"storage="chara/mu/mu_guard_wear_1.png" zindex="1"]
-        [chara_layer name="mu" part="wear" id="guard2"storage="chara/mu/mu_guard_wear_2.png" zindex="1"]
-        [chara_layer name="mu" part="wear" id="guard3"storage="chara/mu/mu_guard_wear_3.png" zindex="1"]
-        [chara_layer name="mu" part="head" id="guard1"storage="chara/mu/mu_guard_head_1.png" zindex="10"]
-        [chara_layer name="mu" part="head" id="guard2"storage="chara/mu/mu_guard_head_2.png" zindex="10"]
-        [chara_layer name="mu" part="head" id="guard3"storage="chara/mu/mu_guard_head_3.png" zindex="10"]
+        [chara_layer name="mu" part="wear" id="guard1" storage="chara/mu/mu_guard_wear_1.png" zindex="1"]
+        [chara_layer name="mu" part="wear" id="guard2" storage="chara/mu/mu_guard_wear_2.png" zindex="1"]
+        [chara_layer name="mu" part="wear" id="guard3" storage="chara/mu/mu_guard_wear_3.png" zindex="1"]
+        [chara_layer name="mu" part="head" id="guard1" storage="chara/mu/mu_guard_head_1.png" zindex="10"]
+        [chara_layer name="mu" part="head" id="guard2" storage="chara/mu/mu_guard_head_2.png" zindex="10"]
+        [chara_layer name="mu" part="head" id="guard3" storage="chara/mu/mu_guard_head_3.png" zindex="10"]
     [chara_face name="mu" face="damaged" storage="chara/mu/mu_damaged.png"]
-        [chara_layer name="mu" part="wear" id="damaged1"storage="chara/mu/mu_damaged_wear_1.png" zindex="1"]
-        [chara_layer name="mu" part="wear" id="damaged2"storage="chara/mu/mu_damaged_wear_2.png" zindex="1"]
-        [chara_layer name="mu" part="wear" id="damaged3"storage="chara/mu/mu_damaged_wear_3.png" zindex="1"]
-        [chara_layer name="mu" part="head" id="damaged1"storage="chara/mu/mu_damaged_head_1.png" zindex="10"]
-        [chara_layer name="mu" part="head" id="damaged2"storage="chara/mu/mu_damaged_head_2.png" zindex="10"]
-        [chara_layer name="mu" part="head" id="damaged3"storage="chara/mu/mu_damaged_head_3.png" zindex="10"]
+        [chara_layer name="mu" part="wear" id="damaged1" storage="chara/mu/mu_damaged_wear_1.png" zindex="1"]
+        [chara_layer name="mu" part="wear" id="damaged2" storage="chara/mu/mu_damaged_wear_2.png" zindex="1"]
+        [chara_layer name="mu" part="wear" id="damaged3" storage="chara/mu/mu_damaged_wear_3.png" zindex="1"]
+        [chara_layer name="mu" part="head" id="damaged1" storage="chara/mu/mu_damaged_head_1.png" zindex="10"]
+        [chara_layer name="mu" part="head" id="damaged2" storage="chara/mu/mu_damaged_head_2.png" zindex="10"]
+        [chara_layer name="mu" part="head" id="damaged3" storage="chara/mu/mu_damaged_head_3.png" zindex="10"]
     [chara_face name="mu" face="down" storage="chara/mu/mu_down.png"]
-        [chara_layer name="mu" part="wear" id="down1"storage="chara/mu/mu_down_wear_1.png" zindex="10"]
-        [chara_layer name="mu" part="wear" id="down2"storage="chara/mu/mu_down_wear_2.png" zindex="10"]
-        [chara_layer name="mu" part="wear" id="down3"storage="chara/mu/mu_down_wear_3.png" zindex="10"]
-        [chara_layer name="mu" part="head" id="down1"storage="chara/mu/mu_down_head_1.png" zindex="10"]
-        [chara_layer name="mu" part="head" id="down2"storage="chara/mu/mu_down_head_2.png" zindex="10"]
-        [chara_layer name="mu" part="head" id="down3"storage="chara/mu/mu_down_head_3.png" zindex="10"]
+        [chara_layer name="mu" part="wear" id="down1" storage="chara/mu/mu_down_wear_1.png" zindex="10"]
+        [chara_layer name="mu" part="wear" id="down2" storage="chara/mu/mu_down_wear_2.png" zindex="10"]
+        [chara_layer name="mu" part="wear" id="down3" storage="chara/mu/mu_down_wear_3.png" zindex="10"]
+        [chara_layer name="mu" part="head" id="down1" storage="chara/mu/mu_down_head_1.png" zindex="10"]
+        [chara_layer name="mu" part="head" id="down2" storage="chara/mu/mu_down_head_2.png" zindex="10"]
+        [chara_layer name="mu" part="head" id="down3" storage="chara/mu/mu_down_head_3.png" zindex="10"]
     [chara_face name="mu" face="knockout" storage="chara/mu/mu_knockout.png"]
-        [chara_layer name="mu" part="wear" id="knockout1"storage="chara/mu/mu_knockout_wear_1.png" zindex="10"]
-        [chara_layer name="mu" part="wear" id="knockout2"storage="chara/mu/mu_knockout_wear_2.png" zindex="10"]
-        [chara_layer name="mu" part="wear" id="knockout3"storage="chara/mu/mu_knockout_wear_3.png" zindex="10"]
-        [chara_layer name="mu" part="head" id="knockout1"storage="chara/mu/mu_knockout_head_1.png" zindex="10"]
-        [chara_layer name="mu" part="head" id="knockout2"storage="chara/mu/mu_knockout_head_2.png" zindex="10"]
-        [chara_layer name="mu" part="head" id="knockout3"storage="chara/mu/mu_knockout_head_3.png" zindex="10"]
+        [chara_layer name="mu" part="wear" id="knockout1" storage="chara/mu/mu_knockout_wear_1.png" zindex="10"]
+        [chara_layer name="mu" part="wear" id="knockout2" storage="chara/mu/mu_knockout_wear_2.png" zindex="10"]
+        [chara_layer name="mu" part="wear" id="knockout3" storage="chara/mu/mu_knockout_wear_3.png" zindex="10"]
+        [chara_layer name="mu" part="head" id="knockout1" storage="chara/mu/mu_knockout_head_1.png" zindex="10"]
+        [chara_layer name="mu" part="head" id="knockout2" storage="chara/mu/mu_knockout_head_2.png" zindex="10"]
+        [chara_layer name="mu" part="head" id="knockout3" storage="chara/mu/mu_knockout_head_3.png" zindex="10"]
 [chara_new name="mu_normal_bundle" storage="chara/mu_normal_bundle/default.png" width="500" height="702"]
     [chara_face name="mu_normal_bundle" face="e11_Lv1_1" storage="chara/mu_normal_bundle/e11_Lv1_1.png"]
     [chara_face name="mu_normal_bundle" face="e11_Lv1_2" storage="chara/mu_normal_bundle/e11_Lv1_2.png"]

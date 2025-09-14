@@ -122,9 +122,13 @@ class BattleSection {
             eventName: 'HEROINE_DAMAGE_DISPLAY_NOMOTION',
             jumpLabel: '*battle_heroine_damage_display_nomotion'
         },
-        HEROINE_DAMAGE_DISPLAY_FIT: {
-            eventName: 'HEROINE_DAMAGE_DISPLAY_FIT',
-            jumpLabel: '*battle_heroine_damage_display_fit'
+        HEROINE_DAMAGE_GUARD_COUNTER: {
+            eventName: 'HEROINE_DAMAGE_GUARD_COUNTER',
+            jumpLabel: '*battle_heroine_damage_guard_counter'
+        },
+        HEROINE_DAMAGE_MU_CHARGE: {
+            eventName: 'HEROINE_DAMAGE_MU_CHARGE',
+            jumpLabel: '*battle_heroine_damage_mu_charge'
         },
         HEROINE_HEAL_DISPLAY: {
             eventName: 'HEROINE_HEAL_DISPLAY',
@@ -145,6 +149,10 @@ class BattleSection {
         HEROINE_RESCUE_BUNDLE: {
             eventName: 'HEROINE_RESCUE_BUNDLE',
             jumpLabel: '*battle_heroine_rescue_bundle'
+        },
+        HEROINE_ENABLE_BUDDY_BONDING: {
+            eventName: 'HEROINE_ENABLE_BUDDY_BONDING',
+            jumpLabel: '*battle_heroine_enable_buddy_bonding'
         },
         LAMBDA_LIGHTNING_SUNDAY: {
             eventName: 'LAMBDA_LIGHTNING_SUNDAY',
@@ -246,6 +254,8 @@ class BattleSection {
         this.heroines.push(this.mu);
 
         this.heroines.forEach((charaDisplayData, index) => {
+            // BattleSection毎にリセットされる
+            charaDisplayData.charaInstance.ultimateUsed = false;
             this.dispatch('HEROINE_APPEAR', { heroineDisp: charaDisplayData });
         });
 
@@ -886,7 +896,7 @@ window.BattleSection = BattleSection;
 ; layer4 : バフ、デバフアイコン
 ; layer5 : 固定の画像とか
 ; layer6 : じゃんけんアイコン
-; layer7 : の数字
+; layer7 : 常在エフェクト
 ; layer8 : ダメージや回復などのエフェクト
 ; layer9 : の数字
 
@@ -1482,9 +1492,20 @@ window.BattleSection = BattleSection;
 *battle_heroine_damage_display_nomotion
     [damage_to targetname="&tf.currentEvent.params.target.charaInstance.name" chara="&tf.currentEvent.params.target.charaInstance" damagevalue="&tf.currentEvent.params.amount" split="&tf.currentEvent.params.split" x="&tf.currentEvent.params.target.x" y="&tf.currentEvent.params.target.y"]
     [jump target="*process_battle_events_start"]
-*battle_heroine_damage_display_fit
+*battle_heroine_damage_guard_counter
     [anim name="&tf.currentEvent.params.source.charaInstance.name" left="&tf.currentEvent.params.target.x" top="&tf.currentEvent.params.target.y" time="100" effect="easeOutCirc"][wa]
     [anim name="&tf.currentEvent.params.source.charaInstance.name" left="&tf.currentEvent.params.source.x" top="&tf.currentEvent.params.source.y" time="200" effect="easeOutCirc"]
+    [image layer="8" name="guard_damage" folder="fgimage" storage="chara/effects/HeroineGuard.webp" wait="false" left="&tf.currentEvent.params.target.x" top="&tf.currentEvent.params.target.y" width="&tf.currentEvent.params.target.charaInstance.width"]
+    [wait time="150"]
+    [free layer="8" name="guard_damage"]
+    [damage_to targetname="&tf.currentEvent.params.target.charaInstance.name" chara="&tf.currentEvent.params.target.charaInstance" damagevalue="&tf.currentEvent.params.amount" split="&tf.currentEvent.params.split" x="&tf.currentEvent.params.target.x" y="&tf.currentEvent.params.target.y"]
+    [jump target="*process_battle_events_start"]
+*battle_heroine_damage_mu_charge
+    [anim name="&tf.currentEvent.params.source.charaInstance.name" left="&tf.currentEvent.params.target.x" top="&tf.currentEvent.params.target.y" time="100" effect="easeOutCirc"][wa]
+    [anim name="&tf.currentEvent.params.source.charaInstance.name" left="&tf.currentEvent.params.source.x" top="&tf.currentEvent.params.source.y" time="200" effect="easeOutCirc"]
+    [image layer="8" name="mucharge_damage" folder="fgimage" storage="chara/effects/MuCharge.webp" wait="false" left="&tf.currentEvent.params.target.x" top="&tf.currentEvent.params.target.y" width="&tf.currentEvent.params.target.charaInstance.width"]
+    [wait time="150"]
+    [free layer="8" name="mucharge_damage"]
     [damage_to targetname="&tf.currentEvent.params.target.charaInstance.name" chara="&tf.currentEvent.params.target.charaInstance" damagevalue="&tf.currentEvent.params.amount" split="&tf.currentEvent.params.split" x="&tf.currentEvent.params.target.x" y="&tf.currentEvent.params.target.y"]
     [jump target="*process_battle_events_start"]
 *battle_heroine_heal_display
@@ -1531,14 +1552,16 @@ window.BattleSection = BattleSection;
     [heroine_action_decision heroine="&tf.currentEvent.params.source" buddy="&tf.currentEvent.params.buddy" enemies="&tf.currentEvent.params.enemies"]
     [freeimage layer="5"]
     [jump target="*process_battle_events_start"]
+*battle_heroine_enable_buddy_bonding
+    [image layer="8" name="bonding" folder="fgimage" storage="chara/effects/BuddyBonding.webp" left="&tf.currentEvent.params.heroine.x" top="&tf.currentEvent.params.heroine.y" width="&tf.currentEvent.params.heroine.charaInstance.width"]
+    [wait time="500"]
+    [free layer="8" name="bonding"]
+    [jump target="*process_battle_events_start"]
 *battle_lambda_lightning_sunday
     [lightning_sunday lambda_disp="&tf.currentEvent.params.source" amount="&tf.currentEvent.params.amount" enemies="&tf.currentEvent.params.enemies"]
     [jump target="*process_battle_events_start"]
 *battle_mu_adrenaline_rush
-    [anim name="&tf.currentEvent.params.source.charaInstance.name" left="-=50" time="100" effect="easeInCirc"][wa]
-    [heal_to chara="&tf.currentEvent.params.source.charaInstance" healValue="&tf.currentEvent.params.amount" x="&tf.currentEvent.params.source.x" y="&tf.currentEvent.params.source.y"]
-    [anim name="&tf.currentEvent.params.source.charaInstance.name" left="+=50" time="100" effect="easeInCirc"][wa]
-    [heroine_mod heroine="&tf.currentEvent.params.source.charaInstance" time="100"]
+    [adrenaline_rush mu_disp="&tf.currentEvent.params.source" amount="&tf.currentEvent.params.amount"]
     [jump target="*process_battle_events_start"]
     
 *battle_chara_spbar_refresh
@@ -1551,6 +1574,7 @@ window.BattleSection = BattleSection;
     [layopt layer="4" visible="false"]
     [layopt layer="5" visible="false"]
     [layopt layer="6" visible="false"]
+    [layopt layer="7" visible="false"]
     [layopt layer="8" visible="false"]
     [layopt layer="9" visible="false"]
     [turn_text msg="！！勝利！！"]
@@ -1564,6 +1588,7 @@ window.BattleSection = BattleSection;
     [layopt layer="4" visible="false"]
     [layopt layer="5" visible="false"]
     [layopt layer="6" visible="false"]
+    [layopt layer="7" visible="false"]
     [layopt layer="8" visible="false"]
     [layopt layer="9" visible="false"]
     [turn_text msg="全滅しました・・・。"]

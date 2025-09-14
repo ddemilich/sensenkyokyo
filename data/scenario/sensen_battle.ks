@@ -118,9 +118,9 @@ class BattleSection {
             eventName: 'HEROINE_DAMAGE_DISPLAY',
             jumpLabel: '*battle_heroine_damage_display'
         },
-        HEROINE_DAMAGE_DISPLAY_NOMOTION: {
-            eventName: 'HEROINE_DAMAGE_DISPLAY_NOMOTION',
-            jumpLabel: '*battle_heroine_damage_display_nomotion'
+        HEROINE_DAMAGE_LAMBDA_CHARGE: {
+            eventName: 'HEROINE_DAMAGE_LAMBDA_CHARGE',
+            jumpLabel: '*battle_heroine_damage_lambda_charge'
         },
         HEROINE_DAMAGE_GUARD_COUNTER: {
             eventName: 'HEROINE_DAMAGE_GUARD_COUNTER',
@@ -1489,8 +1489,10 @@ window.BattleSection = BattleSection;
     [heroine_mod heroine="&tf.currentEvent.params.source.charaInstance" time="100"]
     [wa]
     [jump target="*process_battle_events_start"]
-*battle_heroine_damage_display_nomotion
+*battle_heroine_damage_lambda_charge
+    [image layer="8" name="lambda_charge" folder="fgimage" storage="chara/effects/LambdaCharge.webp" wait="false" left="&tf.currentEvent.params.target.x" top="&tf.currentEvent.params.target.y" width="&tf.currentEvent.params.target.charaInstance.width"]
     [damage_to targetname="&tf.currentEvent.params.target.charaInstance.name" chara="&tf.currentEvent.params.target.charaInstance" damagevalue="&tf.currentEvent.params.amount" split="&tf.currentEvent.params.split" x="&tf.currentEvent.params.target.x" y="&tf.currentEvent.params.target.y"]
+    [free layer="8" name="lambda_charge"]    
     [jump target="*process_battle_events_start"]
 *battle_heroine_damage_guard_counter
     [anim name="&tf.currentEvent.params.source.charaInstance.name" left="&tf.currentEvent.params.target.x" top="&tf.currentEvent.params.target.y" time="100" effect="easeOutCirc"][wa]

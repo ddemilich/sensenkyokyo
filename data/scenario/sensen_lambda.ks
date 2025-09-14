@@ -72,7 +72,6 @@ class LambdaChargeBurst extends Action {
         console.log(`[${source.charaInstance.name}] 溜め攻撃を実行！`);
         const damage = Math.floor(source.charaInstance.currentAp * 0.25);
 
-        // TODO: 移動エフェクトを作る
         const availableTargets = allEnemies.filter(eDisp => !eDisp.charaInstance.isDefeated() && !eDisp.charaInstance.bundled);
         if (availableTargets) {
             for (const targetDisp of availableTargets) {
@@ -82,7 +81,7 @@ class LambdaChargeBurst extends Action {
                 let actualDamage = targetDisp.charaInstance.applyDamageWithEvasion(separatedDamage.splitDamages, source.charaInstance.getHitRate());
                 targetCharaInstance.takeDamage(actualDamage.actualTotalDamage);
                 console.log(`[${source.charaInstance.name}] が [${targetCharaInstance.name}] に ${damage} ダメージを与えました。残りLP: ${targetCharaInstance.lp}`);
-                dispatch('HEROINE_DAMAGE_DISPLAY_NOMOTION', {
+                dispatch('HEROINE_DAMAGE_LAMBDA_CHARGE', {
                     source: source,
                     target: targetDisp,
                     amount: actualDamage.actualTotalDamage,
@@ -98,7 +97,6 @@ class LambdaChargeBurst extends Action {
                 amount: spAmount,
             });
         }
-        // TODO: 移動(元の場所に戻る)
     }
 }
 

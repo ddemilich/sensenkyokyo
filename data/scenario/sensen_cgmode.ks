@@ -408,10 +408,10 @@ window.CGMode = CGMode;
     [button graphic="&tf.cgmode.vs_char_button_img('e13')" enterimg="&tf.cgmode.vs_char_button_enterimg('e13')"  x="&tf.cgmode.button_x(4)" y="&tf.cgmode.button_y(5)" width="64" height="32" target="&mp.target" exp="tf.cgmode.vs_char_button_action('e13')"]
     [button graphic="&tf.cgmode.vs_char_button_img('e14')" enterimg="&tf.cgmode.vs_char_button_enterimg('e14')"  x="&tf.cgmode.button_x(5)" y="&tf.cgmode.button_y(5)" width="64" height="32" target="&mp.target" exp="tf.cgmode.vs_char_button_action('e14')"]
     ; 6行目 ステージ2
-    [image layer="1" storage="button/vs_e21_disable.png" folder="image"                                               x="&tf.cgmode.button_x(2)" y="&tf.cgmode.button_y(6)" width="64" height="32"]
-    [image layer="1" storage="button/vs_e22_disable.png" folder="image"                                               x="&tf.cgmode.button_x(3)" y="&tf.cgmode.button_y(6)" width="64" height="32"]
-    [image layer="1" storage="button/vs_e23_disable.png" folder="image"                                               x="&tf.cgmode.button_x(4)" y="&tf.cgmode.button_y(6)" width="64" height="32"]
-    [image layer="1" storage="button/vs_e24_disable.png" folder="image"                                               x="&tf.cgmode.button_x(5)" y="&tf.cgmode.button_y(6)" width="64" height="32"]
+    [button graphic="&tf.cgmode.vs_char_button_img('e21')" enterimg="&tf.cgmode.vs_char_button_enterimg('e21')"  x="&tf.cgmode.button_x(2)" y="&tf.cgmode.button_y(6)" width="64" height="32" target="&mp.target" exp="tf.cgmode.vs_char_button_action('e21')"]
+    [button graphic="&tf.cgmode.vs_char_button_img('e22')" enterimg="&tf.cgmode.vs_char_button_enterimg('e22')"  x="&tf.cgmode.button_x(3)" y="&tf.cgmode.button_y(6)" width="64" height="32" target="&mp.target" exp="tf.cgmode.vs_char_button_action('e22')"]
+    [button graphic="&tf.cgmode.vs_char_button_img('e23')" enterimg="&tf.cgmode.vs_char_button_enterimg('e23')"  x="&tf.cgmode.button_x(4)" y="&tf.cgmode.button_y(6)" width="64" height="32" target="&mp.target" exp="tf.cgmode.vs_char_button_action('e23')"]
+    [button graphic="&tf.cgmode.vs_char_button_img('e24')" enterimg="&tf.cgmode.vs_char_button_enterimg('e24')"  x="&tf.cgmode.button_x(5)" y="&tf.cgmode.button_y(6)" width="64" height="32" target="&mp.target" exp="tf.cgmode.vs_char_button_action('e24')"]
     ; 7行目 ステージ3
     [image layer="1" storage="button/vs_undefined_disable.png" folder="image"                                         x="&tf.cgmode.button_x(2)" y="&tf.cgmode.button_y(7)" width="64" height="32"]
     [image layer="1" storage="button/vs_undefined_disable.png" folder="image"                                         x="&tf.cgmode.button_x(3)" y="&tf.cgmode.button_y(7)" width="64" height="32"]

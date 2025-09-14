@@ -838,14 +838,14 @@ class Jelly extends Enemy {
     }
 }
 
-class Mount extends Enemy {
+class BossMount extends Enemy {
     static ENEMY_ID = "e14";
 
     constructor(lp, ap, label, width=1000, height=702) {
         if (width < height) {
             width = parseInt(width * 2);
         }
-        super(`${Mount.ENEMY_ID}_${label}`, lp, ap, label, width, height);
+        super(`${BossMount.ENEMY_ID}_${label}`, lp, ap, label, width, height);
 
         this.displayName = "マウント";
         this.isBoss = true;
@@ -853,6 +853,47 @@ class Mount extends Enemy {
     }
 }
 
+class MaleRanger extends Enemy {
+    static ENEMY_ID = "e21";
+
+    constructor(lp, ap, label, width=500, height=702) {
+        super(`${MaleRanger.ENEMY_ID}_${label}`, lp, ap, label, width, height);
+        this.displayName = `レンジャー男${label}`;
+        console.log(`${this.displayName}はエネミーです。`);
+    }
+}
+class FemaleRanger extends Enemy {
+    static ENEMY_ID = "e22";
+
+    constructor(lp, ap, label, width=500, height=702) {
+        super(`${FemaleRanger.ENEMY_ID}_${label}`, lp, ap, label, width, height);
+        this.displayName = `レンジャー女${label}`;
+        console.log(`${this.displayName}はエネミーです。`);
+    }
+}
+class LesserBinder extends Enemy {
+    static ENEMY_ID = "e23";
+
+    constructor(lp, ap, label, width=500, height=702) {
+        super(`${LesserBinder.ENEMY_ID}_${label}`, lp, ap, label, width, height);
+        this.displayName = `レッサーバインダー${label}`;
+        console.log(`${this.displayName}はエネミーです。`);
+    }
+}
+class BossBind extends Enemy {
+    static ENEMY_ID = "e24";
+
+    constructor(lp, ap, label, width=1000, height=702) {
+        if (width < height) {
+            width = parseInt(width * 2);
+        }
+        super(`${BossBind.ENEMY_ID}_${label}`, lp, ap, label, width, height);
+
+        this.displayName = "バインド";
+        this.isBoss = true;
+        console.log(`${this.displayName}はエネミーです。`);
+    }
+}
 class CharacterBundle {
     constructor(captive, captor, centerX, centerY) {
         this.lp = 3;
@@ -1108,7 +1149,11 @@ window.GameEvent = GameEvent;
 EnemyFactory.registerEnemy(Luigi.ENEMY_ID, Luigi);
 EnemyFactory.registerEnemy(CleaningWoman.ENEMY_ID, CleaningWoman);
 EnemyFactory.registerEnemy(Jelly.ENEMY_ID, Jelly);
-EnemyFactory.registerEnemy(Mount.ENEMY_ID, Mount);
+EnemyFactory.registerEnemy(BossMount.ENEMY_ID, BossMount);
+EnemyFactory.registerEnemy(MaleRanger.ENEMY_ID, MaleRanger);
+EnemyFactory.registerEnemy(FemaleRanger.ENEMY_ID, FemaleRanger);
+EnemyFactory.registerEnemy(LesserBinder.ENEMY_ID, LesserBinder);
+EnemyFactory.registerEnemy(BossBind.ENEMY_ID, BossBind);
 
 [endscript]
 

@@ -55,7 +55,10 @@ class StepByStepEffect extends Effect {
 
     applyEffect(selfDisp, allEnemies, allHeroines, dispatch) {
         super.applyEffect(selfDisp, allEnemies, allHeroines, dispatch);
-        
+        // 自分が倒れていたら・・・発動しない
+        if (selfDisp.charaInstance.pose == 'knockout') {
+            return;
+        }        
         if (selfDisp.charaInstance.canUseUltimate()) {
             // 最大SPに達しているので何もしない
             return;
@@ -72,8 +75,8 @@ class StepByStepEffect extends Effect {
 window.StepByStepEffect = StepByStepEffect;
 
 class BundleEffect extends Effect {
-    static #ER_VALUE_LEVEL2 = 10;
-    static #ER_VALUE_LEVEL3 = 20;
+    static #ER_VALUE_LEVEL2 = 15;
+    static #ER_VALUE_LEVEL3 = 25;
 
     constructor(enemy, duration = -1) {
         super('拘束状態', duration, false);
@@ -213,6 +216,10 @@ class BuddyBonding extends Effect {
 
     applyEffect(selfDisp, allEnemies, allHeroines, dispatch) {
         super.applyEffect(selfDisp, allEnemies, allHeroines, dispatch);
+        // 自分が倒れていたら・・・発動しない
+        if (selfDisp.charaInstance.pose == 'knockout') {
+            return;
+        }
         // 自分以外を探して
         const buddy = allHeroines.find(h => h.charaInstance !== selfDisp.charaInstance);
         if (buddy.charaInstance.pose == 'knockout' || buddy.charaInstance.bundled) {

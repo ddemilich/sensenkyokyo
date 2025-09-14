@@ -190,7 +190,7 @@ class BattleSection {
         // ...
     });
     static #BASE_LP = 100;
-    static #BASE_AP = 50;
+    static #BASE_AP = 25;
 
     // フィールド関係
     // 敵フィールド
@@ -309,10 +309,10 @@ class BattleSection {
     }
 
     calculateEnemyStats(level) {
-        // AP上昇率 = 1.0 + 1.0 * (level / 200)
-        const apMultiplier = 1.0 + 1.0 * (level / 200);
-        // LP上昇率 = 1.0 + 1.0 * (level / 200)
-        const lpMultiplier = 1.0 + 1.0 * (level / 200);
+        // AP上昇率 = 1.0 + 1.0 * (level / 10)
+        const apMultiplier = 1.0 + 1.0 * (level / 10);
+        // LP上昇率 = 1.0 + 1.0 * (level / 10)
+        const lpMultiplier = 1.0 + 1.0 * (level / 10);
 
         const calculatedAp = BattleSection.#BASE_AP * apMultiplier;
         const calculatedLp = BattleSection.#BASE_LP * lpMultiplier;
@@ -824,6 +824,7 @@ class BattleSection {
                     extractedPairs.push({ action: action, source: charaDisp });
                 });
         }
+        extractedPairs.sort(() => Math.random() - 0.5);
         return extractedPairs;
     }
     preExecuteActionPairs(actionPairs) {

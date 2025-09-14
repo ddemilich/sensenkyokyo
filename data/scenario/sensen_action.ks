@@ -155,6 +155,15 @@ class EnemyFirstStrike extends Action {
                 split: actualDamage.splitDamages,
                 actionType: 'first_strike'
             });
+            if (actualDamage.actualTotalDamage > 0) {
+                // ダメージを与えたらSPを増やす(最大25くらい)
+                const spAmount = Math.floor(Math.random() * actualDamage.actualTotalDamage * 0.5);
+                source.charaInstance.changeSp(spAmount);
+                dispatch('CHARA_SPBAR_REFRESH', {
+                    source: source,
+                    amount: spAmount,
+                });
+            }
         } else {
             // ApUp(10%~15%)
             source.charaInstance.ap.increaseBaseValue(Math.floor(source.charaInstance.currentAp * (0.10 + (Math.random() * 0.05)))); 
@@ -279,6 +288,15 @@ class EnemyGuardCounter extends Action {
                 split: actualDamage.splitDamages,
                 actionType: 'guard_counter'
             });
+            if (actualDamage.actualTotalDamage > 0) {
+                // ダメージを与えたらSPを増やす(最大25くらい)
+                const spAmount = Math.floor(Math.random() * actualDamage.actualTotalDamage * 0.5);
+                source.charaInstance.changeSp(spAmount);
+                dispatch('CHARA_SPBAR_REFRESH', {
+                    source: source,
+                    amount: spAmount,
+                });
+            }
         } else {
             console.warn(`[${source.charaInstance.name}] 敵反撃攻撃の対象がいません。`);
         }

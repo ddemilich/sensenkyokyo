@@ -634,7 +634,6 @@ class Heroine extends Character {
     }
 
     takeDamage(damage) {
-        this.increaseSpByDamage(damage);
         // 服敗れチャレンジ
         this.tryWearLevelUp(damage);
         // 既存のLPを保存しておく
@@ -651,6 +650,7 @@ class Heroine extends Character {
             this.lp = 0;
         }
         this.updatePoseByLp();
+        this.increaseSpByDamage(previousLp - this.lp);
     }
     heal(amount) {
         const previousLp = this.lp;

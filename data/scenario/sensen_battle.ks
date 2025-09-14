@@ -720,7 +720,7 @@ class BattleSection {
             // 対象のアクションにChargeBurstがある場合は１つ見つけてキャンセルする
             const target = enemyFirstPair.action.selectedTarget;
             if (target) {
-                const canceled_action = target.charaInstance.actions.find(action => action.type === 'ChargeBurst');
+                const canceled_action = target.charaInstance.actions.find(action => action.type === 'ChargeBurst' && !action.canceled);
                 if (canceled_action) {
                     canceled_action.canceled = true;
                 }
@@ -1532,10 +1532,7 @@ window.BattleSection = BattleSection;
     [freeimage layer="5"]
     [jump target="*process_battle_events_start"]
 *battle_lambda_lightning_sunday
-    [anim name="&tf.currentEvent.params.source.charaInstance.name" left="-=50" time="100" effect="easeInCirc"][wa]
-    [heal_to chara="&tf.currentEvent.params.source.charaInstance" healValue="&tf.currentEvent.params.amount" x="&tf.currentEvent.params.source.x" y="&tf.currentEvent.params.source.y"]
-    [anim name="&tf.currentEvent.params.source.charaInstance.name" left="+=50" time="100" effect="easeInCirc"][wa]
-    [heroine_mod heroine="&tf.currentEvent.params.source.charaInstance" time="100"]
+    [lightning_sunday lambda_disp="&tf.currentEvent.params.source" amount="&tf.currentEvent.params.amount" enemies="&tf.currentEvent.params.enemies"]
     [jump target="*process_battle_events_start"]
 *battle_mu_adrenaline_rush
     [anim name="&tf.currentEvent.params.source.charaInstance.name" left="-=50" time="100" effect="easeInCirc"][wa]
@@ -1554,6 +1551,7 @@ window.BattleSection = BattleSection;
     [layopt layer="4" visible="false"]
     [layopt layer="5" visible="false"]
     [layopt layer="6" visible="false"]
+    [layopt layer="8" visible="false"]
     [layopt layer="9" visible="false"]
     [turn_text msg="！！勝利！！"]
     [anim name="&tf.currentEvent.params.lambda.charaInstance.name" left="500" top="150"]
@@ -1566,6 +1564,7 @@ window.BattleSection = BattleSection;
     [layopt layer="4" visible="false"]
     [layopt layer="5" visible="false"]
     [layopt layer="6" visible="false"]
+    [layopt layer="8" visible="false"]
     [layopt layer="9" visible="false"]
     [turn_text msg="全滅しました・・・。"]
     [anim name="&tf.currentEvent.params.lambda.charaInstance.name" left="500" top="150"]

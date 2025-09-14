@@ -158,6 +158,7 @@ class LightningSunday extends Action {
     constructor() {
         super('LightningSunday', 'Ultimate');
         this.needTarget = false;
+        this.execCount = 0;
     }
     decideTargetCharaDisplayData(source, allEnemies, allHeroines) {
         return null;
@@ -169,6 +170,7 @@ class LightningSunday extends Action {
         if (this.execCount != 0) {
             healAmount = Math.floor(source.charaInstance.maxLp * 0.3);
         }
+        this.execCount += 1;
         source.charaInstance.heal(healAmount);
         source.charaInstance.wearLevel = 1;
         source.charaInstance.er = 0;
@@ -182,17 +184,20 @@ class LightningSunday extends Action {
             })
         }
         console.log(`[${source.charaInstance.name}] 必殺技を実行！`);
+        const availableTargets = allEnemies.filter(eDisp => !eDisp.charaInstance.isDefeated() && !eDisp.charaInstance.bundled);
         // 敵のスキルを１つずつキャンセル
-        allEnemies.forEach(enemyDisp => {
+        availableTargets.forEach(enemyDisp => {
             let activeAction = enemyDisp.charaInstance.actions.find(action => !action.canceled);
             if (activeAction) {
                 activeAction.canceled = true;
             }
         });
+
         // イベント発行
         dispatch('LAMBDA_LIGHTNING_SUNDAY', {
             source: source,
             amount: healAmount,
+            enemies: availableTargets,
             actionType: 'ultimate'
         });
         dispatch('CHARA_ACTION_REFRESH', {
@@ -393,6 +398,33 @@ class HeroineLambda extends Heroine {
 }
 window.HeroineLambda = HeroineLambda;
 [endscript]
+
+[macro name="lightning_sunday"]
+    ;mp.lambda_disp
+    ;mp.amount
+    ;mp.enemies
+    [anim name="&mp.lambda_disp.charaInstance.name" left="-=50" time="100" effect="easeInCirc"][wa]
+    [heal_to chara="&mp.lambda_disp.charaInstance" healValue="&mp.amount" x="&mp.lambda_disp.x" y="&mp.lambda_disp.y"]
+    [heroine_mod heroine="&mp.lambda_disp.charaInstance" time="100"]
+    [image name="lightning_sunday_01" layer="8" folder="fgimage" storage="chara/effects/LightningSunday_01_loop.webp" left="0" top="0" width="640" wait="false"]
+    [iscript]
+        tf.enemy_lightning_sunday_loop_index = 0;
+    [endscript]
+    [wait time="300"]
+    [free layer="8" name="lightning_sunday_01"]
+*enemy_lightning_sunday_loop_start
+    [jump target="*enemy_lightning_sunday_loop_end" cond="!(tf.enemy_lightning_sunday_loop_index < mp.enemies.length)"]
+    [image layer="8" folder="fgimage" storage="chara/effects/LightningSunday_02_loop.webp" left="&mp.enemies[tf.enemy_lightning_sunday_loop_index].x" top="&mp.enemies[tf.enemy_lightning_sunday_loop_index].y" width="&mp.enemies[tf.enemy_lightning_sunday_loop_index].charaInstance.width" time="100" wait="false"]
+    [iscript]
+        tf.enemy_lightning_sunday_loop_index++;
+    [endscript]
+    [jump target="*enemy_lightning_sunday_loop_start"]
+*enemy_lightning_sunday_loop_end
+    [wait time="1000"]
+    [anim name="&mp.lambda_disp.charaInstance.name" left="+=50" time="100" effect="easeInCirc"][wa]
+    [freeimage layer="8" wait="true"]
+[endmacro]
+
 ; ゲーム開始時にキャラクタ定義する
 [chara_new name="lambda" storage="chara/lambda/lambda_base.png" width="500" height="702"]
     [chara_face name="lambda" face="base" storage="chara/lambda/lambda_base.png"]

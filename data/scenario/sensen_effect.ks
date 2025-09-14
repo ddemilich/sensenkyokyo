@@ -61,7 +61,7 @@ class StepByStepEffect extends Effect {
             return;
         }
 
-        selfDisp.charaInstance.changeSp(1);
+        selfDisp.charaInstance.changeSp(50);
         console.log(`[${selfDisp.charaInstance.name}] のSPが 1 上昇しました。残り: ${selfDisp.charaInstance.sp}`);
         dispatch('CHARA_SPBAR_REFRESH', {
             source: selfDisp,

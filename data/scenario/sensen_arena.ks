@@ -215,6 +215,7 @@ window.ArenaController = ArenaController;
     [layopt layer="4" visible="true"]
     [layopt layer="5" visible="true"]
     [layopt layer="6" visible="true"]
+    [layopt layer="8" visible="true"]
     [layopt layer="9" visible="true"]
     [battle_init battle="&tf.ArenaController.Battle"]
 [endmacro]
@@ -231,6 +232,7 @@ window.ArenaController = ArenaController;
     [layopt layer="4" visible="false"]
     [layopt layer="5" visible="false"]
     [layopt layer="6" visible="false"]
+    [layopt layer="8" visible="false"]
     [layopt layer="9" visible="false"]
     [fadeoutbgm time="100"]
     [freeimage layer="0"]
@@ -240,6 +242,7 @@ window.ArenaController = ArenaController;
     [freeimage layer="4"]
     [freeimage layer="5"]
     [freeimage layer="6"]
+    [freeimage layer="8"]
     [freeimage layer="9"]
 [endmacro]
 

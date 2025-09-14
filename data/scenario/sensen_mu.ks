@@ -155,19 +155,20 @@ class AdrenalineRush extends Action {
 
     constructor() {
         super('AdrenalineRush', 'Ultimate');
+        this.needTarget = false;
         this.execCount = 0;
     }
     decideTargetCharaDisplayData(source, allEnemies, allHeroines) {
         return null;
     }
     execute(source, allEnemies, allHeroines, dispatch) {
-        this.execCount += 1;
         // 全SP消費
         source.charaInstance.useSpByUltimate();
         let healAmount = source.charaInstance.maxLp;
         if (this.execCount != 0) {
             healAmount = Math.floor(source.charaInstance.maxLp * 0.3);
         }
+        this.execCount += 1;
         source.charaInstance.heal(healAmount);
         source.charaInstance.wearLevel = 1;
         source.charaInstance.er = 0;

@@ -37,7 +37,7 @@ class LambdaFirstStrike extends Action {
             targetCharaInstance.takeDamage(actualDamage.actualTotalDamage);
             console.log(`[${source.charaInstance.name}] が [${targetCharaInstance.name}] に ${damage} ダメージを与えました。残りLP: ${targetCharaInstance.lp}`);
 
-            dispatch('HEROINE_DAMAGE_DISPLAY', {
+            dispatch('HEROINE_DAMAGE_LAMBDA_STRIKE', {
                 source: source,
                 target: targetCharaDispData,
                 amount: actualDamage.actualTotalDamage,
@@ -47,7 +47,7 @@ class LambdaFirstStrike extends Action {
         } else {
             let spAmount = Math.floor(source.charaInstance.maxSp * 0.2) + 1;
             source.charaInstance.changeSp(spAmount);
-            dispatch('CHARA_SPBAR_REFRESH', {
+            dispatch('HEROINE_SP_GRANTED', {
                 source: source,
                 amount: spAmount,
             });
@@ -92,7 +92,7 @@ class LambdaChargeBurst extends Action {
         } else {
             let spAmount = Math.floor(source.charaInstance.maxSp * 0.2) + 1;
             source.charaInstance.changeSp(spAmount);
-            dispatch('CHARA_SPBAR_REFRESH', {
+            dispatch('HEROINE_SP_GRANTED', {
                 source: source,
                 amount: spAmount,
             });

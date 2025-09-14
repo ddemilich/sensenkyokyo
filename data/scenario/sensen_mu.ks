@@ -37,7 +37,7 @@ class MuFirstStrike extends Action {
 
             console.log(`[${source.charaInstance.name}] が [${targetCharaInstance.name}] に ${damage} ダメージを与えました。残りLP: ${targetCharaInstance.lp}`);
 
-            dispatch('HEROINE_DAMAGE_DISPLAY', {
+            dispatch('HEROINE_DAMAGE_MU_STRIKE', {
                 source: source,
                 target: targetCharaDispData,
                 amount: actualDamage.actualTotalDamage,
@@ -45,9 +45,9 @@ class MuFirstStrike extends Action {
                 actionType: 'first_strike'
             });
         } else {
-            let spAmount = Math.floor(source.charaInstance.sp * 0.1) + 1;
+            let spAmount = Math.floor(source.charaInstance.maxSp * 0.2) + 1;
             source.charaInstance.changeSp(spAmount);
-            dispatch('CHARA_SPBAR_REFRESH', {
+            dispatch('HEROINE_SP_GRANTED', {
                 source: source,
                 amount: spAmount,
             });
@@ -94,7 +94,7 @@ class MuChargeBurst extends Action {
         } else {
             let spAmount = Math.floor(source.charaInstance.sp * 0.1) + 1;
             source.charaInstance.changeSp(spAmount);
-            dispatch('CHARA_SPBAR_REFRESH', {
+            dispatch('HEROINE_SP_GRANTED', {
                 source: source,
                 amount: spAmount,
             });

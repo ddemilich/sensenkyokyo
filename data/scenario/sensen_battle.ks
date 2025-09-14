@@ -114,9 +114,13 @@ class BattleSection {
             eventName: 'HEROINE_BREAK_BUNDLE',
             jumpLabel: '*battle_heroine_break_bundle'
         },
-        HEROINE_DAMAGE_DISPLAY: {
-            eventName: 'HEROINE_DAMAGE_DISPLAY',
-            jumpLabel: '*battle_heroine_damage_display'
+        HEROINE_DAMAGE_LAMBDA_STRIKE: {
+            eventName: 'HEROINE_DAMAGE_LAMBDA_STRIKE',
+            jumpLabel: '*battle_heroine_damage_lambda_strike'
+        },
+        HEROINE_DAMAGE_MU_STRIKE: {
+            eventName: 'HEROINE_DAMAGE_MU_STRIKE',
+            jumpLabel: '*battle_heroine_damage_mu_strike'
         },
         HEROINE_DAMAGE_LAMBDA_CHARGE: {
             eventName: 'HEROINE_DAMAGE_LAMBDA_CHARGE',
@@ -165,6 +169,10 @@ class BattleSection {
         CHARA_SPBAR_REFRESH: {
             eventName: 'CHARA_SPBAR_REFRESH',
             jumpLabel: '*battle_chara_spbar_refresh'
+        },
+        HEROINE_SP_GRANTED: {
+            eventName: 'HEROINE_SP_GRANTED',
+            jumpLabel: '*battle_heroine_sp_granted'
         },
         BATTLE_WIN: {
             eventName: 'BATTLE_WIN',
@@ -1253,7 +1261,8 @@ window.BattleSection = BattleSection;
     ;mp.chara
     ;mp.x
     ;mp.y
-    [anim name="&mp.chara.spbarName()" width="&mp.chara.spbarWidth()" left="&mp.chara.spbarX(mp.x)" time="10"][wa]
+    ;mp.time
+    [anim name="&mp.chara.spbarName()" width="&mp.chara.spbarWidth()" left="&mp.chara.spbarX(mp.x)" time="&mp.time"][wa]
 [endmacro]
 [macro name="turn_text"]
     ;mp.msg;
@@ -1375,9 +1384,14 @@ window.BattleSection = BattleSection;
         if (tf.currentEvent.params.amount > 0) {
             tf.currentEvent.params.target.charaInstance.pose = "damaged";
         }
+        // target x and y
+        tf.effect_x = tf.currentEvent.params.target.x;
+        tf.effect_y = tf.currentEvent.params.target.y;
     [endscript]
     [heroine_mod heroine="&tf.currentEvent.params.target.charaInstance" time="100"][wa]
+    [image layer="8" name="enemy_strike" folder="fgimage" storage="chara/effects/EnemyStrike.webp" animimg="true" reflect="true" wait="false" left="&tf.effect_x" top="&tf.effect_y" width="&tf.currentEvent.params.target.charaInstance.width"]
     [damage_to targetname="&tf.currentEvent.params.target.charaInstance.name" chara="&tf.currentEvent.params.target.charaInstance" damagevalue="&tf.currentEvent.params.amount" split="&tf.currentEvent.params.split" x="&tf.currentEvent.params.target.x" y="&tf.currentEvent.params.target.y"]
+    [free layer="8" name="enemy_strike"]
     [anim name="&tf.currentEvent.params.source.charaInstance.name" left="-=50" time="100" effect="easeInCirc"]
     [iscript]
         tf.currentEvent.params.target.charaInstance.updatePoseByLp();
@@ -1413,7 +1427,9 @@ window.BattleSection = BattleSection;
         tf.currentEvent.params.target.charaInstance.pose = "damaged";
     [endscript]
     [heroine_mod heroine="&tf.currentEvent.params.target.charaInstance" time="100"][wa]
+    [image layer="8" name="emey_er_apply" folder="fgimage" storage="chara/effects/EnemyErApply.webp" reflect="true" wait="false" left="&tf.currentEvent.params.target.x" top="&tf.currentEvent.params.target.y" width="&tf.currentEvent.params.target.charaInstance.width"]
     [er_apply chara="&tf.currentEvent.params.target.charaInstance" erValue="&tf.currentEvent.params.amount" current="&tf.currentEvent.params.target.charaInstance.er" x="&tf.currentEvent.params.target.x" y="&tf.currentEvent.params.target.y"]
+    [free layer="8" name="emey_er_apply"]
     [anim name="&tf.currentEvent.params.source.charaInstance.name" left="-=50" time="100" effect="easeInCirc"]
     [iscript]
         tf.currentEvent.params.target.charaInstance.updatePoseByLp();
@@ -1445,7 +1461,9 @@ window.BattleSection = BattleSection;
     [focus_on_chara x="&tf.currentEvent.params.heroine.cameraX()" y="&tf.currentEvent.params.heroine.cameraY()"]
     [jump target="*process_battle_events_start"]
 *battle_heroine_er_change
+    [image layer="8" name="emey_er_change" folder="fgimage" storage="chara/effects/BundleErApply.webp" reflect="true" wait="false" left="&tf.currentEvent.params.heroine.x" top="&tf.currentEvent.params.heroine.y" width="&tf.currentEvent.params.heroine.charaInstance.width"]
     [er_change_to targetname="&tf.currentEvent.params.heroine.bundleInstance.name" chara="&tf.currentEvent.params.heroine.charaInstance" value="&tf.currentEvent.params.amount" split="&tf.currentEvent.params.split" x="&tf.currentEvent.params.heroine.x" y="&tf.currentEvent.params.heroine.y"]
+    [free layer="8" name="emey_er_change"]
     [jump target="*process_battle_events_start"]
 *battle_heroine_bundle_start_ecstasy
     [camera zoom="2" x="&tf.currentEvent.params.heroine.cameraX()" y="&tf.currentEvent.params.heroine.cameraY()" ease_type="ease-out" time="200"]
@@ -1471,17 +1489,36 @@ window.BattleSection = BattleSection;
     [wa]
     [rescue_effect chara="&tf.currentEvent.params.buddy.charaInstance" x="&tf.currentEvent.params.buddy.x" y="&tf.currentEvent.params.buddy.y"]
     [anim name="&tf.currentEvent.params.heroine.charaInstance.name" left="&tf.currentEvent.params.heroine.x" top="&tf.currentEvent.params.heroine.y" time="50"]
+    [spbar_refresh chara="&tf.currentEvent.params.heroine.charaInstance" x="&tf.currentEvent.params.heroine.x" y="&tf.currentEvent.params.heroine.y" time="50"]
     [wa]
-    [spbar_refresh chara="&tf.currentEvent.params.heroine.charaInstance" x="&tf.currentEvent.params.heroine.x" y="&tf.currentEvent.params.heroine.y"]
     [jump target="*process_battle_events_start"]
-*battle_heroine_damage_display
+*battle_heroine_damage_lambda_strike
     [anim name="&tf.currentEvent.params.source.charaInstance.name" left="-=50" time="100" effect="easeInCirc"]
     [iscript]
         tf.currentEvent.params.source.charaInstance.pose = "attack";
     [endscript]
     [heroine_mod heroine="&tf.currentEvent.params.source.charaInstance" time="100"]
     [wa]
+    [image layer="8" name="lambda_strike" folder="fgimage" storage="chara/effects/LambdaStrike.webp" wait="false" left="&tf.currentEvent.params.target.x" top="&tf.currentEvent.params.target.y" width="&tf.currentEvent.params.target.charaInstance.width"]
     [damage_to targetname="&tf.currentEvent.params.target.charaInstance.name" chara="&tf.currentEvent.params.target.charaInstance" damagevalue="&tf.currentEvent.params.amount" split="&tf.currentEvent.params.split" x="&tf.currentEvent.params.target.x" y="&tf.currentEvent.params.target.y"]
+    [free layer="8" name="lambda_strike"]    
+    [anim name="&tf.currentEvent.params.source.charaInstance.name" left="+=50" time="100" effect="easeInCirc"]
+    [iscript]
+        tf.currentEvent.params.source.charaInstance.updatePoseByLp();
+    [endscript]
+    [heroine_mod heroine="&tf.currentEvent.params.source.charaInstance" time="100"]
+    [wa]
+    [jump target="*process_battle_events_start"]
+*battle_heroine_damage_mu_strike
+    [anim name="&tf.currentEvent.params.source.charaInstance.name" left="-=50" time="100" effect="easeInCirc"]
+    [iscript]
+        tf.currentEvent.params.source.charaInstance.pose = "attack";
+    [endscript]
+    [heroine_mod heroine="&tf.currentEvent.params.source.charaInstance" time="100"]
+    [wa]
+    [image layer="8" name="mu_strike" folder="fgimage" storage="chara/effects/MuStrike.webp" wait="false" left="&tf.currentEvent.params.target.x" top="&tf.currentEvent.params.target.y" width="&tf.currentEvent.params.target.charaInstance.width"]
+    [damage_to targetname="&tf.currentEvent.params.target.charaInstance.name" chara="&tf.currentEvent.params.target.charaInstance" damagevalue="&tf.currentEvent.params.amount" split="&tf.currentEvent.params.split" x="&tf.currentEvent.params.target.x" y="&tf.currentEvent.params.target.y"]
+    [free layer="8" name="mu_strike"]    
     [anim name="&tf.currentEvent.params.source.charaInstance.name" left="+=50" time="100" effect="easeInCirc"]
     [iscript]
         tf.currentEvent.params.source.charaInstance.updatePoseByLp();
@@ -1565,9 +1602,14 @@ window.BattleSection = BattleSection;
 *battle_mu_adrenaline_rush
     [adrenaline_rush mu_disp="&tf.currentEvent.params.source" amount="&tf.currentEvent.params.amount"]
     [jump target="*process_battle_events_start"]
-    
 *battle_chara_spbar_refresh
-    [spbar_refresh chara="&tf.currentEvent.params.source.charaInstance" x="&tf.currentEvent.params.source.x" y="&tf.currentEvent.params.source.y"]
+    [spbar_refresh chara="&tf.currentEvent.params.source.charaInstance" x="&tf.currentEvent.params.source.x" y="&tf.currentEvent.params.source.y" time="0"]
+    [jump target="*process_battle_events_start"]
+*battle_heroine_sp_granted
+    [image layer="8" name="sbpar_charge" folder="fgimage" storage="chara/effects/ChargeSp.webp" left="&tf.currentEvent.params.source.x" top="&tf.currentEvent.params.source.y" width="&tf.currentEvent.params.source.charaInstance.width"]
+    [spbar_refresh chara="&tf.currentEvent.params.source.charaInstance" x="&tf.currentEvent.params.source.x" y="&tf.currentEvent.params.source.y" time="300"]
+    [wa]
+    [free layer="8" name="sbpar_charge"]
     [jump target="*process_battle_events_start"]
 
 *battle_win

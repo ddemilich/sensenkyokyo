@@ -1049,10 +1049,10 @@ class CharaDisplayData {
         return (360 - this.centerY);
     }
     fromCameraX() {
-        return (this.centerX - 640) + ((Math.random() - 0.5) * this.charaInstance.width * 3);
+        return this.cameraX() + ((Math.random() - 0.5) * this.charaInstance.width);
     }
     fromCameraY() {
-        return (360 - this.centerY) + ((Math.random() - 0.5) * this.charaInstance.height * 3);
+        return this.cameraY() + ((Math.random() - 0.5) * this.charaInstance.height);
     }
 }
 window.CharaDisplayData = CharaDisplayData;

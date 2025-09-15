@@ -40,6 +40,10 @@ class ArenaController {
             if (enemyId == "e14" && this.enemyList.includes("e14")) {
                 // ボスは１体だけ
                 return;
+            }
+            if (enemyId == "e24" && this.enemyList.includes("e24")) {
+                // ボスは１体だけ
+                return;
             } 
             this.enemyList.push(enemyId);
         }

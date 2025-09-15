@@ -1329,7 +1329,7 @@ window.BattleSection = BattleSection;
     [image layer="5" wait="false" time="500" name="keepout" storage="hover/keepout_01.png" left="&mp.bundle.keepoutX" top="&mp.bundle.keepoutY" width="&mp.bundle.keepoutWidth"]
     [camera zoom="3" rotate="&tf.randomAngle1" x="&mp.x" y="&mp.y" ease_type="ease-out" time="250" wait="true"]
     [camera zoom="2" rotate="&tf.randomAngle2" from_zoom="3" from_x="&mp.x" x="&mp.x" from_y="&mp.y" y="&mp.y" ease_type="ease-out" time="500" wait="true"]
-    [free layer="5" name="keepout"]
+    [free layer="5" name="keepout" time="50" wait="false"]
     [reset_camera ease_type="ease-in" time="150"]
 [endmacro]
 
@@ -1486,15 +1486,25 @@ window.BattleSection = BattleSection;
     [free layer="8" name="emey_er_change"]
     [jump target="*process_battle_events_start"]
 *battle_heroine_bundle_start_ecstasy
-    [camera zoom="2" x="&tf.currentEvent.params.heroine.cameraX()" y="&tf.currentEvent.params.heroine.cameraY()" ease_type="ease-out" time="200"]
+    [iscript]
+        tf.randomAngle1 = Math.floor((Math.random() - 0.5) * 720);
+    [endscript]
+    [camera zoom="2" rotate="&tf.randomAngle1" x="&tf.currentEvent.params.heroine.cameraX()" y="&tf.currentEvent.params.heroine.cameraY()" ease_type="ease-out" time="200" wait="true"]
     [jump target="*process_battle_events_start"]
 *battle_heroine_bundle_ecstasy
-    [camera zoom="2" from_zoom="1" from_x="&tf.currentEvent.params.heroine.fromCameraX()" x="&tf.currentEvent.params.heroine.cameraX()" from_y="&tf.currentEvent.params.heroine.fromCameraY()" y="&tf.currentEvent.params.heroine.cameraY()" ease_type="ease-out" time="150"]
+    [free layer="3" name="&tf.currentEvent.params.heroine.bundleInstance.lpName()"]
+    [iscript]
+        tf.randomAngle2 = Math.floor((Math.random() - 0.5) * 60);
+    [endscript]
+    [image layer="5" wait="false" time="500" name="keepout" storage="hover/keepout_02.png" left="&tf.currentEvent.params.heroine.bundleInstance.keepoutX" top="&tf.currentEvent.params.heroine.bundleInstance.keepoutY" width="&tf.currentEvent.params.heroine.bundleInstance.keepoutWidth"]
+    [camera zoom="2.5" rotate="&tf.randomAngle2" from_zoom="1.5" from_x="&tf.currentEvent.params.heroine.fromCameraX()" x="&tf.currentEvent.params.heroine.cameraX()" from_y="&tf.currentEvent.params.heroine.fromCameraY()" y="&tf.currentEvent.params.heroine.cameraY()" ease_type="ease-out" time="250" wait="true"]
     [playse storage="HeroineEcstasy.mp3"]
     [heroine_ecstasy bundle="&tf.currentEvent.params.heroine.bundleInstance" heroine="&tf.currentEvent.params.heroine" amount="&tf.currentEvent.params.amount" current="&tf.currentEvent.params.current"]
+    [camera zoom="1.5" rotate="&tf.randomAngle2" from_zoom="2.5" from_x="&tf.currentEvent.params.heroine.fromCameraX()" x="&tf.currentEvent.params.heroine.cameraX()" from_y="&tf.currentEvent.params.heroine.fromCameraY()" y="&tf.currentEvent.params.heroine.cameraY()" ease_type="ease-out" time="600" wait="true"]
     [jump target="*process_battle_events_start"]
 *battle_heroine_bundle_end_ecstasy
-    [reset_camera ease_type="ease-in" time="50"]
+    [free layer="5" name="keepout" time="50"]
+    [reset_camera ease_type="ease-in" time="700" ease_type="ease-in"]
     [eval exp="tf.currentEvent.params.heroine.setAfterBundle()"]
     [jump target="*process_battle_events_start"]
 *battle_heroine_resist_bundle

@@ -102,7 +102,9 @@ class Character {
 
         // バー関係
         this.ptextName = this.name + '_ptext';
-        this.lpbarWidth = this.width;
+        this.lpbarMarginRate = 0.2;
+        this.lpbarMargin = Math.floor(this.width * this.lpbarMarginRate);
+        this.lpbarWidth = this.width - (this.lpbarMargin * 2);
         this.lpbarHeight = 10;
         this.lpbarLeftToRight = true;
         this.spbarHeight = 5;
@@ -145,7 +147,7 @@ class Character {
     }
 
     lpbarX(x) {
-        return String(parseInt(x));
+        return String(parseInt(x) + this.lpbarMargin);
     }
     lpbarY(y) {
         return String(parseInt(y) + this.height - this.lpbarHeight);
@@ -155,9 +157,9 @@ class Character {
     }
     lpbarActiveX(x) {
         if (this.lpbarLeftToRight) {
-            return String(parseInt(x));
+            return String(parseInt(x) + this.lpbarMargin);
         } else {
-            return String(parseInt(x) + (this.lpbarWidth - this.lpbarActiveWidth()));
+            return String(parseInt(x) + this.lpbarMargin + (this.lpbarWidth - this.lpbarActiveWidth()));
         }
     }
     lpbarActiveWidth() {
@@ -165,7 +167,7 @@ class Character {
             return 1;
         } else {
             let liferate = this.lp / this.maxLp;
-            return parseInt(this.width * liferate);
+            return parseInt(this.lpbarWidth * liferate);
         }
     }
     getLpbarImagePath() {
@@ -188,14 +190,14 @@ class Character {
             return 1;
         } else {
             let liferate = this.sp / this.maxSp;
-            return parseInt(this.width * liferate);
+            return parseInt(this.lpbarWidth * liferate);
         }
     }
     spbarX(x) {
         if (this.lpbarLeftToRight) {
-            return String(parseInt(x));
+            return String(parseInt(x) + this.lpbarMargin);
         } else {
-            return String(parseInt(x) + (this.width - this.spbarWidth()));
+            return String(parseInt(x) + this.lpbarMargin + (this.lpbarWidth - this.spbarWidth()));
         }
     }
     spbarY(y) {
@@ -206,9 +208,9 @@ class Character {
     }
     guardedX(x) {
         if (this.lpbarLeftToRight) {
-            return String((parseInt(x) + this.width) - Math.floor(this.width * 0.3));
+            return String((parseInt(x) + this.width) - Math.floor(this.width * 0.5));
         } else {
-            return String((parseInt(x) - this.width) + Math.floor(this.width * 0.3));
+            return String((parseInt(x) - this.width) + Math.floor(this.width * 0.5));
         }
     }
     guardedY(y) {
@@ -553,7 +555,7 @@ class Heroine extends Character {
     }
     lpbarActiveWidth() {
         let liferate = this.lp / this.maxLp;
-        let resultInt = parseInt(this.width * liferate);
+        let resultInt = parseInt(this.lpbarWidth * liferate);
         if (resultInt == 0) {
             return 1;
         } else {
@@ -687,11 +689,11 @@ class Heroine extends Character {
             if (errate > 1.0) {
                 errate = 1.0;
             }
-            return Math.floor(this.width * errate);
+            return Math.floor(this.lpbarWidth * errate);
         }
     }
     erbarX(x, current=-1) {
-        return String(parseInt(x) + (this.width - this.erbarWidth(current)));
+        return String(parseInt(x) + this.lpbarMargin + (this.lpbarWidth - this.erbarWidth(current)));
     }
     erbarY(y) {
         // spbarの下にerbarを配置する
@@ -807,7 +809,20 @@ class Enemy extends Character {
 
     }
 }
+class BossEnemy extends Enemy {
+    constructor(name, lp, ap, label, width, height) {
+        // widthを調整
+        if (width < height) {
+            width = parseInt(width * 2);
+        }
+        // lpとapを増やす
+        let bossLp = Math.floor(lp * 2.0);
+        let bossAp = Math.floor(ap * 1.5);
 
+        super(name, bossLp, bossAp, label, width, height);
+        this.isBoss = true;
+    }
+}
 class Luigi extends Enemy {
     static ENEMY_ID = "e11";
 
@@ -838,17 +853,13 @@ class Jelly extends Enemy {
     }
 }
 
-class BossMount extends Enemy {
+class BossMount extends BossEnemy {
     static ENEMY_ID = "e14";
 
     constructor(lp, ap, label, width=1000, height=702) {
-        if (width < height) {
-            width = parseInt(width * 2);
-        }
         super(`${BossMount.ENEMY_ID}_${label}`, lp, ap, label, width, height);
 
         this.displayName = "マウント";
-        this.isBoss = true;
         console.log(`${this.displayName}はエネミーです。`);
     }
 }
@@ -880,17 +891,13 @@ class LesserBinder extends Enemy {
         console.log(`${this.displayName}はエネミーです。`);
     }
 }
-class BossBind extends Enemy {
+class BossBind extends BossEnemy {
     static ENEMY_ID = "e24";
 
     constructor(lp, ap, label, width=1000, height=702) {
-        if (width < height) {
-            width = parseInt(width * 2);
-        }
         super(`${BossBind.ENEMY_ID}_${label}`, lp, ap, label, width, height);
 
         this.displayName = "バインド";
-        this.isBoss = true;
         console.log(`${this.displayName}はエネミーです。`);
     }
 }

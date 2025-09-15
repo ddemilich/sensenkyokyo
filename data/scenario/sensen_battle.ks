@@ -229,7 +229,7 @@ class BattleSection {
     static #HEROINE_FIELD_HEIGHT = 720;
     static #HEROINE_X_RATES_BY_COUNT = {
         1: [0.6], // ヒロインが1人の場合は中央
-        2: [0.30, 0.75], // ヒロインが2人の場合は、左寄り、右寄り
+        2: [0.20, 0.65], // ヒロインが2人の場合は、左寄り、右寄り
     };
     static #HEROINE_Y_RATES_BY_COUNT = {
         1: [0.5], // ヒロインが1人の場合は中央
@@ -1380,7 +1380,7 @@ window.BattleSection = BattleSection;
     [jump target="*process_battle_events_start"]
 
 *battle_enemy_damage_display
-    [anim name="&tf.currentEvent.params.source.charaInstance.name" left="+=50" time="100" effect="easeInCirc"]
+    [anim name="&tf.currentEvent.params.source.charaInstance.name" left="+=25" time="100" effect="easeInCirc"]
     [iscript]
         if (tf.currentEvent.params.amount > 0) {
             tf.currentEvent.params.target.charaInstance.pose = "damaged";
@@ -1393,19 +1393,19 @@ window.BattleSection = BattleSection;
     [image layer="8" name="enemy_strike" folder="fgimage" storage="chara/effects/EnemyStrike.webp" animimg="true" reflect="true" wait="false" left="&tf.effect_x" top="&tf.effect_y" width="&tf.currentEvent.params.target.charaInstance.width"]
     [damage_to targetname="&tf.currentEvent.params.target.charaInstance.name" chara="&tf.currentEvent.params.target.charaInstance" damagevalue="&tf.currentEvent.params.amount" split="&tf.currentEvent.params.split" x="&tf.currentEvent.params.target.x" y="&tf.currentEvent.params.target.y"]
     [free layer="8" name="enemy_strike"]
-    [anim name="&tf.currentEvent.params.source.charaInstance.name" left="-=50" time="100" effect="easeInCirc"]
+    [anim name="&tf.currentEvent.params.source.charaInstance.name" left="-=25" time="100" effect="easeInCirc"]
     [iscript]
         tf.currentEvent.params.target.charaInstance.updatePoseByLp();
     [endscript]
     [heroine_mod heroine="&tf.currentEvent.params.target.charaInstance" time="100"][wa]
     [jump target="*process_battle_events_start"]
 *battle_enemy_heal_display
-    [anim name="&tf.currentEvent.params.source.charaInstance.name" left="+=50" time="100" effect="easeInCirc"][wa]
+    [anim name="&tf.currentEvent.params.source.charaInstance.name" left="+=25" time="100" effect="easeInCirc"][wa]
     [heal_to chara="&tf.currentEvent.params.target.charaInstance" healValue="&tf.currentEvent.params.amount" x="&tf.currentEvent.params.target.x" y="&tf.currentEvent.params.target.y"]
-    [anim name="&tf.currentEvent.params.source.charaInstance.name" left="-=50" time="100" effect="easeInCirc"][wa]
+    [anim name="&tf.currentEvent.params.source.charaInstance.name" left="-=25" time="100" effect="easeInCirc"][wa]
     [jump target="*process_battle_events_start"]
 *battle_enemy_guard_action
-    [anim name="&tf.currentEvent.params.attacker.charaInstance.name" left="-=50" time="100" effect="easeInCirc"]
+    [anim name="&tf.currentEvent.params.attacker.charaInstance.name" left="-=25" time="100" effect="easeInCirc"]
     [iscript]
         tf.currentEvent.params.attacker.charaInstance.pose = "attack";
     [endscript]
@@ -1415,7 +1415,7 @@ window.BattleSection = BattleSection;
     [guard_effect chara="&tf.currentEvent.params.target.charaInstance" x="&tf.currentEvent.params.target.charaInstance.guardedX(tf.currentEvent.params.target.x)" y="&tf.currentEvent.params.target.charaInstance.guardedY(tf.currentEvent.params.target.y)"]
     [anim name="&tf.currentEvent.params.guardian.charaInstance.name" left="&tf.currentEvent.params.guardian.x" top="&tf.currentEvent.params.guardian.y" time="50"]
     [wa]
-    [anim name="&tf.currentEvent.params.attacker.charaInstance.name" left="+=50" time="100" effect="easeInCirc"]
+    [anim name="&tf.currentEvent.params.attacker.charaInstance.name" left="+=25" time="100" effect="easeInCirc"]
     [iscript]
         tf.currentEvent.params.attacker.charaInstance.updatePoseByLp();
     [endscript]
@@ -1423,7 +1423,7 @@ window.BattleSection = BattleSection;
     [wa]
     [jump target="*process_battle_events_start"]
 *battle_enemy_er_apply_display
-    [anim name="&tf.currentEvent.params.source.charaInstance.name" left="+=50" time="100" effect="easeInCirc"]
+    [anim name="&tf.currentEvent.params.source.charaInstance.name" left="+=25" time="100" effect="easeInCirc"]
     [iscript]
         tf.currentEvent.params.target.charaInstance.pose = "damaged";
     [endscript]
@@ -1431,7 +1431,7 @@ window.BattleSection = BattleSection;
     [image layer="8" name="emey_er_apply" folder="fgimage" storage="chara/effects/EnemyErApply.webp" reflect="true" wait="false" left="&tf.currentEvent.params.target.x" top="&tf.currentEvent.params.target.y" width="&tf.currentEvent.params.target.charaInstance.width"]
     [er_apply chara="&tf.currentEvent.params.target.charaInstance" erValue="&tf.currentEvent.params.amount" current="&tf.currentEvent.params.target.charaInstance.er" x="&tf.currentEvent.params.target.x" y="&tf.currentEvent.params.target.y"]
     [free layer="8" name="emey_er_apply"]
-    [anim name="&tf.currentEvent.params.source.charaInstance.name" left="-=50" time="100" effect="easeInCirc"]
+    [anim name="&tf.currentEvent.params.source.charaInstance.name" left="-=25" time="100" effect="easeInCirc"]
     [iscript]
         tf.currentEvent.params.target.charaInstance.updatePoseByLp();
     [endscript]
@@ -1494,7 +1494,7 @@ window.BattleSection = BattleSection;
     [wa]
     [jump target="*process_battle_events_start"]
 *battle_heroine_damage_lambda_strike
-    [anim name="&tf.currentEvent.params.source.charaInstance.name" left="-=50" time="100" effect="easeInCirc"]
+    [anim name="&tf.currentEvent.params.source.charaInstance.name" left="-=25" time="100" effect="easeInCirc"]
     [iscript]
         tf.currentEvent.params.source.charaInstance.pose = "attack";
     [endscript]
@@ -1503,7 +1503,7 @@ window.BattleSection = BattleSection;
     [image layer="8" name="lambda_strike" folder="fgimage" storage="chara/effects/LambdaStrike.webp" wait="false" left="&tf.currentEvent.params.target.x" top="&tf.currentEvent.params.target.y" width="&tf.currentEvent.params.target.charaInstance.width"]
     [damage_to targetname="&tf.currentEvent.params.target.charaInstance.name" chara="&tf.currentEvent.params.target.charaInstance" damagevalue="&tf.currentEvent.params.amount" split="&tf.currentEvent.params.split" x="&tf.currentEvent.params.target.x" y="&tf.currentEvent.params.target.y"]
     [free layer="8" name="lambda_strike"]    
-    [anim name="&tf.currentEvent.params.source.charaInstance.name" left="+=50" time="100" effect="easeInCirc"]
+    [anim name="&tf.currentEvent.params.source.charaInstance.name" left="+=25" time="100" effect="easeInCirc"]
     [iscript]
         tf.currentEvent.params.source.charaInstance.updatePoseByLp();
     [endscript]
@@ -1511,7 +1511,7 @@ window.BattleSection = BattleSection;
     [wa]
     [jump target="*process_battle_events_start"]
 *battle_heroine_damage_mu_strike
-    [anim name="&tf.currentEvent.params.source.charaInstance.name" left="-=50" time="100" effect="easeInCirc"]
+    [anim name="&tf.currentEvent.params.source.charaInstance.name" left="-=25" time="100" effect="easeInCirc"]
     [iscript]
         tf.currentEvent.params.source.charaInstance.pose = "attack";
     [endscript]
@@ -1520,7 +1520,7 @@ window.BattleSection = BattleSection;
     [image layer="8" name="mu_strike" folder="fgimage" storage="chara/effects/MuStrike.webp" wait="false" left="&tf.currentEvent.params.target.x" top="&tf.currentEvent.params.target.y" width="&tf.currentEvent.params.target.charaInstance.width"]
     [damage_to targetname="&tf.currentEvent.params.target.charaInstance.name" chara="&tf.currentEvent.params.target.charaInstance" damagevalue="&tf.currentEvent.params.amount" split="&tf.currentEvent.params.split" x="&tf.currentEvent.params.target.x" y="&tf.currentEvent.params.target.y"]
     [free layer="8" name="mu_strike"]    
-    [anim name="&tf.currentEvent.params.source.charaInstance.name" left="+=50" time="100" effect="easeInCirc"]
+    [anim name="&tf.currentEvent.params.source.charaInstance.name" left="+=25" time="100" effect="easeInCirc"]
     [iscript]
         tf.currentEvent.params.source.charaInstance.updatePoseByLp();
     [endscript]

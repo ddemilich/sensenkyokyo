@@ -401,7 +401,7 @@ window.HeroineLambda = HeroineLambda;
     ;mp.lambda_disp
     ;mp.amount
     ;mp.enemies
-    [anim name="&mp.lambda_disp.charaInstance.name" left="-=50" time="100" effect="easeInCirc"][wa]
+    [anim name="&mp.lambda_disp.charaInstance.name" left="-=25" time="100" effect="easeInCirc"][wa]
     [heal_to chara="&mp.lambda_disp.charaInstance" healValue="&mp.amount" x="&mp.lambda_disp.x" y="&mp.lambda_disp.y"]
     [heroine_mod heroine="&mp.lambda_disp.charaInstance" time="100"]
     [image name="lightning_sunday_01" layer="8" folder="fgimage" storage="chara/effects/LightningSunday_01_loop.webp" left="0" top="0" width="640" wait="false"]
@@ -419,7 +419,7 @@ window.HeroineLambda = HeroineLambda;
     [jump target="*enemy_lightning_sunday_loop_start"]
 *enemy_lightning_sunday_loop_end
     [wait time="1000"]
-    [anim name="&mp.lambda_disp.charaInstance.name" left="+=50" time="100" effect="easeInCirc"][wa]
+    [anim name="&mp.lambda_disp.charaInstance.name" left="+=25" time="100" effect="easeInCirc"][wa]
     [freeimage layer="8" wait="true"]
 [endmacro]
 
@@ -608,6 +608,7 @@ window.HeroineLambda = HeroineLambda;
     [chara_face name="lambda_normal_bundle" face="e23_Lv3_3_1" storage="chara/lambda_normal_bundle/e23_Lv3_3_1.png"]
     [chara_face name="lambda_normal_bundle" face="e23_Lv3_3_2" storage="chara/lambda_normal_bundle/e23_Lv3_3_2.png"]
     [chara_face name="lambda_normal_bundle" face="e23_Lv3_3_3" storage="chara/lambda_normal_bundle/e23_Lv3_3_3.png"]
+
 [chara_new name="lambda_boss_bundle" storage="chara/lambda_boss_bundle/default.png" width="1000" height="702"]
     [chara_face name="lambda_boss_bundle" face="e14_Lv1_1" storage="chara/lambda_boss_bundle/e14_Lv1_1.png"]
     [chara_face name="lambda_boss_bundle" face="e14_Lv1_2" storage="chara/lambda_boss_bundle/e14_Lv1_2.png"]

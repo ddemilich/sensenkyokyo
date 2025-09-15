@@ -387,10 +387,10 @@ window.HeroineMu = HeroineMu;
 [macro name="adrenaline_rush"]
     ;mp.mu_disp
     ;mp.amount
-    [anim name="&mp.mu_disp.charaInstance.name" left="-=50" time="100" effect="easeInCirc"][wa]
+    [anim name="&mp.mu_disp.charaInstance.name" left="-=25" time="100" effect="easeInCirc"][wa]
     [heal_to chara="&mp.mu_disp.charaInstance" healValue="&mp.amount" x="&mp.mu_disp.x" y="&mp.mu_disp.y"]
     [heroine_mod heroine="&mp.mu_disp.charaInstance" time="100"]
-    [anim name="&mp.mu_disp.charaInstance.name" left="+=50" time="100" effect="easeInCirc"][wa]
+    [anim name="&mp.mu_disp.charaInstance.name" left="+=25" time="100" effect="easeInCirc"][wa]
     [image layer="8" folder="fgimage" storage="chara/effects/AdrenalineRush.webp" left="&mp.mu_disp.x" top="&mp.mu_disp.y" width="&mp.mu_disp.charaInstance.width" wait="false"]
     [wait time="1000"]
     [freeimage layer="8" wait="true"]

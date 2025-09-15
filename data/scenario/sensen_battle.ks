@@ -1319,10 +1319,17 @@ window.BattleSection = BattleSection;
     [bundle_mod bundle="&mp.bundle" time="300"]
 [endmacro]
 [macro name="focus_on_chara"]
+    ;mp.bundle
     ;mp.x
     ;mp.y
-    [camera zoom="2" x="&mp.x" y="&mp.y" ease_type="ease-out" time="500"]
-    [camera zoom="2" from_zoom="3" from_x="&mp.x" x="&mp.x" from_y="&mp.y" y="&mp.y" ease_type="ease-out" time="250"]
+    [iscript]
+        tf.randomAngle1 = ((Math.random() - 0.5) * 90);
+        tf.randomAngle2 = ((Math.random() - 0.5) * 60);
+    [endscript]
+    [image layer="5" wait="false" time="500" name="keepout" storage="hover/keepout_01.png" left="&mp.bundle.keepoutX" top="&mp.bundle.keepoutY" width="&mp.bundle.keepoutWidth"]
+    [camera zoom="3" rotate="&tf.randomAngle1" x="&mp.x" y="&mp.y" ease_type="ease-out" time="250" wait="true"]
+    [camera zoom="2" rotate="&tf.randomAngle2" from_zoom="3" from_x="&mp.x" x="&mp.x" from_y="&mp.y" y="&mp.y" ease_type="ease-out" time="500" wait="true"]
+    [free layer="5" name="keepout"]
     [reset_camera ease_type="ease-in" time="150"]
 [endmacro]
 
@@ -1448,7 +1455,7 @@ window.BattleSection = BattleSection;
     [heroine_hide heroine="&tf.currentEvent.params.target.charaInstance" time="0"]
     [playse storage="BundleEnter.mp3" loop="false"]
     [bundle_display bundle="&tf.currentEvent.params.target.bundleInstance" x="&tf.currentEvent.params.target.x" y="&tf.currentEvent.params.target.y"]
-    [focus_on_chara x="&tf.currentEvent.params.target.cameraX()" y="&tf.currentEvent.params.target.cameraY()"]
+    [focus_on_chara bundle="&tf.currentEvent.params.target.bundleInstance" x="&tf.currentEvent.params.target.cameraX()" y="&tf.currentEvent.params.target.cameraY()"]
     [jump target="*process_battle_events_start"]
 *battle_enemy_destroy
     [enemy_destroy enemy="&tf.currentEvent.params.enemy"]
@@ -1469,7 +1476,7 @@ window.BattleSection = BattleSection;
     [damage_to targetname="&tf.currentEvent.params.heroine.bundleInstance.name" chara="&tf.currentEvent.params.heroine.charaInstance" damagevalue="&tf.currentEvent.params.amount" split="&tf.currentEvent.params.split" x="&tf.currentEvent.params.heroine.x" y="&tf.currentEvent.params.heroine.y"]
     [playse storage="WearLevel.wav"]
     [bundle_refresh bundle="&tf.currentEvent.params.heroine.bundleInstance" x="&tf.currentEvent.params.heroine.x" y="&tf.currentEvent.params.heroine.y"]
-    [focus_on_chara x="&tf.currentEvent.params.heroine.cameraX()" y="&tf.currentEvent.params.heroine.cameraY()"]
+    [focus_on_chara bundle="&tf.currentEvent.params.heroine.bundleInstance" x="&tf.currentEvent.params.heroine.cameraX()" y="&tf.currentEvent.params.heroine.cameraY()"]
     [jump target="*process_battle_events_start"]
 *battle_heroine_er_change
     [image layer="8" name="emey_er_change" folder="fgimage" storage="chara/effects/BundleErApply.webp" reflect="true" wait="false" left="&tf.currentEvent.params.heroine.x" top="&tf.currentEvent.params.heroine.y" width="&tf.currentEvent.params.heroine.charaInstance.width"]

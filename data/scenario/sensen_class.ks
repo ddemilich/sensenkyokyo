@@ -921,6 +921,14 @@ class CharacterBundle {
         this.x = Math.floor(centerX - (this.width / 2));
         this.y = Math.floor(centerY - (this.height / 2));
         this.textSize = 32;
+
+        this.keepoutPadding = 0.4;
+        this.keepoutHeightRate = 1 + (this.keepoutPadding * 2);
+        this.keepoutHeight = Math.floor(this.height * this.keepoutHeightRate);
+        this.keepoutWidth = Math.floor((16 * this.keepoutHeight) / 9);
+
+        this.keepoutX = Math.floor(centerX - (this.keepoutWidth / 2));
+        this.keepoutY = Math.floor(centerY - (this.keepoutHeight / 2));
     }
     getFace() {
         if (this.getLevel() == 1) {

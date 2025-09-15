@@ -1230,6 +1230,7 @@ window.BattleSection = BattleSection;
     ;mp.x
     ;mp.y
     ;ガード表示
+    [playse storage="GuardEffect.mp3"]
     [ptext layer="9" color="blue" name="&mp.chara.lpDiffName()" text="GUARD" x="&mp.chara.lpDiffX(mp.x, true)" y="&mp.chara.lpDiffY(mp.y, true)" width="&mp.chara.width" size="40" align="center" edge="4px 0x000000"]
     [anim name="&mp.chara.lpDiffName()" top="-=10" time="100"][wa]
     [anim name="&mp.chara.lpDiffName()" top="+=10" effect="easeOutElastic" time="400"][wa]
@@ -1295,6 +1296,7 @@ window.BattleSection = BattleSection;
     ; mp.y
     ; mp.result
     [bundle_updown bundle="&mp.bundle"]
+    [playse storage="BundleBreak.mp3"]
     [ptext layer="9" color="0x21e43f" name="&mp.bundle.resultName()" text="BREAK!" x="&mp.bundle.resultX()" y="&mp.bundle.resultY()" width="&mp.bundle.width" size="40" align="center" edge="4px 0x000000" cond="mp.result"]
     [ptext layer="9" color="yellow" name="&mp.bundle.resultName()" text="FAIL!" x="&mp.bundle.resultX()" y="&mp.bundle.resultY()" width="&mp.bundle.width" size="40" align="center" edge="4px 0x000000" cond="!mp.result"]
     [anim name="&mp.bundle.resultName()" top="-=10" time="100"][wa]
@@ -1391,6 +1393,8 @@ window.BattleSection = BattleSection;
     [endscript]
     [heroine_mod heroine="&tf.currentEvent.params.target.charaInstance" time="100"][wa]
     [image layer="8" name="enemy_strike" folder="fgimage" storage="chara/effects/EnemyStrike.webp" animimg="true" reflect="true" wait="false" left="&tf.effect_x" top="&tf.effect_y" width="&tf.currentEvent.params.target.charaInstance.width"]
+    [playse storage="EnemyStrike.mp3" cond="tf.currentEvent.params.amount > 0"]
+    [playse storage="DamageMiss.mp3" cond="tf.currentEvent.params.amount == 0"]
     [damage_to targetname="&tf.currentEvent.params.target.charaInstance.name" chara="&tf.currentEvent.params.target.charaInstance" damagevalue="&tf.currentEvent.params.amount" split="&tf.currentEvent.params.split" x="&tf.currentEvent.params.target.x" y="&tf.currentEvent.params.target.y"]
     [free layer="8" name="enemy_strike"]
     [anim name="&tf.currentEvent.params.source.charaInstance.name" left="-=25" time="100" effect="easeInCirc"]
@@ -1401,6 +1405,7 @@ window.BattleSection = BattleSection;
     [jump target="*process_battle_events_start"]
 *battle_enemy_heal_display
     [anim name="&tf.currentEvent.params.source.charaInstance.name" left="+=25" time="100" effect="easeInCirc"][wa]
+    [playse storage="UltimateHeal.mp3"]
     [heal_to chara="&tf.currentEvent.params.target.charaInstance" healValue="&tf.currentEvent.params.amount" x="&tf.currentEvent.params.target.x" y="&tf.currentEvent.params.target.y"]
     [anim name="&tf.currentEvent.params.source.charaInstance.name" left="-=25" time="100" effect="easeInCirc"][wa]
     [jump target="*process_battle_events_start"]
@@ -1429,6 +1434,7 @@ window.BattleSection = BattleSection;
     [endscript]
     [heroine_mod heroine="&tf.currentEvent.params.target.charaInstance" time="100"][wa]
     [image layer="8" name="emey_er_apply" folder="fgimage" storage="chara/effects/EnemyErApply.webp" reflect="true" wait="false" left="&tf.currentEvent.params.target.x" top="&tf.currentEvent.params.target.y" width="&tf.currentEvent.params.target.charaInstance.width"]
+    [playse storage="EnemyCharge.wav" loop="false"]
     [er_apply chara="&tf.currentEvent.params.target.charaInstance" erValue="&tf.currentEvent.params.amount" current="&tf.currentEvent.params.target.charaInstance.er" x="&tf.currentEvent.params.target.x" y="&tf.currentEvent.params.target.y"]
     [free layer="8" name="emey_er_apply"]
     [anim name="&tf.currentEvent.params.source.charaInstance.name" left="-=25" time="100" effect="easeInCirc"]
@@ -1440,6 +1446,7 @@ window.BattleSection = BattleSection;
 *battle_enemy_enter_bundle
     [enemy_invisible enemy="&tf.currentEvent.params.source.charaInstance"]
     [heroine_hide heroine="&tf.currentEvent.params.target.charaInstance" time="0"]
+    [playse storage="BundleEnter.mp3" loop="false"]
     [bundle_display bundle="&tf.currentEvent.params.target.bundleInstance" x="&tf.currentEvent.params.target.x" y="&tf.currentEvent.params.target.y"]
     [focus_on_chara x="&tf.currentEvent.params.target.cameraX()" y="&tf.currentEvent.params.target.cameraY()"]
     [jump target="*process_battle_events_start"]
@@ -1448,22 +1455,27 @@ window.BattleSection = BattleSection;
     [jump target="*process_battle_events_start"]
 *battle_heroine_leave_bundle
     [bundle_cancel bundle="&tf.currentEvent.params.heroine.bundleInstance"]
+    [playse storage="BundleLeave.mp3" loop="false"]
     [heroine_show heroine="&tf.currentEvent.params.heroine.charaInstance" left="&tf.currentEvent.params.heroine.x" top="&tf.currentEvent.params.heroine.y"]
     [enemy_visible enemy="&tf.currentEvent.params.enemy"]
     [eval exp="tf.currentEvent.params.heroine.leaveBundle()"]
     [jump target="*process_battle_events_start"]
 *battle_heroine_bundle_damage
+    [playse storage="BundleEnemyHit.mp3"]
     [damage_to targetname="&tf.currentEvent.params.heroine.bundleInstance.name" chara="&tf.currentEvent.params.heroine.charaInstance" damagevalue="&tf.currentEvent.params.amount" split="&tf.currentEvent.params.split" x="&tf.currentEvent.params.heroine.x" y="&tf.currentEvent.params.heroine.y"]
     [bundle_refresh bundle="&tf.currentEvent.params.heroine.bundleInstance" x="&tf.currentEvent.params.heroine.x" y="&tf.currentEvent.params.heroine.y"]
     [jump target="*process_battle_events_start"]
 *battle_heroine_bundle_levelup
     [damage_to targetname="&tf.currentEvent.params.heroine.bundleInstance.name" chara="&tf.currentEvent.params.heroine.charaInstance" damagevalue="&tf.currentEvent.params.amount" split="&tf.currentEvent.params.split" x="&tf.currentEvent.params.heroine.x" y="&tf.currentEvent.params.heroine.y"]
+    [playse storage="WearLevel.wav"]
     [bundle_refresh bundle="&tf.currentEvent.params.heroine.bundleInstance" x="&tf.currentEvent.params.heroine.x" y="&tf.currentEvent.params.heroine.y"]
     [focus_on_chara x="&tf.currentEvent.params.heroine.cameraX()" y="&tf.currentEvent.params.heroine.cameraY()"]
     [jump target="*process_battle_events_start"]
 *battle_heroine_er_change
     [image layer="8" name="emey_er_change" folder="fgimage" storage="chara/effects/BundleErApply.webp" reflect="true" wait="false" left="&tf.currentEvent.params.heroine.x" top="&tf.currentEvent.params.heroine.y" width="&tf.currentEvent.params.heroine.charaInstance.width"]
+    [playse storage="BundleErApply.wav" loop="true"]
     [er_change_to targetname="&tf.currentEvent.params.heroine.bundleInstance.name" chara="&tf.currentEvent.params.heroine.charaInstance" value="&tf.currentEvent.params.amount" split="&tf.currentEvent.params.split" x="&tf.currentEvent.params.heroine.x" y="&tf.currentEvent.params.heroine.y"]
+    [stopse]
     [free layer="8" name="emey_er_change"]
     [jump target="*process_battle_events_start"]
 *battle_heroine_bundle_start_ecstasy
@@ -1471,6 +1483,7 @@ window.BattleSection = BattleSection;
     [jump target="*process_battle_events_start"]
 *battle_heroine_bundle_ecstasy
     [camera zoom="2" from_zoom="1" from_x="&tf.currentEvent.params.heroine.fromCameraX()" x="&tf.currentEvent.params.heroine.cameraX()" from_y="&tf.currentEvent.params.heroine.fromCameraY()" y="&tf.currentEvent.params.heroine.cameraY()" ease_type="ease-out" time="150"]
+    [playse storage="HeroineEcstasy.mp3"]
     [heroine_ecstasy bundle="&tf.currentEvent.params.heroine.bundleInstance" heroine="&tf.currentEvent.params.heroine" amount="&tf.currentEvent.params.amount" current="&tf.currentEvent.params.current"]
     [jump target="*process_battle_events_start"]
 *battle_heroine_bundle_end_ecstasy
@@ -1479,6 +1492,7 @@ window.BattleSection = BattleSection;
     [jump target="*process_battle_events_start"]
 *battle_heroine_resist_bundle
     [bundle_shake bundle="&tf.currentEvent.params.heroine.bundleInstance"]
+    [playse storage="BundleResist.mp3"]
     [bundle_refresh bundle="&tf.currentEvent.params.heroine.bundleInstance" x="&tf.currentEvent.params.heroine.x" y="&tf.currentEvent.params.heroine.y"]
     [jump target="*process_battle_events_start"]
 *battle_heroine_break_bundle
@@ -1501,6 +1515,7 @@ window.BattleSection = BattleSection;
     [heroine_mod heroine="&tf.currentEvent.params.source.charaInstance" time="100"]
     [wa]
     [image layer="8" name="lambda_strike" folder="fgimage" storage="chara/effects/LambdaStrike.webp" wait="false" left="&tf.currentEvent.params.target.x" top="&tf.currentEvent.params.target.y" width="&tf.currentEvent.params.target.charaInstance.width"]
+    [playse storage="LambdaStrike.mp3"]
     [damage_to targetname="&tf.currentEvent.params.target.charaInstance.name" chara="&tf.currentEvent.params.target.charaInstance" damagevalue="&tf.currentEvent.params.amount" split="&tf.currentEvent.params.split" x="&tf.currentEvent.params.target.x" y="&tf.currentEvent.params.target.y"]
     [free layer="8" name="lambda_strike"]    
     [anim name="&tf.currentEvent.params.source.charaInstance.name" left="+=25" time="100" effect="easeInCirc"]
@@ -1518,6 +1533,7 @@ window.BattleSection = BattleSection;
     [heroine_mod heroine="&tf.currentEvent.params.source.charaInstance" time="100"]
     [wa]
     [image layer="8" name="mu_strike" folder="fgimage" storage="chara/effects/MuStrike.webp" wait="false" left="&tf.currentEvent.params.target.x" top="&tf.currentEvent.params.target.y" width="&tf.currentEvent.params.target.charaInstance.width"]
+    [playse storage="MuStrike.mp3"]
     [damage_to targetname="&tf.currentEvent.params.target.charaInstance.name" chara="&tf.currentEvent.params.target.charaInstance" damagevalue="&tf.currentEvent.params.amount" split="&tf.currentEvent.params.split" x="&tf.currentEvent.params.target.x" y="&tf.currentEvent.params.target.y"]
     [free layer="8" name="mu_strike"]    
     [anim name="&tf.currentEvent.params.source.charaInstance.name" left="+=25" time="100" effect="easeInCirc"]
@@ -1529,6 +1545,7 @@ window.BattleSection = BattleSection;
     [jump target="*process_battle_events_start"]
 *battle_heroine_damage_lambda_charge
     [image layer="8" name="lambda_charge" folder="fgimage" storage="chara/effects/LambdaCharge.webp" wait="false" left="&tf.currentEvent.params.target.x" top="&tf.currentEvent.params.target.y" width="&tf.currentEvent.params.target.charaInstance.width"]
+    [playse storage="LambdaCharge.mp3"]
     [damage_to targetname="&tf.currentEvent.params.target.charaInstance.name" chara="&tf.currentEvent.params.target.charaInstance" damagevalue="&tf.currentEvent.params.amount" split="&tf.currentEvent.params.split" x="&tf.currentEvent.params.target.x" y="&tf.currentEvent.params.target.y"]
     [free layer="8" name="lambda_charge"]    
     [jump target="*process_battle_events_start"]
@@ -1536,6 +1553,7 @@ window.BattleSection = BattleSection;
     [anim name="&tf.currentEvent.params.source.charaInstance.name" left="&tf.currentEvent.params.target.x" top="&tf.currentEvent.params.target.y" time="100" effect="easeOutCirc"][wa]
     [anim name="&tf.currentEvent.params.source.charaInstance.name" left="&tf.currentEvent.params.source.x" top="&tf.currentEvent.params.source.y" time="200" effect="easeOutCirc"]
     [image layer="8" name="guard_damage" folder="fgimage" storage="chara/effects/HeroineGuard.webp" wait="false" left="&tf.currentEvent.params.target.x" top="&tf.currentEvent.params.target.y" width="&tf.currentEvent.params.target.charaInstance.width"]
+    [playse storage="DefaultGuard.mp3"]
     [wait time="150"]
     [free layer="8" name="guard_damage"]
     [damage_to targetname="&tf.currentEvent.params.target.charaInstance.name" chara="&tf.currentEvent.params.target.charaInstance" damagevalue="&tf.currentEvent.params.amount" split="&tf.currentEvent.params.split" x="&tf.currentEvent.params.target.x" y="&tf.currentEvent.params.target.y"]
@@ -1544,6 +1562,7 @@ window.BattleSection = BattleSection;
     [anim name="&tf.currentEvent.params.source.charaInstance.name" left="&tf.currentEvent.params.target.x" top="&tf.currentEvent.params.target.y" time="100" effect="easeOutCirc"][wa]
     [anim name="&tf.currentEvent.params.source.charaInstance.name" left="&tf.currentEvent.params.source.x" top="&tf.currentEvent.params.source.y" time="200" effect="easeOutCirc"]
     [image layer="8" name="mucharge_damage" folder="fgimage" storage="chara/effects/MuCharge.webp" wait="false" left="&tf.currentEvent.params.target.x" top="&tf.currentEvent.params.target.y" width="&tf.currentEvent.params.target.charaInstance.width"]
+    [playse storage="MuCharge.mp3"]
     [wait time="150"]
     [free layer="8" name="mucharge_damage"]
     [damage_to targetname="&tf.currentEvent.params.target.charaInstance.name" chara="&tf.currentEvent.params.target.charaInstance" damagevalue="&tf.currentEvent.params.amount" split="&tf.currentEvent.params.split" x="&tf.currentEvent.params.target.x" y="&tf.currentEvent.params.target.y"]
@@ -1555,6 +1574,7 @@ window.BattleSection = BattleSection;
     [endscript]
     [heroine_mod heroine="&tf.currentEvent.params.source.charaInstance" time="100"]
     [wa]
+    [playse storage="UltimateHeal.mp3"]
     [heal_to chara="&tf.currentEvent.params.target.charaInstance" healValue="&tf.currentEvent.params.amount" x="&tf.currentEvent.params.target.x" y="&tf.currentEvent.params.target.y"]
     [anim name="&tf.currentEvent.params.source.charaInstance.name" left="+=30" time="100" effect="easeInCirc"]
     [iscript]
@@ -1594,6 +1614,7 @@ window.BattleSection = BattleSection;
     [jump target="*process_battle_events_start"]
 *battle_heroine_enable_buddy_bonding
     [image layer="8" name="bonding" folder="fgimage" storage="chara/effects/BuddyBonding.webp" left="&tf.currentEvent.params.heroine.x" top="&tf.currentEvent.params.heroine.y" width="&tf.currentEvent.params.heroine.charaInstance.width"]
+    [playse storage="BuddyBonding.mp3"]
     [wait time="500"]
     [free layer="8" name="bonding"]
     [jump target="*process_battle_events_start"]

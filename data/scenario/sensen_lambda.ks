@@ -402,9 +402,11 @@ window.HeroineLambda = HeroineLambda;
     ;mp.amount
     ;mp.enemies
     [anim name="&mp.lambda_disp.charaInstance.name" left="-=25" time="100" effect="easeInCirc"][wa]
+    [playse storage="UltimateHeal.mp3"]
     [heal_to chara="&mp.lambda_disp.charaInstance" healValue="&mp.amount" x="&mp.lambda_disp.x" y="&mp.lambda_disp.y"]
     [heroine_mod heroine="&mp.lambda_disp.charaInstance" time="100"]
     [image name="lightning_sunday_01" layer="8" folder="fgimage" storage="chara/effects/LightningSunday_01_loop.webp" left="0" top="0" width="640" wait="false"]
+    [playse storage="LightningSunday.mp3"]
     [iscript]
         tf.enemy_lightning_sunday_loop_index = 0;
     [endscript]

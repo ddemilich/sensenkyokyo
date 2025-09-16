@@ -8,11 +8,11 @@
 
 *start 
 
-;[glink color="btn_06_black" x=135 y=320 text="はじめから" width="240" size="32" target="*gamestart" keyfocus="1"]
-[glink color="btn_06_black" x=400 y=320 text="CGモード"  width="240" size="32" target="*cgmode" keyfocus="3"]
-[glink color="btn_06_black" x=135 y=410 text="アリーナ"  width="240" size="32" target="*arenamode" keyfocus="3"]
-;[button x=135 y=500 graphic="title/button_load.png" enterimg="title/button_load2.png" role="load" keyfocus="2"]
-[button x=135 y=590 graphic="title/button_config.png" enterimg="title/button_config2.png" role="sleepgame" storage="config.ks" keyfocus="4"]
+[glink color="btn_29_green" x=115 y=400 text="はじめから" width="240" size="24" target="*gamestart" keyfocus="1" enterse="open.mp3" leavese="close.mp3"]
+[glink color="btn_29_green" x=115 y=490 text="つづきから" width="240" size="24" target="*gamecontinue" keyfocus="2" enterse="open.mp3" leavese="close.mp3"]
+[glink color="btn_29_purple" x=400 y=400 text="CGモード"  width="240" size="24" target="*cgmode" keyfocus="3" enterse="open.mp3" leavese="close.mp3"]
+[glink color="btn_29_purple" x=400 y=490 text="アリーナ"  width="240" size="24" target="*arenamode" keyfocus="4" enterse="open.mp3" leavese="close.mp3"]
+[glink color="btn_29_black" x=115 y=580 text="コンフィグ" width="240" size="24" target="*sleepthenconfig" keyfocus="5" enterse="open.mp3" leavese="close.mp3"]
 
 [s]
 *cgmode
@@ -24,7 +24,11 @@
 *gamestart
 ;一番最初のシナリオファイルへジャンプする
 [fadeoutbgm time="100"]
-@jump storage="scene1.ks"
-
-
-
+[jump storage="scene1.ks"]
+*gamecontinue
+[fadeoutbgm time="100"]
+[jump target="*start"]
+*sleepthenconfig
+[fadeoutbgm time="100"]
+[sleepgame storage="config.ks"]
+[jump target="*start"]

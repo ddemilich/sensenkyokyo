@@ -384,10 +384,10 @@ window.__tyrano_key_config = {
     // マウス操作
     mouse: {
         
-        "right"      : "hidemessage",
-        "center"     : "menu",
-        "wheel_up"   : "backlog",
-        "wheel_down" : "next",
+        "right"      : "backlog",
+        "center"     : "",
+        "wheel_up"   : "",
+        "wheel_down" : "",
         "next"       : "holdskip",
         "prev"       : "auto",
         

@@ -5,12 +5,8 @@
 [cm]
 [clearfix]
 [start_keyconfig]
-
-
 [bg storage="stage1.png" time="100"]
 
-;メニューボタンの表示
-@showmenubutton
 
 ;メッセージウィンドウの設定
 [position layer="message0" left=160 top=500 width=1000 height=200 page=fore visible=true]

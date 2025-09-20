@@ -462,7 +462,7 @@ class Heroine extends Character {
     static HEROINE_DODGE_RATE = 0.85;
     static HEROINE_RESCUE_RATE = 0.2;
 
-    constructor(name, lp, ap, width, height) {
+    constructor(name, lp, ap, width=250, height=351) {
         super(name, lp, ap, width, height);
         this.dodgeRate = Heroine.HEROINE_DODGE_RATE;
 

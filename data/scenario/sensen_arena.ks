@@ -101,8 +101,8 @@ class ArenaController {
     }
 
     battleSetup() {
-        let lambda = new HeroineLambda(this.LP, this.AP, 250, 351);
-        let mu = new HeroineMu(this.LP, this.AP, 250, 351);
+        let lambda = new HeroineLambda(this.LP, this.AP);
+        let mu = new HeroineMu(this.LP, this.AP);
         lambda.er = this.ER;
         mu.er = this.ER;
         lambda.cr = this.CR;

@@ -1,32 +1,5 @@
 *start
-
-[cm]
-[clearfix]
-[start_keyconfig]
-[bg storage="robby00.jpg" time="100"]
-
-
-[sensen_init]
-[sensen_load]
-;メッセージウィンドウの設定
-[position layer="message0" left="60" top="500" width="1200" height="200" page="fore" visible="false"]
-;文字が表示される領域を調整
-[position layer="message0" page="fore" margint="45" marginl="50" marginr="70" marginb="60"]
-[ptext name="chara_name_area" layer="message0" color="white" size="28" bold="true" x="180" y="510"]
-;上記で定義した領域がキャラクターの名前表示であることを宣言（これがないと#の部分でエラーになります）
-[chara_config ptext="chara_name_area"]
-
-
-;メッセージウィンドウの表示
-[layopt layer="message0" visible="true"]
-
-#
-この度は戦々嬌々をダウンロードしていただきありがとうございます。[l][r]
-このバージョンではステージ１とステージ２をプレイすることができます。[p]
-[layopt layer="message0" visible="false"]
-
-*scene1_start
-[sensen_header bg="robby01.jpg" bgm="kaiju.mp3"]
+[sensen_header bg="lobby01.jpg" bgm="kaiju.mp3"]
 
 [image layer="1" name="lambda_stand" storage="chara/story/lambda_stand.png" left="780" top="150" width="600" time="300" zindex="20" wait="false"]
 [image layer="1" name="mu_stand" storage="chara/story/mu_stand.png" left="780" top="150" width="600" time="300" zindex="10"]
@@ -67,11 +40,11 @@
     [ptext layer="3" name="mu_er"     x="1080" y="480" size="22" color="0xfc03db" text="&tf.sensenData.mu.er" width="180" align="right" edge="3px 0x000000" overwrite="true"]
     [ptext layer="3" name="lambda_cr"  x="880" y="510" size="22" color="0x3e8238" text="&tf.sensenData.lambda.cr" width="180" align="right" edge="3px 0x000000" overwrite="true"]
     [ptext layer="3" name="mu_cr"     x="1080" y="510" size="22" color="0x3e8238" text="&tf.sensenData.mu.cr" width="180" align="right" edge="3px 0x000000" overwrite="true"]
-    [glink color="btn_29_purple" target="*change_heroine_stat" size="24" text="CLOSE" x="980" y="650" width="240" exp="tf.heroineStatDetail = false"]
+    [glink color="btn_29_purple" target="*change_heroine_stat" size="24" text="CLOSE" x="980" y="650" width="240" exp="tf.heroineStatDetail = false" enterse="open.mp3" leavese="close.mp3"]
 [else]
-    [glink color="btn_29_purple" target="*change_heroine_stat" size="24" text="ステータス" x="980" y="650" width="240" exp="tf.heroineStatDetail = true"]
+    [glink color="btn_29_purple" target="*change_heroine_stat" size="24" text="ステータス" x="980" y="650" width="240" exp="tf.heroineStatDetail = true" enterse="open.mp3" leavese="close.mp3"]
 [endif]
-[glink color="btn_29_green" target="*back" text="タイトルに戻る" width="240" size="24" x="10" y="650"]
+[glink color="btn_29_green" target="*back" text="タイトルに戻る" width="240" size="24" x="10" y="650" enterse="open.mp3" leavese="close.mp3"]
 [s]
 
 *change_heroine_stat

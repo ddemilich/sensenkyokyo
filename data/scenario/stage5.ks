@@ -1,11 +1,11 @@
 *start
 [sensen_header bg="stage4.png" bgm="music.ogg"]
 
-[glink color="btn_29_green" text="ステージ攻略成功" size="24" target="*back" exp="tf.sensenData.processStage(5, true)"]
-[glink color="btn_29_green" text="ステージ攻略失敗" size="24" target="*back" exp="tf.sensenData.processStage(5, false)"]
+[glink color="btn_29_green" text="ステージ攻略成功" size="24" target="*back" exp="tf.sensenData.processStage(5, true)" enterse="open.mp3" leavese="close.mp3"]
+[glink color="btn_29_green" text="ステージ攻略失敗" size="24" target="*back" exp="tf.sensenData.processStage(5, false)" enterse="open.mp3" leavese="close.mp3"]
 [s]
 
 *back
 [sensen_save]
 [sensen_footer]
-[jump storage="scene1.ks" target="*scene1_start"]
+[jump storage="lobby.ks"]

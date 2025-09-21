@@ -26,11 +26,11 @@
 *gamestart
 ;一番最初のシナリオファイルへジャンプする
 [fadeoutbgm time="100"]
-[jump storage="scene1.ks"]
+[jump storage="sensen_newgame.ks"]
 *gamecontinue
 [fadeoutbgm time="100"]
 [sensen_load]
-[jump storage="scene1.ks" target="*scene1_start"]
+[jump storage="lobby.ks"]
 *sleepthenconfig
 [fadeoutbgm time="100"]
 [sleepgame storage="config.ks"]

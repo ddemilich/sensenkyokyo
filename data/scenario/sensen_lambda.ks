@@ -654,4 +654,8 @@ window.HeroineLambda = HeroineLambda;
     [chara_face name="lambda_boss_bundle" face="e24_Lv3_3_1" storage="chara/lambda_boss_bundle/e24_Lv3_3_1.png"]
     [chara_face name="lambda_boss_bundle" face="e24_Lv3_3_2" storage="chara/lambda_boss_bundle/e24_Lv3_3_2.png"]
     [chara_face name="lambda_boss_bundle" face="e24_Lv3_3_3" storage="chara/lambda_boss_bundle/e24_Lv3_3_3.png"]
+
+[chara_new name="story_lambda" jname="ラムダ" storage="chara/story/lambda_stand.png" width="600" height="848"]
+
 [return]
+

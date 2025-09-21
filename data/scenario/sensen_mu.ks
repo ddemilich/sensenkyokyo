@@ -637,4 +637,7 @@ window.HeroineMu = HeroineMu;
     [heal_to chara="&mp.mu" healValue="&mp.mu.maxLp" x="&mp.x" y="&mp.y"]
     [heroine_mod heroine="&mp.mu"]
 [endmacro]
+
+[chara_new name="story_mu" jname="ミュー" storage="chara/story/mu_stand.png" width="600" height="848"]
+
 [return]

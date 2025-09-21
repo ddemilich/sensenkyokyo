@@ -1,24 +1,13 @@
 *start
 [sensen_header bg="lobby00.jpg" bgm="kaiju.mp3"]
+[novel_header]
 
-;メッセージウィンドウの設定
-[position layer="message0" left="60" top="500" width="1200" height="200" page="fore" visible="false"]
-;文字が表示される領域を調整
-[position layer="message0" page="fore" margint="45" marginl="50" marginr="70" marginb="60"]
-[ptext name="chara_name_area" layer="message0" color="white" size="28" bold="true" x="180" y="510"]
-;上記で定義した領域がキャラクターの名前表示であることを宣言（これがないと#の部分でエラーになります）
-[chara_config ptext="chara_name_area"]
-
-
-;メッセージウィンドウの表示
-[layopt layer="message0" visible="true"]
-
-#
+# ddemilich
 この度は戦々嬌々をダウンロードしていただきありがとうございます。[l][r]
 このバージョンではステージ１とステージ２をプレイすることができます。[p]
 
 [if exp="sf.sensenSaveData"]
-#
+# 
 セーブ済のデータがあります。[r]
 新規データで上書きすると、過去のデータは完全に削除されます。[r]
 上書きしても良いでしょうか？[r]
@@ -34,8 +23,7 @@
 [sensen_load]
 
 *advance_to_lobby
-[layopt layer="message0" visible="false"]
-
+[novel_footer]
 [sensen_footer]
 [jump storage="lobby.ks"]
 
@@ -49,4 +37,5 @@
 #
 [r]
 過去データの続きから再開します。[p]
+[sensen_load]
 [jump target="*advance_to_lobby"]

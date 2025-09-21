@@ -35,11 +35,32 @@ class SensenSystemData {
 }
 
 class SensenData {
-    constructor(lambda, lcards, mu, mcards) {
+    constructor(lambda, mu, lcards, mcards, stage, stage_result) {
         this.lambda = lambda;
         this.mu = mu;
         this.lambda_cards = lcards;
         this.mu_cards = mcards;
+        this.stage = stage;
+        this.stage_result = stage_result;
+    }
+    getStageResultImage(stage) {
+        if (this.stage_result[stage-1]) {
+            return "../image/eventButton/stageResultOk.png";
+        } else {
+            return "../image/eventButton/stageResultNg.png";
+        }
+    }
+    processStage(stage, result) {
+        if(stage == this.stage) {
+            // 初クリア
+            this.stage++;
+        }
+        if (this.stage > 6) {
+            console.warn(`異常なステージ進行が検出されました。${this.stage}`)
+            this.stage = 6;
+        }
+        // フラグ更新
+        this.stage_result[stage-1] = result;
     }
 }
 
@@ -47,13 +68,19 @@ class SensenSaveData {
     constructor(sensenData=null) { 
         let lambda;
         let mu;
+        let stage;
+        let stage_result;
 
         if (sensenData) {
             lambda = sensenData.lambda;
             mu = sensenData.mu;
+            stage = sensenData.stage;
+            stage_result = sensenData.stage_result;
         } else {
             lambda = new HeroineLambda(300, 50);
             mu = new HeroineMu(300, 50);
+            stage = 1;
+            stage_result = [false, false, false, false, false, false];
         }
 
         // 基礎ステータス
@@ -69,6 +96,9 @@ class SensenSaveData {
         // カード
         this.lambda_card_ids = [];
         this.mu_card_ids = [];
+        // ステージ情報
+        this.stage = stage;
+        this.stage_result = stage_result;
     }
     serialize() {
         return JSON.parse(JSON.stringify(this));
@@ -84,7 +114,7 @@ class SensenSaveData {
         mu.cr = this.mu_cr;
         mu.maxActionCount.baseValue = this.mu_actionCount;
         // TODO: カードIDからカードインスタンスを作る
-        return new SensenData(lambda, mu, [], []);
+        return new SensenData(lambda, mu, [], [], this.stage, this.stage_result);
     }
 
     static deserialize(plainObject) {

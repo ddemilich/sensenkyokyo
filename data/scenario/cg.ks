@@ -7,7 +7,7 @@
 [hidemenubutton]
 [cm]
 
-[bg storage="../../tyrano/images/system/bg_base.png" time=100]
+[bg storage="../../tyrano/images/system/bg_base.png" time="100"]
 [playbgm storage="music.m4a" loop="true" restart="false" volume="10"]
 [layopt layer="1" visible="true"]
 [image layer="1" left="0" top="0" storage="config/label_cg.png" folder="image" ]

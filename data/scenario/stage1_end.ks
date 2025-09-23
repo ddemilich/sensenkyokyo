@@ -1,5 +1,5 @@
 *start
-[sensen_header bg="stage1.png" bgm="music.ogg"]
+[sensen_header bg="stage1.png" bgm="stage_end.mp3"]
 [novel_header]
 [if exp="tf.sensenData.stage_result[0]"]
 [chara_show name="story_lambda" left="780" top="100" wait="false" zindex="10"]

@@ -1,5 +1,5 @@
 *start
-[sensen_header bg="stage1.png" bgm="music.ogg"]
+[sensen_header bg="stage1.png" bgm="stage_begin.mp3"]
 [novel_header]
 #
 薄暗い地下水路にモーターの音が響き渡っている。[p]

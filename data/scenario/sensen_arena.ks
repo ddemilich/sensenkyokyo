@@ -101,8 +101,8 @@ class ArenaController {
     }
 
     battleSetup() {
-        let lambda = new HeroineLambda(this.LP, this.AP);
-        let mu = new HeroineMu(this.LP, this.AP);
+        let lambda = new HeroineLambda(this.LP, this.AP, 250, 351);
+        let mu = new HeroineMu(this.LP, this.AP, 250, 351);
         lambda.er = this.ER;
         mu.er = this.ER;
         lambda.cr = this.CR;
@@ -203,13 +203,14 @@ window.ArenaController = ArenaController;
     [ptext name="showHeroineCRValue" overwrite="true" edge="4px 0x000000" layer="1" color="white" size="20" text="&tf.ArenaController.CR" x="&tf.ArenaController.getBgSelectX(12)" y="&tf.ArenaController.getBgSelectY(9)" width="&tf.ArenaController.gridWidth"]
 [endmacro]
 [macro name="arena_start_button"]
-    [glink text="戦闘開始" x="&tf.ArenaController.startButtonX" y="&tf.ArenaController.startButtonY" exp="tf.ArenaController.startBattle()" cond="tf.ArenaController.enemyList.length > 0" target="&mp.target"]
+    [glink color="btn_29_green" text="戦闘開始" size="24" x="&tf.ArenaController.startButtonX" y="&tf.ArenaController.startButtonY" cond="tf.ArenaController.enemyList.length > 0" target="&mp.target"]
 [endmacro]
 [macro name="arena_end_button"]
-    [glink text="戦闘中止" x="&tf.ArenaController.startButtonX" y="&tf.ArenaController.startButtonY" target="&mp.target" storage="arena_battle.ks"]
+    [glink color="btn_29_green" text="戦闘中止" size="24" x="&tf.ArenaController.startButtonX" y="&tf.ArenaController.startButtonY" target="&mp.target" storage="arena_battle.ks"]
 [endmacro]
 
 [macro name="arena_battle_setup"]
+    ;mp.backtarget
     [iscript]
         tf.ArenaController.battleSetup();
     [endscript]
@@ -226,11 +227,11 @@ window.ArenaController = ArenaController;
     [layopt layer="7" visible="true"]
     [layopt layer="8" visible="true"]
     [layopt layer="9" visible="true"]
-    [battle_init battle="&tf.ArenaController.Battle"]
+    [battle_init battle="&tf.ArenaController.Battle" backtarget="&mp.backtarget"]
 [endmacro]
 
 [macro name="arena_battle_mainloop"]
-    [battle_loop battle="&tf.ArenaController.Battle"]
+    [battle_loop battle="&tf.ArenaController.Battle" backtarget="&mp.backtarget"]
 [endmacro]
 
 [macro name="arena_battle_end"]

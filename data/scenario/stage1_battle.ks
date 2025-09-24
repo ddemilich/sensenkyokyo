@@ -15,7 +15,7 @@
 *stand_start
 [jump target="*end" cond="tf.sensenStage.ListedEventItems.length==0"]
 [heroine_stand target="*stand_end"]
-[stage_event_select stage="&tf.sensenStage" target="*stand_end"]
+[stage_event_select stage="&tf.sensenStage" target="*stand_end" target_event_start="*event_start" ]
 [s]
 
 *stand_end
@@ -36,3 +36,9 @@
 [stage_progress_bar_hide stage="&tf.sensenStage"]
 [sensen_footer]
 [jump storage="stage1_end.ks"]
+
+*event_start
+[cm]
+[stage_event_hide]
+[freeimage layer="2"]
+[freeimage layer="3"]

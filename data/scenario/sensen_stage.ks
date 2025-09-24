@@ -197,13 +197,14 @@ window.SensenStageOne = SensenStageOne;
 [macro name="stage_event_select"]
     ;mp.stage
     ;mp.target
+    ;mp.target_event_start
     [if exp="mp.stage.selectedEventIndex == -1"]
         [ptext layer="5" text="イベントを選んでステージを進んでいこう→" name="event_detail" x="&mp.stage.eventDetailX" y="&mp.stage.eventDetailY" width="&mp.stage.eventDetailWidth" size="24" align="center" overwrite="true" ]
         [ptext layer="5" text=" " name="event_selected" x="&mp.stage.eventMarkX()" y="&mp.stage.eventMarkY()" width="&mp.stage.eventMarkWidth" size="48" align="right" overwrite="true"]
     [else]
         [ptext layer="5" text="&mp.stage.getEventDetail()" name="event_detail" x="&mp.stage.eventDetailX" y="&mp.stage.eventDetailY" width="&mp.stage.eventDetailWidth" size="18" align="left" overwrite="true" ]
         [ptext layer="5" text="→" name="event_selected" x="&mp.stage.eventMarkX()" y="&mp.stage.eventMarkY()" width="&mp.stage.eventMarkWidth" size="48" align="right" overwrite="true"]
-        [glink color="btn_29_green" text="進む" size="24" target="&mp.target" exp="tf.sensenStage.handleEventSelection()" x="&mp.stage.eventDetailX" y="&mp.stage.eventDetailBottomY" width="&mp.stage.eventDetailWidth" enterse="open.mp3" leavese="close.mp3"]    
+        [glink color="btn_29_green" text="進む" size="24" target="&mp.target_event_start" exp="tf.sensenStage.handleEventSelection()" x="&mp.stage.eventDetailX" y="&mp.stage.eventDetailBottomY" width="&mp.stage.eventDetailWidth" enterse="open.mp3" leavese="close.mp3"]    
     [endif]
     [button target="&mp.target" exp="tf.sensenStage.selectedEventIndex=0" graphic="&mp.stage.ListedEventItems[0].event.getImagePath()" x="&mp.stage.eventX(0)" y="&mp.stage.eventY(0)" width="&mp.stage.eventButtonWidth" height="&mp.stage.eventButtonHeight" cond="mp.stage.ListedEventItems.length > 0"]
     [button target="&mp.target" exp="tf.sensenStage.selectedEventIndex=1" graphic="&mp.stage.ListedEventItems[1].event.getImagePath()" x="&mp.stage.eventX(1)" y="&mp.stage.eventY(1)" width="&mp.stage.eventButtonWidth" height="&mp.stage.eventButtonHeight" cond="mp.stage.ListedEventItems.length > 1"]

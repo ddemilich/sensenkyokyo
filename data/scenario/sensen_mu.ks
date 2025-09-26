@@ -92,7 +92,7 @@ class MuChargeBurst extends Action {
                 actionType: 'charge_burst'
             });
         } else {
-            let spAmount = Math.floor(source.charaInstance.sp * 0.1) + 1;
+            let spAmount = Math.floor(source.charaInstance.maxSp * 0.2) + 1;
             source.charaInstance.changeSp(spAmount);
             dispatch('HEROINE_SP_GRANTED', {
                 source: source,

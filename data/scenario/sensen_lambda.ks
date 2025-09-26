@@ -73,7 +73,7 @@ class LambdaChargeBurst extends Action {
         const damage = Math.floor(source.charaInstance.currentAp * 0.25);
 
         const availableTargets = allEnemies.filter(eDisp => !eDisp.charaInstance.isDefeated() && !eDisp.charaInstance.bundled);
-        if (availableTargets) {
+        if (availableTargets.length > 0) {
             for (const targetDisp of availableTargets) {
                 const targetCharaInstance = targetDisp.charaInstance;
 

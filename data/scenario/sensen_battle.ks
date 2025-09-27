@@ -473,6 +473,9 @@ class BattleSection {
 
     processUpkeepPhase() {
         console.log(`JS: --- ターン ${this.currentTurn}: アップキープフェイズ処理実行 ---`);
+        // 再配置
+        this.repositionEnemies();
+        this.repositionHeroines();
         for (const heroDisp of this.heroines) {
             this.processCharacterEffects(heroDisp);
         }
@@ -480,9 +483,6 @@ class BattleSection {
         for (const enemyDisp of this.enemies) {
             this.processCharacterEffects(enemyDisp);
         }
-        // 再配置
-        this.repositionEnemies();
-        this.repositionHeroines();
     }
 
     processEnemyActionDecisionPhase() {

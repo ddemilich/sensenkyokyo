@@ -303,6 +303,11 @@ class BattleSection {
         this.backButtonX = 50;
         this.backButtonY = 650;
         this.backButtonWidth = 200;
+
+        // UNDOボタン
+        this.undoButtonX = 300;
+        this.undoButtonY = this.backButtonY;
+        this.undoButtonWidth = this.backButtonWidth;
     }
 
     dispatch(eventName, params = {}) {
@@ -550,6 +555,8 @@ class BattleSection {
             }
             // 自分以外を探す
             const buddy = this.heroines.find(h => h.charaInstance !== heroDisp.charaInstance);
+            // UNDOされたとき等にアイコンを消すために再度リフレッシュする。
+            this.dispatch('CHARA_ACTION_REFRESH', { enemies: this.enemies, heroines: this.heroines });
             // イベント発行
             this.dispatch('HEROINE_ACTION_DECISION', {
                 source: heroDisp,
@@ -1086,6 +1093,13 @@ window.BattleSection = BattleSection;
     [cm]
 [endmacro]
 
+[macro name="action_undo_button"]
+    ;mp.target
+    ;mp.heroine
+    ;mp.buddy
+    [glink color="btn_29_green" text="一つ戻す" size="24" width="&tf.sensenBattle.undoButtonWidth" x="&tf.sensenBattle.undoButtonX" y="&tf.sensenBattle.undoButtonY" exp="mp.heroine.undoOneAction() || mp.buddy.undoOneAction()" target="&mp.target" ]
+[endmacro]
+
 [macro name="heroine_action_buttons"]
     ;mp.heroine
     ;mp.buddy
@@ -1100,6 +1114,7 @@ window.BattleSection = BattleSection;
     [button name="action_resist" folder="fgimage" graphic="&mp.heroine.actionClasses.get('Resist').imagePath" x="&mp.heroine.actionSelectX(mp.x, 0)" y="&mp.heroine.actionSelectY(mp.y, 0)" width="&mp.heroine.actionSelectWidth()" target="*heroine_action_decision_decided" exp="tf.selectedAction = mp.heroine.setActionByKey('Resist')" cond="mp.heroine.bundled"]
     [button name="action_break" folder="fgimage" graphic="&mp.heroine.actionClasses.get('Break').imagePath" x="&mp.heroine.actionSelectX(mp.x, 0)" y="&mp.heroine.actionSelectY(mp.y, 1)" width="&mp.heroine.actionSelectWidth()" target="*heroine_action_decision_decided" exp="tf.selectedAction = mp.heroine.setActionByKey('Break')" cond="mp.heroine.bundled"]
     [button name="action_cocent" folder="fgimage" graphic="&mp.heroine.actionClasses.get('Concentrate').imagePath" x="&mp.heroine.actionSelectX(mp.x, 0)" y="&mp.heroine.actionSelectY(mp.y, 2)" width="&mp.heroine.actionSelectWidth()" target="*heroine_action_decision_decided" exp="tf.selectedAction = mp.heroine.setActionByKey('Concentrate')" cond="mp.heroine.bundled"]
+    [action_undo_button heroine="&mp.heroine" buddy="&mp.buddy" target="*heroine_action_button_end"]
     [battle_end_button][s]
 *heroine_ultimate
     [cm]

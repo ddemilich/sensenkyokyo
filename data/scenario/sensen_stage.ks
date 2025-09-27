@@ -235,7 +235,7 @@ window.SensenStageOne = SensenStageOne;
 [macro name="stage_event_msg"]
     ;mp.stage
     ;mp.target_event_continue
-    [ptext name="stage_event_msg" layer="5" x="&mp.stage.eventDetailX" y="250" text="&mp.stage.getEventMessage()" width="640" size="24" edge="4px 0x000000" overwrite="true" ]
+    [ptext name="stage_event_msg" layer="5" x="&mp.stage.eventDetailX" y="150" text="&mp.stage.getEventMessage()" width="640" size="24" edge="4px 0x000000" overwrite="true" ]
     [glink color="btn_29_green" text="次へ" size="24" target="&mp.target_event_continue" x="&mp.stage.eventDetailX" y="&mp.stage.eventDetailBottomY" width="&mp.stage.eventDetailWidth" enterse="open.mp3" leavese="close.mp3"]
 [endmacro]
 [macro name="stage_msg_fadeout"]

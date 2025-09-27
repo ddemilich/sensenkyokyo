@@ -317,6 +317,17 @@ class Character {
         }
         return null;
     }
+    undoOneAction() {
+        // 1. actions配列が空でないかチェック
+        if (this.actions.length > 0) {
+            // 2. 配列の末尾の要素を削除
+            const lastAction = this.actions.pop();
+            console.log(`[Character - ${this.name}] からアクション "${lastAction.name}" を削除しました。`);
+            return lastAction; // 削除されたアクションインスタンスを返す
+        }
+        console.warn(`[Character - ${this.name}] アクションリストは空です。`);
+        return null; 
+    }
     removeActions() {
         this.actions.length = 0;
     }

@@ -100,6 +100,55 @@ class SensenStageEvent {
         return msg;
     }
 
+    apply(lambda, mu) {
+        // 
+        if (!this.hasBattle) {
+            // 回復処理
+            if (this.isBig) {
+                lambda.maxLp += Math.floor(lambda.maxLp * 0.1);
+                mu.maxLp += Math.floor(lambda.maxLp * 0.1);
+                lambda.heal(Math.floor(lambda.maxLp * 0.5));
+                mu.heal(Math.floor(lambda.maxLp * 0.5));
+            } else {
+                lambda.maxLp += Math.floor(lambda.maxLp * 0.05);
+                mu.maxLp += Math.floor(lambda.maxLp * 0.05);
+                lambda.heal(Math.floor(lambda.maxLp * 0.2));
+                mu.heal(Math.floor(lambda.maxLp * 0.2));
+            }
+        }
+        if (this.hasTrap) {
+            let lambdaTrapped = false;
+            let muTrapped = false;
+            // 罠の処理
+            // まずラムダとミューの回避判定を行う
+            let lresult = lambda.applyDamageWithEvasion([1]);
+            if (lresult.actualTotalDamage > 0) {
+                // 命中
+                lambdaTrapped = true;
+            }
+            let mresult = mu.applyDamageWithEvasion([1]);
+            if (mresult.actualTotalDamage > 0) {
+                // 命中
+                muTrapped = true;
+            }
+            if (this.isBigTrap) {
+                if (lambdaTrapped) {
+                    lambda.applyErValue(50);
+                }
+                if (muTrapped) {
+                    mu.applyErValue(50);
+                }
+            } else {
+                if (lambdaTrapped) {
+                    lambda.applyErValue(25);
+                }
+                if (muTrapped) {
+                    mu.applyErValue(25);
+                }
+            }
+        }
+    }
+
     generateEnemyIdList(uniqueEnemyIds) {
         let generated = [];
         if (!this.hasBattle) {
@@ -137,7 +186,7 @@ class SensenStageBossEvent extends SensenStageEvent {
         return msg;
     }
     generateEnemyIdList(uniqueEnemyIds) {
-        let generated = super.generateEnemyIdList(uniqueEnemyIds);
+        let generated = super.generateEnemyIdList(["e13"]);
         // 一番最後にマウントを設定
         generated[generated.length-1] = "e14";
         return generated;
@@ -165,7 +214,7 @@ class SensenStageFixedEvent extends SensenStageEvent {
         return msg;
     }
     generateEnemyIdList(uniqueEnemyIds) {
-        return super.generateEnemyIdList(uniqueEnemyIds);
+        return super.generateEnemyIdList(["e11"]);
     }
 }
 window.SensenStageFixedEvent = SensenStageFixedEvent;

@@ -51,6 +51,7 @@
 
 *event_completed
 [cm]
+[stage_event_detail_bg stage="&tf.sensenStage"]
 [stage_progress_bar_refresh stage="&tf.sensenStage"]
 [jump target="*stand_end"]
 
@@ -58,6 +59,5 @@
 [cm]
 [stage_battle_end]
 [sensen_header bg="stage1.png" bgm="stage_event.mp3"]
-[stage_event_detail_bg stage="&tf.sensenStage"]
 [stage_progress_bar_show stage="&tf.sensenStage"]
 [jump target="*event_completed"]

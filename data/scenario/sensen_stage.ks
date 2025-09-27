@@ -125,12 +125,9 @@ class SensenStage {
         const selectedEvent = selectedEventItem.event;
 
         // TODO:イベント本体を実行する
-
+        selectedEvent.apply(lambda, mu);
     }
     hasBattleEvent() {
-        for(const myeventItems of ListedEventItems) {
-            console.warn(`[battle] = ${myeventItems.event.hasBattle}`);
-        }
         return this.ListedEventItems[this.selectedEventIndex].event.hasBattle;
     }
     getEventDetail() {

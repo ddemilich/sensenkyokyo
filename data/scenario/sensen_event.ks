@@ -101,19 +101,53 @@ class SensenStageEvent {
     }
 
     apply(lambda, mu) {
-        // 
+        let msg = "";
+        let oldValue = 0;
+        let addValue = 0;
         if (!this.hasBattle) {
             // 回復処理
             if (this.isBig) {
-                lambda.maxLp += Math.floor(lambda.maxLp * 0.1);
-                mu.maxLp += Math.floor(lambda.maxLp * 0.1);
-                lambda.heal(Math.floor(lambda.maxLp * 0.5));
-                mu.heal(Math.floor(lambda.maxLp * 0.5));
+                msg = "安全な場所でゆっくり休憩した...<br >";
+                oldValue = lambda.maxLp;
+                addValue = Math.floor(lambda.maxLp * 0.1);
+                lambda.maxLp += addValue;
+                msg += `　ラムダの最大体力が${addValue}増加した。${oldValue}->${lambda.maxLp}<br />`;
+
+                oldValue = mu.maxLp;
+                addValue = Math.floor(mu.maxLp * 0.1);
+                mu.maxLp += addValue;
+                msg += `　ミューの最大体力が${addValue}増加した。${oldValue}->${lambda.maxLp}<br />`;
+
+                oldValue = lambda.lp;
+                addValue = Math.floor(lambda.maxLp * 0.5);
+                lambda.heal(addValue);
+                msg += `　ラムダの体力が回復した。${oldValue}->${lambda.lp}<br />`;
+
+                oldValue = mu.lp;
+                addValue = Math.floor(mu.maxLp * 0.5);
+                mu.heal(addValue);
+                msg += `　ミューの体力が回復した。${oldValue}->${mu.lp}<br />`;
             } else {
-                lambda.maxLp += Math.floor(lambda.maxLp * 0.05);
-                mu.maxLp += Math.floor(lambda.maxLp * 0.05);
-                lambda.heal(Math.floor(lambda.maxLp * 0.2));
-                mu.heal(Math.floor(lambda.maxLp * 0.2));
+                msg = "少し休憩した...<br >";
+                oldValue = lambda.maxLp;
+                addValue = Math.floor(lambda.maxLp * 0.05);
+                lambda.maxLp += addValue;
+                msg += `　ラムダの最大体力が${addValue}増加した。${oldValue} -> ${lambda.maxLp}<br />`;
+
+                oldValue = mu.maxLp;
+                addValue = Math.floor(mu.maxLp * 0.05);
+                mu.maxLp += addValue;
+                msg += `　ミューの最大体力が${addValue}増加した。${oldValue} -> ${lambda.maxLp}<br />`;
+
+                oldValue = lambda.lp;
+                addValue = Math.floor(lambda.maxLp * 0.2);
+                lambda.heal(addValue);
+                msg += `　ラムダの体力が回復した。${oldValue} -> ${lambda.lp}<br />`;
+
+                oldValue = mu.lp;
+                addValue = Math.floor(mu.maxLp * 0.2);
+                mu.heal(addValue);
+                msg += `　ミューの体力が回復した。${oldValue} -> ${mu.lp}<br />`;
             }
         }
         if (this.hasTrap) {
@@ -132,21 +166,40 @@ class SensenStageEvent {
                 muTrapped = true;
             }
             if (this.isBigTrap) {
+                msg += "怪しい液体が降り注ぐ！<br />";
                 if (lambdaTrapped) {
+                    oldValue = lambda.er;
                     lambda.applyErValue(50);
+                    msg += `　ラムダは全身に液体を浴びてしまった。快楽値：${oldValue} -> ${lambda.er}<br />`;
+                } else {
+                    msg += `　ラムダは素早く回避した。<br />`;
                 }
                 if (muTrapped) {
+                    oldValue = mu.er;
                     mu.applyErValue(50);
+                    msg += `　ミューは全身に液体を浴びてしまった。快楽値：${oldValue} -> ${mu.er}<br />`;
+                } else {
+                    msg += `　ミューは素早く回避した。<br />`;
                 }
             } else {
+                msg += "怪しいガスが噴き出した！<br />";
                 if (lambdaTrapped) {
+                    oldValue = lambda.er;
                     lambda.applyErValue(25);
+                    msg += `　ラムダはガスを吸い込んでしまった。快楽値：${oldValue} -> ${lambda.er}<br />`;
+                } else {
+                    msg += `　ラムダは素早く回避した。<br />`;
                 }
                 if (muTrapped) {
+                    oldValue = mu.er;
                     mu.applyErValue(25);
+                    msg += `　ミューはガスを吸い込んでしまった。快楽値：${oldValue} -> ${mu.er}<br />`;
+                } else {
+                    msg += `　ミューは素早く回避した。<br />`;
                 }
             }
         }
+        this.eventMsg = msg;
     }
 
     generateEnemyIdList(uniqueEnemyIds) {

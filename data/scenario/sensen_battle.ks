@@ -812,11 +812,15 @@ class BattleSection {
         // 敵が誰もいなくなったら勝利
         if (this.enemies.length === 0) {
             console.log("JS: 全ての敵を撃破！戦闘勝利！");
+            this.lambda.charaInstance.changeSp(-100);
+            this.mu.charaInstance.changeSp(-100);
             this.dispatch('BATTLE_WIN', { lambda: this.lambda, mu: this.mu });
             return true;
         }
         // ヒロインが二人とも諦めたら敗北
         if (this.lambda.charaInstance.isLosed && this.mu.charaInstance.isLosed) {
+            this.lambda.charaInstance.changeSp(-100);
+            this.mu.charaInstance.changeSp(-100);
             this.dispatch('BATTLE_LOSE', { lambda: this.lambda, mu: this.mu });
             return true;
         } 

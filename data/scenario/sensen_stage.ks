@@ -124,7 +124,6 @@ class SensenStage {
         const selectedEventItem = this.ListedEventItems[this.selectedEventIndex];
         const selectedEvent = selectedEventItem.event;
 
-        // TODO:イベント本体を実行する
         selectedEvent.apply(lambda, mu);
     }
     hasBattleEvent() {
@@ -132,6 +131,9 @@ class SensenStage {
     }
     getEventDetail() {
         return this.ListedEventItems[this.selectedEventIndex].event.detail();
+    }
+    getEventMessage() {
+        return this.ListedEventItems[this.selectedEventIndex].event.eventMsg;
     }
     onEventCompleted() {
         const selectedEventItem = this.ListedEventItems[this.selectedEventIndex];
@@ -230,8 +232,17 @@ window.SensenStageOne = SensenStageOne;
     [ptext name="stage_msg" layer="5" x="0" y="250" text="&mp.text" width="1280" size="80" align="center" edge="8px 0x000000" overwrite="true" ]
     [wait time="500"]
 [endmacro]
+[macro name="stage_event_msg"]
+    ;mp.stage
+    ;mp.target_event_continue
+    [ptext name="stage_event_msg" layer="5" x="&mp.stage.eventDetailX" y="250" text="&mp.stage.getEventMessage()" width="640" size="24" edge="4px 0x000000" overwrite="true" ]
+    [glink color="btn_29_green" text="次へ" size="24" target="&mp.target_event_continue" x="&mp.stage.eventDetailX" y="&mp.stage.eventDetailBottomY" width="&mp.stage.eventDetailWidth" enterse="open.mp3" leavese="close.mp3"]
+[endmacro]
 [macro name="stage_msg_fadeout"]
     [free name="stage_msg" layer="5" time="150"]
+[endmacro]
+[macro name="stage_event_msg_fadeout"]
+    [free name="stage_event_msg" layer="5" time="150"]
 [endmacro]
 
 [macro name="stage_event_detail_bg"]

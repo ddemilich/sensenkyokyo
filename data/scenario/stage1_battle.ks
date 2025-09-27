@@ -42,6 +42,13 @@
 [freeimage layer="2"]
 [freeimage layer="3"]
 
+[jump target="*event_continue" cond="!tf.sensenStage.getEventMessage()"]
+[stage_event_msg stage="&tf.sensenStage" target_event_continue="*event_continue"]
+[s]
+
+*event_continue
+[stage_event_msg_fadeout]
+
 ; battleがなければ終了
 [jump target="*event_completed" cond="!tf.sensenStage.hasBattleEvent()"]
 [stage_progress_bar_hide stage="&tf.sensenStage"]

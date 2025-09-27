@@ -950,7 +950,7 @@ class CharacterBundle {
         if (this.getLevel() == 1) {
             return `${this.captor.getEnemyId()}_Lv${this.getLevel()}_${this.captive.getEcstaticLevel()}`;
         }
-        return  `${this.captor.getEnemyId()}_Lv${this.getLevel()}_${this.captive.getCorruptedLevel()}_${this.step}`
+        return `${this.captor.getEnemyId()}_Lv${this.getLevel()}_${this.captive.getCorruptedLevel()}_${this.step}`
     }
     getLevel() {
         return this.captive.wearLevel;

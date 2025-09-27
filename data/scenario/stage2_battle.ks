@@ -1,11 +1,11 @@
 *start
-[sensen_header bg="stage1.png" bgm="stage_event.mp3"]
-[stage_msg text="STAGE ONE"]
+[sensen_header bg="stage2.png" bgm="stage_event.mp3"]
+[stage_msg text="STAGE TWO"]
 [stage_msg text="??READY??"]
 [stage_msg text="!!!START!!!"]
 [stage_msg_fadeout]
 [iscript]
-    tf.sensenStage = new SensenStageOne();
+    tf.sensenStage = new SensenStageTwo();
     // 最初のイベントをロード
     tf.sensenStage.generateNewEventItems();
 [endscript]
@@ -26,19 +26,19 @@
 
 *end
 [iscript]
-    tf.sensenData.processStage(1, true);
+    tf.sensenData.processStage(2, true);
 [endscript]
 [stage_event_hide]
-[stage_msg text="STAGE ONE"]
+[stage_msg text="STAGE TWO"]
 [stage_msg text="!!! CLEAR !!!"]
 [stage_msg_fadeout]
 [stage_progress_bar_hide stage="&tf.sensenStage"]
 [sensen_footer]
-[jump storage="stage1_end.ks"]
+[jump storage="stage2_end.ks"]
 
 *end_failed
 [iscript]
-    tf.sensenData.processStage(1, false);
+    tf.sensenData.processStage(2, false);
 [endscript]
 [stage_event_hide]
 [stage_msg text="STAGE ONE"]
@@ -46,7 +46,7 @@
 [stage_msg_fadeout]
 [stage_progress_bar_hide stage="&tf.sensenStage"]
 [sensen_footer]
-[jump storage="stage1_end.ks"]
+[jump storage="stage2_end.ks"]
 
 *event_start
 [cm]
@@ -64,7 +64,7 @@
 ; battleがなければ終了
 [jump target="*event_completed" cond="!tf.sensenStage.hasBattleEvent()"]
 [stage_progress_bar_hide stage="&tf.sensenStage"]
-[stage_battle_setup scenario="stage1_battle.ks" target="*back_to_stage1_battle_end"]
+[stage_battle_setup scenario="stage2_battle.ks" target="*back_to_stage1_battle_end"]
 [stage_battle_mainloop]
 [s]
 
@@ -77,7 +77,7 @@
 *back_to_stage1_battle_end
 [cm]
 [stage_battle_end]
-[sensen_header bg="stage1.png" bgm="stage_event.mp3"]
+[sensen_header bg="stage2.png" bgm="stage_event.mp3"]
 [stage_progress_bar_show stage="&tf.sensenStage"]
 [jump target="*end_failed" cond="tf.sensenData.lambda.isLosed && tf.sensenData.mu.isLosed"]
 [jump target="*event_completed"]

@@ -35,12 +35,13 @@
 #
 ラムダは薬物プラントの詳細な様子をディスクに収めた。[l][r]
 そのデータは翌日の新聞各紙を大いに賑わせることになった。[p]
-
+[heroine_restart]
 [else]
 
 #
-エロシーン入ります。[p]
+※エロシーン[p]
 
+[heroine_restart_from_defeat]
 [endif]
 
 *back

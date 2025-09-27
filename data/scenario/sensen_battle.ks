@@ -818,9 +818,30 @@ class BattleSection {
     checkBattleEndCondition() {
         // 敵が誰もいなくなったら勝利
         if (this.enemies.length === 0) {
+            // lastStandコミの最低値
+            const healAmount = 2;
             console.log("JS: 全ての敵を撃破！戦闘勝利！");
             this.lambda.charaInstance.changeSp(-100);
             this.mu.charaInstance.changeSp(-100);
+            if (this.lambda.charaInstance.pose == 'knockout') {
+                this.lambda.charaInstance.heal(healAmount);
+                this.dispatch('HEROINE_HEAL_DISPLAY', {
+                    source: this.mu,
+                    target: this.lambda,
+                    amount: healAmount,
+                    actionType: 'battle_win'
+                });
+            }
+            if (this.mu.charaInstance.pose == 'knockout') {
+                this.mu.charaInstance.heal(healAmount);
+                this.dispatch('HEROINE_HEAL_DISPLAY', {
+                    source: this.lambda,
+                    target: this.mu,
+                    amount: healAmount,
+                    actionType: 'battle_win'
+                });
+            }
+
             this.dispatch('BATTLE_WIN', { lambda: this.lambda, mu: this.mu });
             return true;
         }
@@ -828,6 +849,16 @@ class BattleSection {
         if (this.lambda.charaInstance.isLosed && this.mu.charaInstance.isLosed) {
             this.lambda.charaInstance.changeSp(-100);
             this.mu.charaInstance.changeSp(-100);
+            if (this.lambda.bundleInstance) {
+                if (this.lambda.bundleInstance.step != 3) {
+                    this.lambda.bundleInstance.step = 3;
+                }
+            }
+            if (this.mu.bundleInstance) {
+                if (this.mu.bundleInstance.step != 3) {
+                    this.mu.bundleInstance.step = 3;
+                }
+            }
             this.dispatch('BATTLE_LOSE', { lambda: this.lambda, mu: this.mu });
             return true;
         } 
@@ -1133,9 +1164,10 @@ window.BattleSection = BattleSection;
     ;mp.heroine
     ;mp.buddy
     ;mp.enemies
+    [jump target="*heroine_action_decision_middle" cond="mp.heroine.charaInstance.isLosed"]
     [if exp="mp.heroine.charaInstance.pose=='knockout' && mp.buddy.pose=='knockout'"]
-        [glink text="降参する" x="600" y="200" exp="mp.heroine.charaInstance.isLosed=true;mp.buddy.charaInstance.isLosed=true" target="*heroine_action_decision_middle"]
-        [glink text="諦めない" x="600" y="400" target="*heroine_action_decision_middle"]
+        [glink color="btn_29_green" text="敗北を受け入れる" x="600" y="200" exp="mp.heroine.charaInstance.isLosed=true;mp.buddy.isLosed=true" target="*heroine_action_decision_middle"]
+        [glink color="btn_29_green" text="諦めない" x="600" y="400" target="*heroine_action_decision_middle"]
         [s]
     [endif]
 *heroine_action_decision_middle
@@ -1634,9 +1666,9 @@ window.BattleSection = BattleSection;
     [heal_to chara="&tf.currentEvent.params.target.charaInstance" healValue="&tf.currentEvent.params.amount" x="&tf.currentEvent.params.target.x" y="&tf.currentEvent.params.target.y"]
     [anim name="&tf.currentEvent.params.source.charaInstance.name" left="+=30" time="100" effect="easeInCirc"]
     [iscript]
-        tf.currentEvent.params.source.charaInstance.updatePoseByLp();
+        tf.currentEvent.params.target.charaInstance.updatePoseByLp();
     [endscript]
-    [heroine_mod heroine="&tf.currentEvent.params.source.charaInstance" time="100"]
+    [heroine_mod heroine="&tf.currentEvent.params.target.charaInstance" time="100"]
     [jump target="*process_battle_events_start"]
 *battle_heroine_guard_action
     [anim name="&tf.currentEvent.params.attacker.charaInstance.name" left="+=30" time="100" effect="easeInCirc"]
@@ -1714,8 +1746,18 @@ window.BattleSection = BattleSection;
     [layopt layer="8" visible="false"]
     [layopt layer="9" visible="false"]
     [turn_text msg="全滅しました・・・。"]
-    [anim name="&tf.currentEvent.params.lambda.charaInstance.name" left="500" top="150"]
-    [anim name="&tf.currentEvent.params.mu.charaInstance.name" left="740" top="150"]
+    [if exp="tf.currentEvent.params.lambda.charaInstance.bundled"]
+        [bundle_mod bundle="&tf.currentEvent.params.lambda.bundleInstance" time="300"]
+        [anim name="&tf.currentEvent.params.lambda.bundleInstance.name" left="500" top="150"]
+    [else]
+        [anim name="&tf.currentEvent.params.lambda.charaInstance.name" left="500" top="150"]
+    [endif]
+    [if exp="tf.currentEvent.params.mu.charaInstance.bundled"]
+        [bundle_mod bundle="&tf.currentEvent.params.mu.bundleInstance" time="300"]
+        [anim name="&tf.currentEvent.params.mu.bundleInstance.name" left="740" top="150"]
+    [else]
+        [anim name="&tf.currentEvent.params.mu.charaInstance.name" left="740" top="150"]
+    [endif]
     [wa]
     [jump target="*process_battle_events_start"]
 *battle_end_sequence

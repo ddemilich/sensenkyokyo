@@ -202,6 +202,45 @@ class SensenStageOne extends SensenStage {
 }
 window.SensenStageOne = SensenStageOne;
 
+class SensenStageTwo extends SensenStage {
+    constructor() {
+        super();
+        this.fixedEventItems = [
+            {
+                event: new SensenStageBossEventTwo(100),
+                isCompleted: false,
+                progressReq: 100,
+            },
+            {
+                event: new SensenStageFixedEventTwo(50),
+                isCompleted: false,
+                progressReq: 50,
+            },
+        ].sort((a, b) => a.progressReq - b.progressReq);
+    }
+    getSettingBg() {
+        return "stage2.png";
+    }
+    battleSetup(lambda, mu, scenario, target) {
+        // イベントを確認して
+        const selectedEventItem = this.ListedEventItems[this.selectedEventIndex];
+        const selectedEvent = selectedEventItem.event;
+
+        let enemyIds = ["e21", "e22"];
+        if (this.progress >= 50) {
+            enemyIds.push("e23");
+        }        
+        // 敵一覧を生成
+        const enemyList = selectedEvent.generateEnemyIdList(enemyIds);
+
+        // 敵の強さ(Lv6~Lv10)
+        let enemyLevel = 6 + Math.floor((this.progress * 4)/100);
+        
+        // バトルセクション生成
+        this.Battle = new BattleSection(lambda, mu, enemyList, enemyLevel, scenario, target);
+    }
+}
+window.SensenStageTwo = SensenStageTwo;
 [endscript]
 
 [macro name="stage_progress_bar_show"]
@@ -235,7 +274,7 @@ window.SensenStageOne = SensenStageOne;
 [macro name="stage_event_msg"]
     ;mp.stage
     ;mp.target_event_continue
-    [ptext name="stage_event_msg" layer="5" x="&mp.stage.eventDetailX" y="150" text="&mp.stage.getEventMessage()" width="640" size="24" edge="4px 0x000000" overwrite="true" ]
+    [ptext name="stage_event_msg" layer="5" x="&mp.stage.eventDetailX" y="150" text="&mp.stage.getEventMessage()" width="1080" size="24" edge="4px 0x000000" overwrite="true" ]
     [glink color="btn_29_green" text="次へ" size="24" target="&mp.target_event_continue" x="&mp.stage.eventDetailX" y="&mp.stage.eventDetailBottomY" width="&mp.stage.eventDetailWidth" enterse="open.mp3" leavese="close.mp3"]
 [endmacro]
 [macro name="stage_msg_fadeout"]

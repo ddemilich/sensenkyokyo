@@ -88,5 +88,27 @@
         [glink color="btn_29_purple" target="&mp.target" size="24" text="ステータス" x="980" y="650" width="240" exp="tf.heroineStatDetail = true" enterse="open.mp3" leavese="close.mp3"]
     [endif]
 [endmacro]
+[macro name="heroine_restart"]
+    [iscript]
+        // isLosedをリセット
+        tf.sensenData.lambda.isLosed = false;
+        tf.sensenData.mu.isLosed = false;
+        // 回復してERを0にして服を直してCRを1増やす
+        tf.sensenData.lambda.heal(tf.sensenData.lambda.maxLp);
+        tf.sensenData.lambda.er = 0;
+        tf.sensenData.lambda.wearLevel = 1;
+ 
+        tf.sensenData.mu.heal(tf.sensenData.mu.maxLp);
+        tf.sensenData.mu.er = 0;
+        tf.sensenData.mu.wearLevel = 1;
+    [endscript]
+[endmacro]
+[macro name="heroine_restart_from_defeat"]
+    [heroine_restart]
+    [iscript]
+        tf.sensenData.lambda.changeCr(1);
+        tf.sensenData.mu.changeCr(1);
+    [endscript]
+[endmacro]
 
 [return]

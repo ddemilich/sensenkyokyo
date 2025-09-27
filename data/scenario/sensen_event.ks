@@ -235,7 +235,7 @@ class SensenStageBossEvent extends SensenStageEvent {
         return "eventButton/eventBoss.png";
     }
     detail() {
-        let msg = "ステージボスとの戦闘になる。<br />";
+        let msg = "ステージボス「マウント」との戦闘になる。<br />";
         return msg;
     }
     generateEnemyIdList(uniqueEnemyIds) {
@@ -246,6 +246,34 @@ class SensenStageBossEvent extends SensenStageEvent {
     }
 }
 window.SensenStageBossEvent = SensenStageBossEvent;
+
+class SensenStageBossEventTwo extends SensenStageEvent {
+    constructor(progress) {
+        super(progress);
+        this.hasBattle = true;
+        this.hasTrap = false;
+        this.isBig = false;
+        this.isBigTrap = false;
+        this.enemyCount = 6;
+    }
+    getProgressPoint() {
+        return 0;
+    }
+    getImagePath() {
+        return "eventButton/eventBoss.png";
+    }
+    detail() {
+        let msg = "ステージボス「バインド」との戦闘になる。<br />";
+        return msg;
+    }
+    generateEnemyIdList(uniqueEnemyIds) {
+        let generated = super.generateEnemyIdList(["e23"]);
+        // 一番最後にバインドを設定
+        generated[generated.length-1] = "e24";
+        return generated;
+    }
+}
+window.SensenStageBossEventTwo = SensenStageBossEventTwo;
 
 class SensenStageFixedEvent extends SensenStageEvent {
     constructor(progress) {
@@ -271,5 +299,30 @@ class SensenStageFixedEvent extends SensenStageEvent {
     }
 }
 window.SensenStageFixedEvent = SensenStageFixedEvent;
+
+class SensenStageFixedEventTwo extends SensenStageEvent {
+    constructor(progress) {
+        super(progress);
+        this.hasBattle = true;
+        this.hasTrap = false;
+        this.isBig = false;
+        this.isBigTrap = false;
+        this.enemyCount = 4;
+    }
+    getProgressPoint() {
+        return 0;
+    }
+    getImagePath() {
+        return "eventButton/eventFixed.png";
+    }
+    detail() {
+        let msg = "勇ましい訓練の掛け声が聞こえる。<br />";
+        return msg;
+    }
+    generateEnemyIdList(uniqueEnemyIds) {
+        return super.generateEnemyIdList(["e22"]);
+    }
+}
+window.SensenStageFixedEventTwo = SensenStageFixedEventTwo;
 [endscript]
 [return]

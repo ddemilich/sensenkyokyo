@@ -841,7 +841,6 @@ class BattleSection {
                     actionType: 'battle_win'
                 });
             }
-
             this.dispatch('BATTLE_WIN', { lambda: this.lambda, mu: this.mu });
             return true;
         }
@@ -859,6 +858,7 @@ class BattleSection {
                     this.mu.bundleInstance.step = 3;
                 }
             }
+            this.forceCleanup();
             this.dispatch('BATTLE_LOSE', { lambda: this.lambda, mu: this.mu });
             return true;
         } 
@@ -951,6 +951,17 @@ class BattleSection {
             return "逃げる";
         }
     }
+    forceCleanup() {
+        // ヒロインのエフェクトをすべて解除
+        this.heroines.forEach(heroineDisp => {
+            heroineDisp.charaInstance.clearAllTemporaryStatuses();
+            heroineDisp.charaInstance.removeActions(); 
+        });
+        // 敵を工場に返却
+        this.enemies.forEach(enemyDisp => {
+            EnemyFactory.releaseEnemy(enemyDisp.charaInstance);
+        });
+    }
 }
 window.BattleSection = BattleSection;
 [endscript]
@@ -968,7 +979,7 @@ window.BattleSection = BattleSection;
 
 ; 終了・あるいは中断ボタン
 [macro name="battle_end_button"]
-    [glink color="btn_29_green" text="&tf.sensenBattle.getBackButtonText()" size="24" width="&tf.sensenBattle.backButtonWidth" x="&tf.sensenBattle.backButtonX" y="&tf.sensenBattle.backButtonY" storage="&tf.sensenBattle.backStorage" target="&tf.sensenBattle.backTarget" ]
+    [glink color="btn_29_green" text="&tf.sensenBattle.getBackButtonText()" size="24" exp="tf.sensenBattle.forceCleanup()" width="&tf.sensenBattle.backButtonWidth" x="&tf.sensenBattle.backButtonX" y="&tf.sensenBattle.backButtonY" storage="&tf.sensenBattle.backStorage" target="&tf.sensenBattle.backTarget" ]
 [endmacro]
 
 ; 敵の登場

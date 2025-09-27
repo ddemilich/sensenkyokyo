@@ -120,24 +120,46 @@ class SensenStage {
         this.ListedEventItems = eventItems;
     }
 
-    handleEventSelection() {
-        // リストから完全な項目を取得する
-        console.warn(`handleEventSelection: ${this.selectedEventIndex}`);
+    handleEventSelection(lambda, mu) {
         const selectedEventItem = this.ListedEventItems[this.selectedEventIndex];
         const selectedEvent = selectedEventItem.event;
 
         // TODO:イベント本体を実行する
 
-        this.onEventCompleted(selectedEventItem)
+    }
+    hasBattleEvent() {
+        for(const myeventItems of ListedEventItems) {
+            console.warn(`[battle] = ${myeventItems.event.hasBattle}`);
+        }
+        return this.ListedEventItems[this.selectedEventIndex].event.hasBattle;
     }
     getEventDetail() {
         return this.ListedEventItems[this.selectedEventIndex].event.detail();
     }
-    onEventCompleted(eventItem) {
-        const progressValue = eventItem.event.getProgressPoint();
+    onEventCompleted() {
+        const selectedEventItem = this.ListedEventItems[this.selectedEventIndex];
+
+        const progressValue = selectedEventItem.event.getProgressPoint();
         this.applyProgress(progressValue);
-        eventItem.isCompleted = true;
+        selectedEventItem.isCompleted = true;
         this.generateNewEventItems()
+    }
+
+    getSettingBg() {
+        return "default.png";
+    }
+    getBgm() {
+        // 通常イベントとボスイベントで変更する。
+        const selectedEventItem = this.ListedEventItems[this.selectedEventIndex];
+        const selectedEvent = selectedEventItem.event;
+        if (selectedEvent instanceof SensenStageBossEvent) {
+            return "FuneralRites.wav";
+        } else {
+            return "LoseMe.wav";
+        }
+    }
+    battleSetup(lambda, mu, scenario, target) {
+        // イベントから敵の数とか吸い出してthis.Battleを作り上げる
     }
 }
 
@@ -157,6 +179,27 @@ class SensenStageOne extends SensenStage {
             },
         ].sort((a, b) => a.progressReq - b.progressReq);
     }
+    getSettingBg() {
+        return "stage1.png";
+    }
+    battleSetup(lambda, mu, scenario, target) {
+        // イベントを確認して
+        const selectedEventItem = this.ListedEventItems[this.selectedEventIndex];
+        const selectedEvent = selectedEventItem.event;
+
+        let enemyIds = ["e11", "e12"];
+        if (this.progress >= 50) {
+            enemyIds.push("e13");
+        }        
+        // 敵一覧を生成
+        const enemyList = selectedEvent.generateEnemyIdList(enemyIds);
+
+        // 敵の強さ(Lv1~Lv5)
+        let enemyLevel = 1 + Math.floor((this.progress * 4)/100);
+        
+        // バトルセクション生成
+        this.Battle = new BattleSection(lambda, mu, enemyList, enemyLevel, scenario, target);
+    }
 }
 window.SensenStageOne = SensenStageOne;
 
@@ -169,8 +212,12 @@ window.SensenStageOne = SensenStageOne;
     [image layer="4" name="&mp.stage.barBgName" storage="&mp.stage.getBarBgPath()" x="&mp.stage.progressBarX" y="&mp.stage.progressBarY" width="&mp.stage.progressBarWidth" height="&mp.stage.progressBarHeight"]
     [image layer="4" name="&mp.stage.barName" storage="&mp.stage.getBarPath()" x="&mp.stage.getBarX()" y="&mp.stage.progressBarY" width="&mp.stage.getBarWidth()" height="&mp.stage.progressBarHeight"]
 [endmacro]
+; イベント完了処理とバーの更新
 [macro name="stage_progress_bar_refresh"]
     ;mp.stage
+    [iscript]
+        mp.stage.onEventCompleted();
+    [endscript]
     [if exp="mp.stage.getBarWidth()!=0"]
         [anim layer="4" name="&mp.stage.barName" left="&mp.stage.getBarX()" top="&mp.stage.progressBarY" width="&mp.stage.getBarWidth()" height="&mp.stage.progressBarHeight"]
     [endif]
@@ -204,7 +251,7 @@ window.SensenStageOne = SensenStageOne;
     [else]
         [ptext layer="5" text="&mp.stage.getEventDetail()" name="event_detail" x="&mp.stage.eventDetailX" y="&mp.stage.eventDetailY" width="&mp.stage.eventDetailWidth" size="18" align="left" overwrite="true" ]
         [ptext layer="5" text="→" name="event_selected" x="&mp.stage.eventMarkX()" y="&mp.stage.eventMarkY()" width="&mp.stage.eventMarkWidth" size="48" align="right" overwrite="true"]
-        [glink color="btn_29_green" text="進む" size="24" target="&mp.target_event_start" exp="tf.sensenStage.handleEventSelection()" x="&mp.stage.eventDetailX" y="&mp.stage.eventDetailBottomY" width="&mp.stage.eventDetailWidth" enterse="open.mp3" leavese="close.mp3"]    
+        [glink color="btn_29_green" text="進む" size="24" target="&mp.target_event_start" exp="tf.sensenStage.handleEventSelection(tf.sensenData.lambda, tf.sensenData.mu)" x="&mp.stage.eventDetailX" y="&mp.stage.eventDetailBottomY" width="&mp.stage.eventDetailWidth" enterse="open.mp3" leavese="close.mp3"]    
     [endif]
     [button target="&mp.target" exp="tf.sensenStage.selectedEventIndex=0" graphic="&mp.stage.ListedEventItems[0].event.getImagePath()" x="&mp.stage.eventX(0)" y="&mp.stage.eventY(0)" width="&mp.stage.eventButtonWidth" height="&mp.stage.eventButtonHeight" cond="mp.stage.ListedEventItems.length > 0"]
     [button target="&mp.target" exp="tf.sensenStage.selectedEventIndex=1" graphic="&mp.stage.ListedEventItems[1].event.getImagePath()" x="&mp.stage.eventX(1)" y="&mp.stage.eventY(1)" width="&mp.stage.eventButtonWidth" height="&mp.stage.eventButtonHeight" cond="mp.stage.ListedEventItems.length > 1"]
@@ -216,5 +263,52 @@ window.SensenStageOne = SensenStageOne;
     [free layer="4" name="stage_event_detail_bg"]
     [free layer="5" name="event_selected"]
     [free layer="5" name="event_detail"]
+[endmacro]
+[macro name="stage_battle_setup"]
+    ;mp.scenario
+    ;mp.target
+    [iscript]
+        tf.sensenStage.battleSetup(tf.sensenData.lambda, tf.sensenData.mu, mp.scenario, mp.target);
+    [endscript]
+    [chara_config pos_mode="false"]
+    [bg storage="&tf.sensenStage.getSettingBg()" time="100"]
+    [playbgm storage="&tf.sensenStage.getBgm()" loop="true" restart="false" volume="10"]
+    [layopt layer="0" visible="true"]
+    [layopt layer="1" visible="true"]
+    [layopt layer="2" visible="true"]
+    [layopt layer="3" visible="true"]
+    [layopt layer="4" visible="true"]
+    [layopt layer="5" visible="true"]
+    [layopt layer="6" visible="true"]
+    [layopt layer="7" visible="true"]
+    [layopt layer="8" visible="true"]
+    [layopt layer="9" visible="true"]
+    [battle_init battle="&tf.sensenStage.Battle"]
+[endmacro]
+[macro name="stage_battle_mainloop"]
+    [battle_loop]
+[endmacro]
+[macro name="stage_battle_end"]
+    [layopt layer="0" visible="false"]
+    [layopt layer="1" visible="false"]
+    [layopt layer="2" visible="false"]
+    [layopt layer="3" visible="false"]
+    [layopt layer="4" visible="false"]
+    [layopt layer="5" visible="false"]
+    [layopt layer="6" visible="false"]
+    [layopt layer="7" visible="false"]
+    [layopt layer="8" visible="false"]
+    [layopt layer="9" visible="false"]
+    [fadeoutbgm time="100"]
+    [freeimage layer="0"]
+    [freeimage layer="1"]
+    [freeimage layer="2"]
+    [freeimage layer="3"]
+    [freeimage layer="4"]
+    [freeimage layer="5"]
+    [freeimage layer="6"]
+    [freeimage layer="7"]
+    [freeimage layer="8"]
+    [freeimage layer="9"]
 [endmacro]
 [return]

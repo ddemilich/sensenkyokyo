@@ -7,6 +7,7 @@ class SensenStageEvent {
         this.hasTrap = false;
         this.isBig = false;
         this.isBigTrap = false;
+        this.enemyCount = 0;
 
         if (Math.random() * 100 < progress * 0.2) {
             this.hasBattle = false;
@@ -98,6 +99,21 @@ class SensenStageEvent {
         }
         return msg;
     }
+
+    generateEnemyIdList(uniqueEnemyIds) {
+        let generated = [];
+        if (!this.hasBattle) {
+            return generated;
+        }
+
+        const maxIndex = uniqueEnemyIds.length - 1;
+
+        for (let i = 0; i < this.enemyCount; i++) {
+            const randomIndex = BattleUtil.getRandomInt(0, maxIndex); 
+            generated.push(uniqueEnemyIds[randomIndex]);
+        }
+        return generated;
+    }
 }
 window.SensenStageEvent = SensenStageEvent;
 
@@ -108,6 +124,7 @@ class SensenStageBossEvent extends SensenStageEvent {
         this.hasTrap = false;
         this.isBig = false;
         this.isBigTrap = false;
+        this.enemyCount = 6;
     }
     getProgressPoint() {
         return 0;
@@ -119,6 +136,12 @@ class SensenStageBossEvent extends SensenStageEvent {
         let msg = "ステージボスとの戦闘になる。<br />";
         return msg;
     }
+    generateEnemyIdList(uniqueEnemyIds) {
+        let generated = super.generateEnemyIdList(uniqueEnemyIds);
+        // 一番最後にマウントを設定
+        generated[generated.length-1] = "e14";
+        return generated;
+    }
 }
 window.SensenStageBossEvent = SensenStageBossEvent;
 
@@ -129,6 +152,7 @@ class SensenStageFixedEvent extends SensenStageEvent {
         this.hasTrap = false;
         this.isBig = false;
         this.isBigTrap = false;
+        this.enemyCount = 4;
     }
     getProgressPoint() {
         return 0;
@@ -139,6 +163,9 @@ class SensenStageFixedEvent extends SensenStageEvent {
     detail() {
         let msg = "騒がしい声が聞こえる。<br />";
         return msg;
+    }
+    generateEnemyIdList(uniqueEnemyIds) {
+        return super.generateEnemyIdList(uniqueEnemyIds);
     }
 }
 window.SensenStageFixedEvent = SensenStageFixedEvent;

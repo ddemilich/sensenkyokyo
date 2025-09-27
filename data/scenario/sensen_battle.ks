@@ -253,7 +253,7 @@ class BattleSection {
     currentPhase = null; // 現在のフェイズ名
     isBattleFinished = false; // 戦闘が終了したかどうかのフラグ
     
-    constructor(l, m, enemyIdList, enemyLevel) {
+    constructor(l, m, enemyIdList, enemyLevel, scenario, target) {
         // プレイヤーキャラクターをメンバ変数に格納
         this.lambda = new CharaDisplayData(l, BattleSection.#HEROINE_START_X, BattleSection.#HEROINE_START_Y);
         this.mu = new CharaDisplayData(m, BattleSection.#HEROINE_START_X, BattleSection.#HEROINE_START_Y);
@@ -296,6 +296,13 @@ class BattleSection {
         console.log("BattleSection の初期化が完了した。");
         const enemyDisplayNames = this.enemies.map(enemy => enemy.displayName).join(', ');
         console.log(`登場する敵: [${enemyDisplayNames}]`);
+
+        // 戻り先のシナリオとターゲット
+        this.backStorage = scenario;
+        this.backTarget = target;
+        this.backButtonX = 50;
+        this.backButtonY = 650;
+        this.backButtonWidth = 200;
     }
 
     dispatch(eventName, params = {}) {
@@ -894,6 +901,14 @@ class BattleSection {
 
         return totalActions;
     }
+
+    getBackButtonText() {
+        if (this.isBattleFinished) {
+            return "戦闘終了";
+        } else {
+            return "逃げる";
+        }
+    }
 }
 window.BattleSection = BattleSection;
 [endscript]
@@ -908,6 +923,11 @@ window.BattleSection = BattleSection;
 ; layer7 : 常在エフェクト
 ; layer8 : ダメージや回復などのエフェクト
 ; layer9 : の数字
+
+; 終了・あるいは中断ボタン
+[macro name="battle_end_button"]
+    [glink color="btn_29_green" text="&tf.sensenBattle.getBackButtonText()" size="24" width="&tf.sensenBattle.backButtonWidth" x="&tf.sensenBattle.backButtonX" y="&tf.sensenBattle.backButtonY" storage="&tf.sensenBattle.backStorage" target="&tf.sensenBattle.backTarget" ]
+[endmacro]
 
 ; 敵の登場
 [macro name="enemy_appear"]
@@ -1046,7 +1066,6 @@ window.BattleSection = BattleSection;
 ;敵選択用画像表示
 [macro name="enemy_select"]
     ;mp.enemies
-    ;mp.backtarget
     [iscript]
         tf.enemy_select_loop_index = 0;
     [endscript]
@@ -1058,7 +1077,7 @@ window.BattleSection = BattleSection;
     [endscript]
     [jump target="*enemy_select_loop_start"]
 *enemy_select_loop_end
-    [arena_end_button target="&mp.backtarget"][s]
+    [battle_end_button][s]
 *enemy_select_done
     [cm]
 [endmacro]
@@ -1069,7 +1088,6 @@ window.BattleSection = BattleSection;
     ;mp.x
     ;mp.y
     ;mp.enemies
-    ;mp.backtarget
     [button name="action_first" folder="fgimage" graphic="&mp.heroine.actionClasses.get('FirstStrike').imagePath" x="&mp.heroine.actionSelectX(mp.x, 0)" y="&mp.heroine.actionSelectY(mp.y, 0)" width="&mp.heroine.actionSelectWidth()" target="*heroine_action_decision_decided" exp="tf.selectedAction = mp.heroine.setActionByKey('FirstStrike')" cond="!mp.heroine.bundled"]
     [button name="action_guard" folder="fgimage" graphic="&mp.heroine.actionClasses.get('GuardCounter').imagePath" x="&mp.heroine.actionSelectX(mp.x, 0)" y="&mp.heroine.actionSelectY(mp.y, 1)" width="&mp.heroine.actionSelectWidth()" target="*heroine_action_decision_decided" exp="tf.selectedAction = mp.heroine.setActionByKey('GuardCounter')" cond="!mp.heroine.bundled"]
     [button name="action_charge" folder="fgimage" graphic="&mp.heroine.actionClasses.get('ChargeBurst').imagePath" x="&mp.heroine.actionSelectX(mp.x, 0)" y="&mp.heroine.actionSelectY(mp.y, 2)" width="&mp.heroine.actionSelectWidth()" target="*heroine_action_decision_decided" exp="tf.selectedAction = mp.heroine.setActionByKey('ChargeBurst')" cond="!mp.heroine.bundled"]
@@ -1078,7 +1096,7 @@ window.BattleSection = BattleSection;
     [button name="action_resist" folder="fgimage" graphic="&mp.heroine.actionClasses.get('Resist').imagePath" x="&mp.heroine.actionSelectX(mp.x, 0)" y="&mp.heroine.actionSelectY(mp.y, 0)" width="&mp.heroine.actionSelectWidth()" target="*heroine_action_decision_decided" exp="tf.selectedAction = mp.heroine.setActionByKey('Resist')" cond="mp.heroine.bundled"]
     [button name="action_break" folder="fgimage" graphic="&mp.heroine.actionClasses.get('Break').imagePath" x="&mp.heroine.actionSelectX(mp.x, 0)" y="&mp.heroine.actionSelectY(mp.y, 1)" width="&mp.heroine.actionSelectWidth()" target="*heroine_action_decision_decided" exp="tf.selectedAction = mp.heroine.setActionByKey('Break')" cond="mp.heroine.bundled"]
     [button name="action_cocent" folder="fgimage" graphic="&mp.heroine.actionClasses.get('Concentrate').imagePath" x="&mp.heroine.actionSelectX(mp.x, 0)" y="&mp.heroine.actionSelectY(mp.y, 2)" width="&mp.heroine.actionSelectWidth()" target="*heroine_action_decision_decided" exp="tf.selectedAction = mp.heroine.setActionByKey('Concentrate')" cond="mp.heroine.bundled"]
-    [arena_end_button target="&mp.backtarget"][s]
+    [battle_end_button][s]
 *heroine_ultimate
     [cm]
     [jump target="*heroine_action_button_end"]
@@ -1086,7 +1104,7 @@ window.BattleSection = BattleSection;
     [cm]
     ; ターゲット選択
     [if exp="tf.selectedAction.needTarget"]
-        [enemy_select enemies="&mp.enemies" action="&tf.selectedAction" backtarget="&mp.backtarget" cond="mp.enemies.length != 0"]
+        [enemy_select enemies="&mp.enemies" action="&tf.selectedAction" cond="mp.enemies.length != 0"]
     [endif]
     [chara_action_show chara="&mp.heroine" x="&mp.x" y="&mp.y" actions="&mp.heroine.actions"]
 *heroine_action_button_end
@@ -1096,7 +1114,6 @@ window.BattleSection = BattleSection;
     ;mp.heroine
     ;mp.buddy
     ;mp.enemies
-    ;mp.backtarget
     [if exp="mp.heroine.charaInstance.pose=='knockout' && mp.buddy.pose=='knockout'"]
         [glink text="降参する" x="600" y="200" exp="mp.heroine.charaInstance.isLosed=true;mp.buddy.charaInstance.isLosed=true" target="*heroine_action_decision_middle"]
         [glink text="諦めない" x="600" y="400" target="*heroine_action_decision_middle"]
@@ -1105,7 +1122,7 @@ window.BattleSection = BattleSection;
 *heroine_action_decision_middle
     [if exp="mp.heroine.canSelectAction()"]
         [anim name="&mp.heroine.charaInstance.name" left="-=30" time="100" effect="easeInCirc" cond="mp.heroine.charaInstance.pose=='base'"][wa]
-        [heroine_action_buttons heroine="&mp.heroine.charaInstance" buddy="&mp.buddy" x="&mp.heroine.x" y="&mp.heroine.y" enemies="&mp.enemies" backtarget="&mp.backtarget"]
+        [heroine_action_buttons heroine="&mp.heroine.charaInstance" buddy="&mp.buddy" x="&mp.heroine.x" y="&mp.heroine.y" enemies="&mp.enemies"]
         [anim name="&mp.heroine.charaInstance.name" left="+=30" time="100" effect="easeInCirc" cond="mp.heroine.charaInstance.pose=='base'"]
     [else]
         [eval exp="mp.heroine.charaInstance.setActionByKey('Speak')"]
@@ -1338,7 +1355,6 @@ window.BattleSection = BattleSection;
 
 [macro name="process_battle_events"]
     ; mp.battle : バトルセクションオブジェクト
-    ; mp.backtarget
 *process_battle_events_start
     ;アニメーション終了をイベントごとに分ける。
     ;並列させたい場合は１イベントに収めること。
@@ -1630,7 +1646,7 @@ window.BattleSection = BattleSection;
     [jump target="*process_battle_events_start"]
 *battle_heroine_action_decision
     [image layer="5" storage="chara/actions/action_icon_graph.png" left="592" top="96" width="96" height="96"]
-    [heroine_action_decision heroine="&tf.currentEvent.params.source" buddy="&tf.currentEvent.params.buddy" enemies="&tf.currentEvent.params.enemies" backtarget="&mp.backtarget"]
+    [heroine_action_decision heroine="&tf.currentEvent.params.source" buddy="&tf.currentEvent.params.buddy" enemies="&tf.currentEvent.params.enemies"]
     [freeimage layer="5"]
     [jump target="*process_battle_events_start"]
 *battle_heroine_enable_buddy_bonding
@@ -1684,20 +1700,21 @@ window.BattleSection = BattleSection;
     [wa]
     [jump target="*process_battle_events_start"]
 *battle_end_sequence
-    [arena_end_button target="&mp.backtarget"][s]
+    [battle_end_button][s]
 
 *process_battle_events_end
 [endmacro]
 
 [macro name="battle_init"]
-    ;mp.backtarget
-    [process_battle_events battle="&mp.battle" backtarget="&mp.backtarget"]
+    [iscript]
+        tf.sensenBattle = mp.battle;
+    [endscript]
+    [process_battle_events battle="&tf.sensenBattle"]
 [endmacro]
 [macro name="battle_loop"]
-    ;mp.backtarget
 *battle_loop_start
-    [jump target="*battle_loop_end" cond="mp.battle.checkBattleEndCondition()"]
-    [process_battle_events battle="&mp.battle" backtarget="&mp.backtarget"]
+    [jump target="*battle_loop_end" cond="tf.sensenBattle.checkBattleEndCondition()"]
+    [process_battle_events battle="&tf.sensenBattle"]
     [jump target="*battle_loop_start"]
 *battle_loop_end
 [endmacro]

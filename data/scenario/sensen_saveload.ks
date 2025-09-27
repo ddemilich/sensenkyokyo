@@ -106,8 +106,8 @@ class SensenSaveData {
 
     extract() {
         // 基礎ステータスをコンストラクタに
-        let lambda = new HeroineLambda(this.lambda_maxLp, this.lambda_ap);
-        let mu = new HeroineMu(this.mu_maxLp, this.mu_ap);
+        let lambda = new HeroineLambda(this.lambda_maxLp, this.lambda_ap, 250, 351);
+        let mu = new HeroineMu(this.mu_maxLp, this.mu_ap, 250, 351);
         // その他ステータスを適用
         lambda.cr = this.lambda_cr;
         lambda.maxActionCount.baseValue = this.lambda_actionCount;

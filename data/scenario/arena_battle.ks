@@ -8,8 +8,8 @@
 [cm]
 
 ;[arena_end_button target="*back_to_menu"]
-[arena_battle_setup backtarget="*back_to_menu" ]
-[arena_battle_mainloop backtarget="*back_to_menu"]
+[arena_battle_setup scenario="arena_battle.ks" target="*back_to_menu"]
+[arena_battle_mainloop]
 [s]
 
 *back_to_menu

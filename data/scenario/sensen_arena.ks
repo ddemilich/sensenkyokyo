@@ -100,14 +100,14 @@ class ArenaController {
         }
     }
 
-    battleSetup() {
+    battleSetup(scenario, target) {
         let lambda = new HeroineLambda(this.LP, this.AP, 250, 351);
         let mu = new HeroineMu(this.LP, this.AP, 250, 351);
         lambda.er = this.ER;
         mu.er = this.ER;
         lambda.cr = this.CR;
         mu.cr = this.CR;
-        this.Battle = new BattleSection(lambda, mu, this.enemyList, this.enemyLevel);
+        this.Battle = new BattleSection(lambda, mu, this.enemyList, this.enemyLevel, scenario, target);
     }
 }
 window.ArenaController = ArenaController;
@@ -203,16 +203,14 @@ window.ArenaController = ArenaController;
     [ptext name="showHeroineCRValue" overwrite="true" edge="4px 0x000000" layer="1" color="white" size="20" text="&tf.ArenaController.CR" x="&tf.ArenaController.getBgSelectX(12)" y="&tf.ArenaController.getBgSelectY(9)" width="&tf.ArenaController.gridWidth"]
 [endmacro]
 [macro name="arena_start_button"]
-    [glink color="btn_29_green" text="戦闘開始" size="24" x="&tf.ArenaController.startButtonX" y="&tf.ArenaController.startButtonY" cond="tf.ArenaController.enemyList.length > 0" target="&mp.target"]
-[endmacro]
-[macro name="arena_end_button"]
-    [glink color="btn_29_green" text="戦闘中止" size="24" x="&tf.ArenaController.startButtonX" y="&tf.ArenaController.startButtonY" target="&mp.target" storage="arena_battle.ks"]
+    [glink color="btn_29_green" text="戦闘開始" size="24" width="200" x="&tf.ArenaController.startButtonX" y="&tf.ArenaController.startButtonY" cond="tf.ArenaController.enemyList.length > 0" target="&mp.target"]
 [endmacro]
 
 [macro name="arena_battle_setup"]
-    ;mp.backtarget
+    ;mp.scenario
+    ;mp.target
     [iscript]
-        tf.ArenaController.battleSetup();
+        tf.ArenaController.battleSetup(mp.scenario, mp.target);
     [endscript]
     [chara_config pos_mode="false"]
     [bg storage="&tf.ArenaController.getSettingBg()" time="100"]
@@ -227,11 +225,11 @@ window.ArenaController = ArenaController;
     [layopt layer="7" visible="true"]
     [layopt layer="8" visible="true"]
     [layopt layer="9" visible="true"]
-    [battle_init battle="&tf.ArenaController.Battle" backtarget="&mp.backtarget"]
+    [battle_init battle="&tf.ArenaController.Battle"]
 [endmacro]
 
 [macro name="arena_battle_mainloop"]
-    [battle_loop battle="&tf.ArenaController.Battle" backtarget="&mp.backtarget"]
+    [battle_loop]
 [endmacro]
 
 [macro name="arena_battle_end"]

@@ -20,7 +20,6 @@
 
 *stand_end
 [cm]
-[stage_progress_bar_refresh stage="&tf.sensenStage"]
 [freeimage layer="2"]
 [freeimage layer="3"]
 [jump target="*stand_start"]
@@ -42,3 +41,23 @@
 [stage_event_hide]
 [freeimage layer="2"]
 [freeimage layer="3"]
+
+; battleがなければ終了
+[jump target="*event_completed" cond="!tf.sensenStage.hasBattleEvent()"]
+[stage_progress_bar_hide stage="&tf.sensenStage"]
+[stage_battle_setup scenario="stage1_battle.ks" target="*back_to_stage1_battle_end"]
+[stage_battle_mainloop]
+[s]
+
+*event_completed
+[cm]
+[stage_progress_bar_refresh stage="&tf.sensenStage"]
+[jump target="*stand_end"]
+
+*back_to_stage1_battle_end
+[cm]
+[stage_battle_end]
+[sensen_header bg="stage1.png" bgm="stage_event.mp3"]
+[stage_event_detail_bg stage="&tf.sensenStage"]
+[stage_progress_bar_show stage="&tf.sensenStage"]
+[jump target="*event_completed"]

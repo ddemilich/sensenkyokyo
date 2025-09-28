@@ -216,6 +216,13 @@ class SensenStageEvent {
         }
         return generated;
     }
+
+    getDefaultSp() {
+        return 0;
+    }
+    getActionWeight() {
+        return [4,2,1];
+    }
 }
 window.SensenStageEvent = SensenStageEvent;
 
@@ -275,7 +282,7 @@ class SensenStageBossEventTwo extends SensenStageEvent {
 }
 window.SensenStageBossEventTwo = SensenStageBossEventTwo;
 
-class SensenStageFixedEvent extends SensenStageEvent {
+class SensenStageFixedEventE11 extends SensenStageEvent {
     constructor(progress) {
         super(progress);
         this.hasBattle = true;
@@ -297,10 +304,16 @@ class SensenStageFixedEvent extends SensenStageEvent {
     generateEnemyIdList(uniqueEnemyIds) {
         return super.generateEnemyIdList(["e11"]);
     }
+    getDefaultSp() {
+        return 75;
+    }
+    getActionWeight() {
+        return [0,0,1];
+    }
 }
-window.SensenStageFixedEvent = SensenStageFixedEvent;
+window.SensenStageFixedEventE11 = SensenStageFixedEventE11;
 
-class SensenStageFixedEventTwo extends SensenStageEvent {
+class SensenStageFixedEventE12 extends SensenStageEvent {
     constructor(progress) {
         super(progress);
         this.hasBattle = true;
@@ -316,13 +329,143 @@ class SensenStageFixedEventTwo extends SensenStageEvent {
         return "eventButton/eventFixed.png";
     }
     detail() {
+        let msg = "クスクスと笑う女性の声がする。<br />";
+        return msg;
+    }
+    generateEnemyIdList(uniqueEnemyIds) {
+        return super.generateEnemyIdList(["e12"]);
+    }
+    getDefaultSp() {
+        return 75;
+    }
+    getActionWeight() {
+        return [0,1,0];
+    }
+}
+window.SensenStageFixedEventE12 = SensenStageFixedEventE12;
+
+class SensenStageFixedEventE13 extends SensenStageEvent {
+    constructor(progress) {
+        super(progress);
+        this.hasBattle = true;
+        this.hasTrap = false;
+        this.isBig = false;
+        this.isBigTrap = false;
+        this.enemyCount = 4;
+    }
+    getProgressPoint() {
+        return 0;
+    }
+    getImagePath() {
+        return "eventButton/eventFixed.png";
+    }
+    detail() {
+        let msg = "ボイラーの熱気を感じる。<br />";
+        return msg;
+    }
+    generateEnemyIdList(uniqueEnemyIds) {
+        return super.generateEnemyIdList(["e13"]);
+    }
+    getDefaultSp() {
+        return 25;
+    }
+    getActionWeight() {
+        return [1,0,0];
+    }
+}
+window.SensenStageFixedEventE13 = SensenStageFixedEventE13;
+
+class SensenStageFixedEventE21 extends SensenStageEvent {
+    constructor(progress) {
+        super(progress);
+        this.hasBattle = true;
+        this.hasTrap = false;
+        this.isBig = false;
+        this.isBigTrap = false;
+        this.enemyCount = 2;
+    }
+    getProgressPoint() {
+        return 0;
+    }
+    getImagePath() {
+        return "eventButton/eventFixed.png";
+    }
+    detail() {
         let msg = "勇ましい訓練の掛け声が聞こえる。<br />";
+        return msg;
+    }
+    generateEnemyIdList(uniqueEnemyIds) {
+        return super.generateEnemyIdList(["e21"]);
+    }
+    getDefaultSp() {
+        return 100;
+    }
+    getActionWeight() {
+        return [1,1,0];
+    }
+}
+window.SensenStageFixedEventE21 = SensenStageFixedEventE21;
+
+class SensenStageFixedEventE22 extends SensenStageEvent {
+    constructor(progress) {
+        super(progress);
+        this.hasBattle = true;
+        this.hasTrap = false;
+        this.isBig = false;
+        this.isBigTrap = false;
+        this.enemyCount = 3;
+    }
+    getProgressPoint() {
+        return 0;
+    }
+    getImagePath() {
+        return "eventButton/eventFixed.png";
+    }
+    detail() {
+        let msg = "タッタッタと規則正しく走る音がする。<br />";
         return msg;
     }
     generateEnemyIdList(uniqueEnemyIds) {
         return super.generateEnemyIdList(["e22"]);
     }
+    getDefaultSp() {
+        return 100;
+    }
+    getActionWeight() {
+        return [0,1,1];
+    }
 }
-window.SensenStageFixedEventTwo = SensenStageFixedEventTwo;
+window.SensenStageFixedEventE22 = SensenStageFixedEventE22;
+
+class SensenStageFixedEventE23 extends SensenStageEvent {
+    constructor(progress) {
+        super(progress);
+        this.hasBattle = true;
+        this.hasTrap = false;
+        this.isBig = false;
+        this.isBigTrap = false;
+        this.enemyCount = 4;
+    }
+    getProgressPoint() {
+        return 0;
+    }
+    getImagePath() {
+        return "eventButton/eventFixed.png";
+    }
+    detail() {
+        let msg = "キチキチと関節のこすれる音がする。<br />";
+        return msg;
+    }
+    generateEnemyIdList(uniqueEnemyIds) {
+        return super.generateEnemyIdList(["e23"]);
+    }
+    getDefaultSp() {
+        return 100;
+    }
+    getActionWeight() {
+        return [1,0,1];
+    }
+}
+window.SensenStageFixedEventE23 = SensenStageFixedEventE23;
 [endscript]
 [return]

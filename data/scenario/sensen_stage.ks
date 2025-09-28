@@ -175,9 +175,19 @@ class SensenStageOne extends SensenStage {
                 progressReq: 100,
             },
             {
-                event: new SensenStageFixedEvent(50),
+                event: new SensenStageFixedEventE11(25),
+                isCompleted: false,
+                progressReq: 25,
+            },
+            {
+                event: new SensenStageFixedEventE12(50),
                 isCompleted: false,
                 progressReq: 50,
+            },
+            {
+                event: new SensenStageFixedEventE13(75),
+                isCompleted: false,
+                progressReq: 75,
             },
         ].sort((a, b) => a.progressReq - b.progressReq);
     }
@@ -198,9 +208,12 @@ class SensenStageOne extends SensenStage {
 
         // 敵の強さ(Lv1~Lv5)
         let enemyLevel = 1 + Math.floor((this.progress * 4)/100);
-        
+        // 初期SP
+        const defaultSp = selectedEvent.getDefaultSp();
+        // 偏り
+        const weight = selectedEvent.getActionWeight();
         // バトルセクション生成
-        this.Battle = new BattleSection(lambda, mu, enemyList, enemyLevel, scenario, target);
+        this.Battle = new BattleSection(lambda, mu, enemyList, enemyLevel, scenario, target, defaultSp, weight);
     }
 }
 window.SensenStageOne = SensenStageOne;
@@ -215,9 +228,19 @@ class SensenStageTwo extends SensenStage {
                 progressReq: 100,
             },
             {
-                event: new SensenStageFixedEventTwo(50),
+                event: new SensenStageFixedEventE21(25),
+                isCompleted: false,
+                progressReq: 25,
+            },
+            {
+                event: new SensenStageFixedEventE22(50),
                 isCompleted: false,
                 progressReq: 50,
+            },
+            {
+                event: new SensenStageFixedEventE23(75),
+                isCompleted: false,
+                progressReq: 75,
             },
         ].sort((a, b) => a.progressReq - b.progressReq);
     }
@@ -235,12 +258,16 @@ class SensenStageTwo extends SensenStage {
         }        
         // 敵一覧を生成
         const enemyList = selectedEvent.generateEnemyIdList(enemyIds);
+        // 初期SP
+        const defaultSp = selectedEvent.getDefaultSp();
+        // 偏り
+        const weight = selectedEvent.getActionWeight();
 
         // 敵の強さ(Lv6~Lv10)
         let enemyLevel = 6 + Math.floor((this.progress * 4)/100);
         
         // バトルセクション生成
-        this.Battle = new BattleSection(lambda, mu, enemyList, enemyLevel, scenario, target);
+        this.Battle = new BattleSection(lambda, mu, enemyList, enemyLevel, scenario, target, defaultSp, weight);
     }
 }
 window.SensenStageTwo = SensenStageTwo;

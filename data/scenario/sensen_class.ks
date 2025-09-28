@@ -126,6 +126,11 @@ class Character {
         // 拘束
         this.bundled = false;
         console.log(`${this.name}が生成されました。`);
+
+        // じゃんけん
+        this.firstRate = 4;
+        this.chargeRate = 2;
+        this.guardRate = 1;
     }
 
     // AP関係
@@ -255,7 +260,7 @@ class Character {
         return actionInstance;
     }
     decideOneAction(source, allEnemies, allHeroines) {
-        const actionKeyToSelect = this.selectActionByWeight(4,2,1);
+        const actionKeyToSelect = this.selectActionByWeight(this.firstRate, this.chargeRate, this.guardRate);
         const selectedAction = this.createActionInstance(actionKeyToSelect); 
         if (selectedAction) {
             selectedAction.decideTargetCharaDisplayData(source, allEnemies, allHeroines);

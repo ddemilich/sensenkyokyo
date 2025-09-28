@@ -253,7 +253,7 @@ class BattleSection {
     currentPhase = null; // 現在のフェイズ名
     isBattleFinished = false; // 戦闘が終了したかどうかのフラグ
     
-    constructor(l, m, enemyIdList, enemyLevel, scenario, target) {
+    constructor(l, m, enemyIdList, enemyLevel, scenario, target, enemyDefaultSp=0, weight=[4,2,1]) {
         // プレイヤーキャラクターをメンバ変数に格納
         this.lambda = new CharaDisplayData(l, BattleSection.#HEROINE_START_X, BattleSection.#HEROINE_START_Y);
         this.mu = new CharaDisplayData(m, BattleSection.#HEROINE_START_X, BattleSection.#HEROINE_START_Y);
@@ -273,6 +273,10 @@ class BattleSection {
 
             try {
                 const enemyInstance = EnemyFactory.createEnemy(enemyId, lp, ap, BattleSection.#ENEMY_WIDTH, BattleSection.#ENEMY_HEIGHT);
+                enemyInstance.sp = enemyDefaultSp;
+                enemyInstance.firstRate = weight[0];
+                enemyInstance.chargeRate = weight[1];
+                enemyInstance.guardRate = weight[2];
                 const enemyDisplayData = new CharaDisplayData(
                     enemyInstance,
                     BattleSection.#ENEMY_START_X,

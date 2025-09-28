@@ -7,8 +7,8 @@ class ArenaController {
     constructor() {
         this.x = 20;
         this.y = 80;
-        this.gridWidth = 64;
-        this.gridHeight = 32;
+        this.gridWidth = 48;
+        this.gridHeight = 24;
         this.marginX = 2;
         this.marginY = 4;
         this.bgStage = 1;
@@ -22,6 +22,12 @@ class ArenaController {
         this.AP = 50;
         this.ER = 0;
         this.CR = 0;
+        this.enemySp = 0;
+
+        this.enemyFirstRate = 4;
+        this.enemyChargeRate = 2;
+        this.enemyGuardRate = 1;
+
         this.startButtonX = 50;
         this.startButtonY = 650;
     }
@@ -99,7 +105,33 @@ class ArenaController {
             this.CR = 0;
         }
     }
-
+    setEnemySp(value) {
+        this.enemySp += parseInt(value);
+        if (this.enemySp > 100) {
+            this.enemySp = 100;
+        }
+        if (this.enemySp < 0) {
+            this.enemySp = 0;
+        }
+    }
+    setEnemyFirstRate(value) {
+        this.enemyFirstRate += parseInt(value);
+        if (this.enemyFirstRate < 0) {
+            this.enemyFirstRate = 0;
+        }
+    }
+    setEnemyChargeRate(value) {
+        this.enemyChargeRate += parseInt(value);
+        if (this.enemyChargeRate < 0) {
+            this.enemyChargeRate = 0;
+        }
+    }
+    setEnemyGuardRate(value) {
+        this.enemyGuardRate += parseInt(value);
+        if (this.enemyGuardRate < 0) {
+            this.enemyGuardRate = 0;
+        }
+    }
     battleSetup(scenario, target) {
         let lambda = new HeroineLambda(this.LP, this.AP, 250, 351);
         let mu = new HeroineMu(this.LP, this.AP, 250, 351);
@@ -107,7 +139,7 @@ class ArenaController {
         mu.er = this.ER;
         lambda.cr = this.CR;
         mu.cr = this.CR;
-        this.Battle = new BattleSection(lambda, mu, this.enemyList, this.enemyLevel, scenario, target);
+        this.Battle = new BattleSection(lambda, mu, this.enemyList, this.enemyLevel, scenario, target, this.enemySp, [this.enemyFirstRate, this.enemyChargeRate, this.enemyGuardRate]);
     }
 }
 window.ArenaController = ArenaController;
@@ -183,6 +215,36 @@ window.ArenaController = ArenaController;
     [button graphic="button/incinc.png" x="&tf.ArenaController.getBgSelectX(5)" y="&tf.ArenaController.getBgSelectY(15)" exp="tf.ArenaController.setCR(10)" width="&tf.ArenaController.gridWidth" target="&mp.target"]
 [endmacro]
 
+[macro name="arena_menu_enemy_sp"]
+    [button graphic="button/decdec.png" x="&tf.ArenaController.getBgSelectX(1)" y="&tf.ArenaController.getBgSelectY(17)" exp="tf.ArenaController.setEnemySp(-10)" width="&tf.ArenaController.gridWidth" target="&mp.target"]
+    [button graphic="button/dec.png" x="&tf.ArenaController.getBgSelectX(2)" y="&tf.ArenaController.getBgSelectY(17)" exp="tf.ArenaController.setEnemySp(-1)" width="&tf.ArenaController.gridWidth" target="&mp.target"]
+    [ptext name="enemySpTitle" overwrite="true" layer="1" color="black" text="敵の初期SP" x="&tf.ArenaController.getBgSelectX(3)" y="&tf.ArenaController.getBgSelectY(17)" width="&tf.ArenaController.gridWidth"]
+    [button graphic="button/inc.png" x="&tf.ArenaController.getBgSelectX(4)" y="&tf.ArenaController.getBgSelectY(17)" exp="tf.ArenaController.setEnemySp(1)" width="&tf.ArenaController.gridWidth" target="&mp.target"]
+    [button graphic="button/incinc.png" x="&tf.ArenaController.getBgSelectX(5)" y="&tf.ArenaController.getBgSelectY(17)" exp="tf.ArenaController.setEnemySp(10)" width="&tf.ArenaController.gridWidth" target="&mp.target"]
+[endmacro]
+
+[macro name="arena_menu_enemy_first_rate"]
+    [button graphic="button/decdec.png" x="&tf.ArenaController.getBgSelectX(8)" y="&tf.ArenaController.getBgSelectY(15)" exp="tf.ArenaController.setEnemyFirstRate(-10)" width="&tf.ArenaController.gridWidth" target="&mp.target"]
+    [button graphic="button/dec.png" x="&tf.ArenaController.getBgSelectX(9)" y="&tf.ArenaController.getBgSelectY(15)" exp="tf.ArenaController.setEnemyFirstRate(-1)" width="&tf.ArenaController.gridWidth" target="&mp.target"]
+    [image name="enemyFirstRate" storage="chara/actions/EnemyFirstStrike.png" layer="1" x="&tf.ArenaController.getBgSelectX(10)" y="&tf.ArenaController.getBgSelectY(15)" width="&tf.ArenaController.gridWidth"]
+    [button graphic="button/inc.png" x="&tf.ArenaController.getBgSelectX(11)" y="&tf.ArenaController.getBgSelectY(15)" exp="tf.ArenaController.setEnemyFirstRate(1)" width="&tf.ArenaController.gridWidth" target="&mp.target"]
+    [button graphic="button/incinc.png" x="&tf.ArenaController.getBgSelectX(12)" y="&tf.ArenaController.getBgSelectY(15)" exp="tf.ArenaController.setEnemyFirstRate(10)" width="&tf.ArenaController.gridWidth" target="&mp.target"]
+[endmacro]
+[macro name="arena_menu_enemy_charge_rate"]
+    [button graphic="button/decdec.png" x="&tf.ArenaController.getBgSelectX(8)" y="&tf.ArenaController.getBgSelectY(17)" exp="tf.ArenaController.setEnemyChargeRate(-10)" width="&tf.ArenaController.gridWidth" target="&mp.target"]
+    [button graphic="button/dec.png" x="&tf.ArenaController.getBgSelectX(9)" y="&tf.ArenaController.getBgSelectY(17)" exp="tf.ArenaController.setEnemyChargeRate(-1)" width="&tf.ArenaController.gridWidth" target="&mp.target"]
+    [image name="enemyChargeRate" storage="chara/actions/EnemyChargeBurst.png" layer="1" x="&tf.ArenaController.getBgSelectX(10)" y="&tf.ArenaController.getBgSelectY(17)" width="&tf.ArenaController.gridWidth"]
+    [button graphic="button/inc.png" x="&tf.ArenaController.getBgSelectX(11)" y="&tf.ArenaController.getBgSelectY(17)" exp="tf.ArenaController.setEnemyChargeRate(1)" width="&tf.ArenaController.gridWidth" target="&mp.target"]
+    [button graphic="button/incinc.png" x="&tf.ArenaController.getBgSelectX(12)" y="&tf.ArenaController.getBgSelectY(17)" exp="tf.ArenaController.setEnemyChargeRate(10)" width="&tf.ArenaController.gridWidth" target="&mp.target"]
+[endmacro]
+[macro name="arena_menu_enemy_guard_rate"]
+    [button graphic="button/decdec.png" x="&tf.ArenaController.getBgSelectX(8)" y="&tf.ArenaController.getBgSelectY(19)" exp="tf.ArenaController.setEnemyGuardRate(-10)" width="&tf.ArenaController.gridWidth" target="&mp.target"]
+    [button graphic="button/dec.png" x="&tf.ArenaController.getBgSelectX(9)" y="&tf.ArenaController.getBgSelectY(19)" exp="tf.ArenaController.setEnemyGuardRate(-1)" width="&tf.ArenaController.gridWidth" target="&mp.target"]
+    [image name="enemyGuardRate" storage="chara/actions/DefaultGuardCounter.png" layer="1" x="&tf.ArenaController.getBgSelectX(10)" y="&tf.ArenaController.getBgSelectY(19)" width="&tf.ArenaController.gridWidth"]
+    [button graphic="button/inc.png" x="&tf.ArenaController.getBgSelectX(11)" y="&tf.ArenaController.getBgSelectY(19)" exp="tf.ArenaController.setEnemyGuardRate(1)" width="&tf.ArenaController.gridWidth" target="&mp.target"]
+    [button graphic="button/incinc.png" x="&tf.ArenaController.getBgSelectX(12)" y="&tf.ArenaController.getBgSelectY(19)" exp="tf.ArenaController.setEnemyGuardRate(10)" width="&tf.ArenaController.gridWidth" target="&mp.target"]
+[endmacro]
+
 [macro name="arena_menu_show"]
     [image layer="1" storage="&tf.ArenaController.getSettingBg()" folder="bgimage" left="&tf.ArenaController.settingX" top="&tf.ArenaController.settingY" width="&tf.ArenaController.settingWidth" height="&tf.ArenaController.settingHeight"]
     [button graphic="&tf.ArenaController.getEnemyImage(0)" x="&tf.ArenaController.getBgSelectX(9)" y="&tf.ArenaController.getBgSelectY(2)" width="&tf.ArenaController.gridWidth" exp="tf.ArenaController.removeEnemy(0)" cond="tf.ArenaController.enemyList.length > 0" target="&mp.target"]
@@ -191,16 +253,24 @@ window.ArenaController = ArenaController;
     [button graphic="&tf.ArenaController.getEnemyImage(3)" x="&tf.ArenaController.getBgSelectX(12)" y="&tf.ArenaController.getBgSelectY(2)" width="&tf.ArenaController.gridWidth" exp="tf.ArenaController.removeEnemy(3)" cond="tf.ArenaController.enemyList.length > 3" target="&mp.target"]
     [button graphic="&tf.ArenaController.getEnemyImage(4)" x="&tf.ArenaController.getBgSelectX(13)" y="&tf.ArenaController.getBgSelectY(2)" width="&tf.ArenaController.gridWidth" exp="tf.ArenaController.removeEnemy(4)" cond="tf.ArenaController.enemyList.length > 4" target="&mp.target"]
     [button graphic="&tf.ArenaController.getEnemyImage(5)" x="&tf.ArenaController.getBgSelectX(14)" y="&tf.ArenaController.getBgSelectY(2)" width="&tf.ArenaController.gridWidth" exp="tf.ArenaController.removeEnemy(5)" cond="tf.ArenaController.enemyList.length > 5" target="&mp.target"]
-    [ptext name="showEnemyLevelTitle" overwrite="true" edge="4px 0x000000" layer="1" color="white" text="敵レベル" x="&tf.ArenaController.getBgSelectX(9)" y="&tf.ArenaController.getBgSelectY(6)" width="&tf.ArenaController.gridWidth"]
-    [ptext name="showEnemyLevelValue" overwrite="true" edge="4px 0x000000" layer="1" color="white" size="20" text="&tf.ArenaController.enemyLevel" x="&tf.ArenaController.getBgSelectX(10)" y="&tf.ArenaController.getBgSelectY(6)" width="&tf.ArenaController.gridWidth"]
-    [ptext name="showHeroineLPTitle" overwrite="true" edge="4px 0x000000" layer="1" color="white" text="LP" x="&tf.ArenaController.getBgSelectX(11)" y="&tf.ArenaController.getBgSelectY(6)" width="&tf.ArenaController.gridWidth"]
-    [ptext name="showHeroineLPlValue" overwrite="true" edge="4px 0x000000" layer="1" color="white" size="20" text="&tf.ArenaController.LP" x="&tf.ArenaController.getBgSelectX(12)" y="&tf.ArenaController.getBgSelectY(6)" width="&tf.ArenaController.gridWidth"]
-    [ptext name="showHeroineAPTitle" overwrite="true" edge="4px 0x000000" layer="1" color="white" text="AP" x="&tf.ArenaController.getBgSelectX(11)" y="&tf.ArenaController.getBgSelectY(7)" width="&tf.ArenaController.gridWidth"]
-    [ptext name="showHeroineAPlValue" overwrite="true" edge="4px 0x000000" layer="1" color="white" size="20" text="&tf.ArenaController.AP" x="&tf.ArenaController.getBgSelectX(12)" y="&tf.ArenaController.getBgSelectY(7)" width="&tf.ArenaController.gridWidth"]
-    [ptext name="showHeroineERTitle" overwrite="true" edge="4px 0x000000" layer="1" color="white" text="ER" x="&tf.ArenaController.getBgSelectX(11)" y="&tf.ArenaController.getBgSelectY(8)" width="&tf.ArenaController.gridWidth"]
-    [ptext name="showHeroineERlValue" overwrite="true" edge="4px 0x000000" layer="1" color="white" size="20" text="&tf.ArenaController.ER" x="&tf.ArenaController.getBgSelectX(12)" y="&tf.ArenaController.getBgSelectY(8)" width="&tf.ArenaController.gridWidth"]
-    [ptext name="showHeroineCRTitle" overwrite="true" edge="4px 0x000000" layer="1" color="white" text="CR" x="&tf.ArenaController.getBgSelectX(11)" y="&tf.ArenaController.getBgSelectY(9)" width="&tf.ArenaController.gridWidth"]
-    [ptext name="showHeroineCRValue" overwrite="true" edge="4px 0x000000" layer="1" color="white" size="20" text="&tf.ArenaController.CR" x="&tf.ArenaController.getBgSelectX(12)" y="&tf.ArenaController.getBgSelectY(9)" width="&tf.ArenaController.gridWidth"]
+    [ptext name="showEnemyLevelTitle" overwrite="true" edge="4px 0x000000" layer="1" color="white" text="敵レベル" size="12" x="&tf.ArenaController.getBgSelectX(9)" y="&tf.ArenaController.getBgSelectY(6)" width="&tf.ArenaController.gridWidth"]
+    [ptext name="showEnemyLevelValue" overwrite="true" edge="4px 0x000000" layer="1" color="white" size="20" text="&tf.ArenaController.enemyLevel" x="&tf.ArenaController.getBgSelectX(10)" y="&tf.ArenaController.getBgSelectY(6)" width="&tf.ArenaController.gridWidth" align="right"]
+    [ptext name="showEnemySpTitle" overwrite="true" edge="4px 0x000000" layer="1" color="white" text="敵初期SP" size="11" x="&tf.ArenaController.getBgSelectX(9)" y="&tf.ArenaController.getBgSelectY(7)" width="&tf.ArenaController.gridWidth"]
+    [ptext name="showEnemySpValue" overwrite="true" edge="4px 0x000000" layer="1" color="white" size="20" text="&tf.ArenaController.enemySp" x="&tf.ArenaController.getBgSelectX(10)" y="&tf.ArenaController.getBgSelectY(7)" width="&tf.ArenaController.gridWidth" align="right"]
+    [ptext name="showEnemyFirstRateTitle" overwrite="true" edge="4px 0x000000" layer="1" color="white" text="先制率" size="11" x="&tf.ArenaController.getBgSelectX(9)" y="&tf.ArenaController.getBgSelectY(8)" width="&tf.ArenaController.gridWidth"]
+    [ptext name="showEnemyFirstRateValue" overwrite="true" edge="4px 0x000000" layer="1" color="white" size="20" text="&tf.ArenaController.enemyFirstRate" x="&tf.ArenaController.getBgSelectX(10)" y="&tf.ArenaController.getBgSelectY(8)" width="&tf.ArenaController.gridWidth" align="right"]
+    [ptext name="showEnemyChargeRateTitle" overwrite="true" edge="4px 0x000000" layer="1" color="white" text="溜め率" size="11" x="&tf.ArenaController.getBgSelectX(9)" y="&tf.ArenaController.getBgSelectY(9)" width="&tf.ArenaController.gridWidth"]
+    [ptext name="showEnemyChargeRateValue" overwrite="true" edge="4px 0x000000" layer="1" color="white" size="20" text="&tf.ArenaController.enemyChargeRate" x="&tf.ArenaController.getBgSelectX(10)" y="&tf.ArenaController.getBgSelectY(9)" width="&tf.ArenaController.gridWidth" align="right"]
+    [ptext name="showEnemyGuardRateTitle" overwrite="true" edge="4px 0x000000" layer="1" color="white" text="反撃率" size="11" x="&tf.ArenaController.getBgSelectX(9)" y="&tf.ArenaController.getBgSelectY(10)" width="&tf.ArenaController.gridWidth"]
+    [ptext name="showEnemyGuardRateValue" overwrite="true" edge="4px 0x000000" layer="1" color="white" size="20" text="&tf.ArenaController.enemyGuardRate" x="&tf.ArenaController.getBgSelectX(10)" y="&tf.ArenaController.getBgSelectY(10)" width="&tf.ArenaController.gridWidth" align="right"]
+    [ptext name="showHeroineLPTitle" overwrite="true" edge="4px 0x000000" layer="1" color="white" text="LP" x="&tf.ArenaController.getBgSelectX(12)" y="&tf.ArenaController.getBgSelectY(6)" width="&tf.ArenaController.gridWidth"]
+    [ptext name="showHeroineLPlValue" overwrite="true" edge="4px 0x000000" layer="1" color="white" size="20" text="&tf.ArenaController.LP" x="&tf.ArenaController.getBgSelectX(13)" y="&tf.ArenaController.getBgSelectY(6)" width="&tf.ArenaController.gridWidth" align="right"]
+    [ptext name="showHeroineAPTitle" overwrite="true" edge="4px 0x000000" layer="1" color="white" text="AP" x="&tf.ArenaController.getBgSelectX(12)" y="&tf.ArenaController.getBgSelectY(7)" width="&tf.ArenaController.gridWidth"]
+    [ptext name="showHeroineAPlValue" overwrite="true" edge="4px 0x000000" layer="1" color="white" size="20" text="&tf.ArenaController.AP" x="&tf.ArenaController.getBgSelectX(13)" y="&tf.ArenaController.getBgSelectY(7)" width="&tf.ArenaController.gridWidth" align="right"]
+    [ptext name="showHeroineERTitle" overwrite="true" edge="4px 0x000000" layer="1" color="white" text="ER" x="&tf.ArenaController.getBgSelectX(12)" y="&tf.ArenaController.getBgSelectY(8)" width="&tf.ArenaController.gridWidth"]
+    [ptext name="showHeroineERlValue" overwrite="true" edge="4px 0x000000" layer="1" color="white" size="20" text="&tf.ArenaController.ER" x="&tf.ArenaController.getBgSelectX(13)" y="&tf.ArenaController.getBgSelectY(8)" width="&tf.ArenaController.gridWidth" align="right"]
+    [ptext name="showHeroineCRTitle" overwrite="true" edge="4px 0x000000" layer="1" color="white" text="CR" x="&tf.ArenaController.getBgSelectX(12)" y="&tf.ArenaController.getBgSelectY(9)" width="&tf.ArenaController.gridWidth"]
+    [ptext name="showHeroineCRValue" overwrite="true" edge="4px 0x000000" layer="1" color="white" size="20" text="&tf.ArenaController.CR" x="&tf.ArenaController.getBgSelectX(13)" y="&tf.ArenaController.getBgSelectY(9)" width="&tf.ArenaController.gridWidth" align="right"]
 [endmacro]
 [macro name="arena_start_button"]
     [glink color="btn_29_green" text="戦闘開始" size="24" width="200" x="&tf.ArenaController.startButtonX" y="&tf.ArenaController.startButtonY" cond="tf.ArenaController.enemyList.length > 0" target="&mp.target"]

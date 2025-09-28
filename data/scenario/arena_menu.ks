@@ -33,6 +33,11 @@
 [arena_menu_ap target="*arena_menu"]
 [arena_menu_er target="*arena_menu"]
 [arena_menu_cr target="*arena_menu"]
+;その他
+[arena_menu_enemy_sp target="*arena_menu"]
+[arena_menu_enemy_first_rate target="*arena_menu"]
+[arena_menu_enemy_charge_rate target="*arena_menu"]
+[arena_menu_enemy_guard_rate target="*arena_menu"]
 
 ;選んだ設定が表示される
 [arena_menu_show target="*arena_menu"]

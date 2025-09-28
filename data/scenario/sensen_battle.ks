@@ -584,14 +584,17 @@ class BattleSection {
                 // アルティメットが打たれていたら実行
                 heroDisp.charaInstance.decideUltimate = false;
                 this.executeImmediateAction(heroDisp, 'Ultimate');
+                return;
             }
             // 自分以外を探す
             const buddy = this.heroines.find(h => h.charaInstance !== heroDisp.charaInstance);
+            // UNDOされたとき等にアイコンを消すために再度リフレッシュする。
+            this.dispatch('CHARA_ACTION_REFRESH', { enemies: this.enemies, heroines: this.heroines });
             // イベント発行
             this.dispatch('HEROINE_ACTION_DECISION', {
                 source: heroDisp,
-                buddy: buddy,
-                enemies: this.enemies
+                buddy: buddy.charaInstance,
+                enemies: this.enemies.filter(e => (!e.charaInstance.isDefeated() && !e.charaInstance.bundled))
             });
             return;
         }

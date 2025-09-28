@@ -151,7 +151,10 @@ class SensenStage {
         // 通常イベントとボスイベントで変更する。
         const selectedEventItem = this.ListedEventItems[this.selectedEventIndex];
         const selectedEvent = selectedEventItem.event;
-        if (selectedEvent instanceof SensenStageBossEvent) {
+        if (
+            selectedEvent instanceof SensenStageBossEvent ||
+            selectedEvent instanceof SensenStageBossEventTwo
+        ) {
             return "FuneralRites.wav";
         } else {
             return "LoseMe.wav";

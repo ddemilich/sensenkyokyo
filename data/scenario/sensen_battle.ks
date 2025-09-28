@@ -401,7 +401,11 @@ class BattleSection {
             charaDisplayData.updatePositionFromCenter(newCenterX, newCenterY);
 
             if (!charaDisplayData.charaInstance.bundled) {
-                this.dispatch('HEROINE_MOVE', { heroineDisp: charaDisplayData });
+                this.dispatch('HEROINE_MOVE', { 
+                    heroineDisp: charaDisplayData,
+                    currentEr: charaDisplayData.charaInstance.er,
+                    currentSp: charaDisplayData.charaInstance.sp,
+                });
             }
         });
     }
@@ -1070,12 +1074,15 @@ window.BattleSection = BattleSection;
 [endmacro]
 ; ヒロインの移動
 [macro name="heroine_move"]
+    ;mp.heroine
+    ;mp.sp
+    ;mp.er
     [anim name="&mp.heroine.name" left="&mp.x" top="&mp.y" effect="easeOutSine" time="100"]
     [anim name="&mp.heroine.lpbarName()" left="&mp.heroine.lpbarX(mp.x)" top="&mp.heroine.lpbarY(mp.y)" time="0"]
     [anim name="&mp.heroine.lpbarActiveName()" left="&mp.heroine.lpbarActiveX(mp.x)" top="&mp.heroine.lpbarY(mp.y)" time="0"]
     [anim name="&mp.heroine.lpbarText()" left="&mp.heroine.lpbarX(mp.x)" top="&mp.heroine.lpbarY(mp.y)" time="0"]
     [anim name="&mp.heroine.spbarName()" left="&mp.heroine.spbarX(mp.x)" top="&mp.heroine.spbarY(mp.y)" time="0"]
-    [anim name="&mp.heroine.erbarName()" left="&mp.heroine.erbarX(mp.x)" top="&mp.heroine.erbarY(mp.y)" time="0"]
+    [anim name="&mp.heroine.erbarName()" left="&mp.heroine.erbarX(mp.x, mp.er)" top="&mp.heroine.erbarY(mp.y)" time="0"]
     [wa]
 [endmacro]
 
@@ -1438,7 +1445,7 @@ window.BattleSection = BattleSection;
     [heroine_appear heroine="&tf.currentEvent.params.heroineDisp.charaInstance" x="&tf.currentEvent.params.heroineDisp.x" y="&tf.currentEvent.params.heroineDisp.y"]
     [jump target="*process_battle_events_start"]
 *battle_heroine_move
-    [heroine_move heroine="&tf.currentEvent.params.heroineDisp.charaInstance" x="&tf.currentEvent.params.heroineDisp.x" y="&tf.currentEvent.params.heroineDisp.y"]
+    [heroine_move heroine="&tf.currentEvent.params.heroineDisp.charaInstance" x="&tf.currentEvent.params.heroineDisp.x" y="&tf.currentEvent.params.heroineDisp.y" sp="&tf.currentEvent.params.currentSp" er="&tf.currentEvent.params.currentEr"]
     [jump target="*process_battle_events_start"]
 
 *battle_upkeep_phase_start

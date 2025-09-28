@@ -157,7 +157,7 @@ class EnemyFirstStrike extends Action {
             });
             if (actualDamage.actualTotalDamage > 0) {
                 // ダメージを与えたらSPを増やす(最大25くらい)
-                const spAmount = Math.floor(Math.random() * actualDamage.actualTotalDamage * 0.5);
+                const spAmount = Math.floor(Math.random() * actualDamage.actualTotalDamage);
                 source.charaInstance.changeSp(spAmount);
                 dispatch('CHARA_SPBAR_REFRESH', {
                     source: source,
@@ -207,7 +207,7 @@ class EnemyChargeBurst extends Action {
 
         if (this.selectedTarget) {
             console.log(`対象決定: [${this.selectedTarget.charaInstance.name}]`);
-            const erValue = 10;
+            const erValue = BattleUtil.getRandomInt(8, 12);
             const targetCharaInstance = this.selectedTarget.charaInstance;
 
             const actual = targetCharaInstance.applyErValue(erValue);
@@ -290,7 +290,7 @@ class EnemyGuardCounter extends Action {
             });
             if (actualDamage.actualTotalDamage > 0) {
                 // ダメージを与えたらSPを増やす(最大25くらい)
-                const spAmount = Math.floor(Math.random() * actualDamage.actualTotalDamage * 0.5);
+                const spAmount = Math.floor(Math.random() * actualDamage.actualTotalDamage);
                 source.charaInstance.changeSp(spAmount);
                 dispatch('CHARA_SPBAR_REFRESH', {
                     source: source,

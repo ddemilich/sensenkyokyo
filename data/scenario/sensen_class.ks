@@ -388,7 +388,7 @@ class Character {
         }
     }
     increaseSpByDamage(damage) {
-        const threshold = this.maxLp * 0.6;
+        const threshold = this.maxLp * 0.65;
         const spIncreaseAmount = Math.ceil(this.maxSp * damage / threshold);
         this.changeSp(spIncreaseAmount);
     }

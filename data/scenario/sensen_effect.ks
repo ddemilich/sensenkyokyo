@@ -64,11 +64,11 @@ class StepByStepEffect extends Effect {
             return;
         }
 
-        selfDisp.charaInstance.changeSp(1);
-        console.log(`[${selfDisp.charaInstance.name}] のSPが 1 上昇しました。残り: ${selfDisp.charaInstance.sp}`);
+        let amount = BattleUtil.getRandomInt(1,3);
+        selfDisp.charaInstance.changeSp(amount);
         dispatch('CHARA_SPBAR_REFRESH', {
             source: selfDisp,
-            amount: 1,
+            amount: amount,
         });
     }
 }
@@ -77,6 +77,7 @@ window.StepByStepEffect = StepByStepEffect;
 class BundleEffect extends Effect {
     static #ER_VALUE_LEVEL2 = 15;
     static #ER_VALUE_LEVEL3 = 25;
+    static #ER_VALUE_RANGE  = 5;
 
     constructor(enemy, duration = -1) {
         super('拘束状態', duration, false);
@@ -145,7 +146,11 @@ class BundleEffect extends Effect {
                     amount: actualDamage.actualTotalDamage,
                     split: actualDamage.splitDamages,
                 });
-                this.erApplyAndDispatch(selfDisp, BundleEffect.#ER_VALUE_LEVEL2, dispatch);
+                this.erApplyAndDispatch(
+                    selfDisp, 
+                    BattleUtil.getRandomInt(BundleEffect.#ER_VALUE_LEVEL2 - BundleEffect.#ER_VALUE_RANGE, BundleEffect.#ER_VALUE_LEVEL2 + BundleEffect.#ER_VALUE_RANGE), 
+                    dispatch
+                );
             } else {
                 dispatch('HEROINE_BUNDLE_DAMAGE', {
                     heroine: selfDisp,
@@ -167,18 +172,30 @@ class BundleEffect extends Effect {
                     amount: actualDamage.actualTotalDamage,
                     split: actualDamage.splitDamages,
                 });
-                this.erApplyAndDispatch(selfDisp, BundleEffect.#ER_VALUE_LEVEL3, dispatch);
+                this.erApplyAndDispatch(
+                    selfDisp, 
+                    BattleUtil.getRandomInt(BundleEffect.#ER_VALUE_LEVEL3 - BundleEffect.#ER_VALUE_RANGE, BundleEffect.#ER_VALUE_LEVEL3 + BundleEffect.#ER_VALUE_RANGE), 
+                    dispatch
+                );
             } else {
                 dispatch('HEROINE_BUNDLE_DAMAGE', {
                     heroine: selfDisp,
                     amount: actualDamage.actualTotalDamage,
                     split: actualDamage.splitDamages,
                 });
-                this.erApplyAndDispatch(selfDisp, BundleEffect.#ER_VALUE_LEVEL2, dispatch);
+                this.erApplyAndDispatch(
+                    selfDisp, 
+                    BattleUtil.getRandomInt(BundleEffect.#ER_VALUE_LEVEL2 - BundleEffect.#ER_VALUE_RANGE, BundleEffect.#ER_VALUE_LEVEL2 + BundleEffect.#ER_VALUE_RANGE), 
+                    dispatch
+                );
             }
         } else if (chara.wearLevel == 3) {
-            // Lv3: ER20を６回に分けて与える
-            this.erApplyAndDispatch(selfDisp, BundleEffect.#ER_VALUE_LEVEL3, dispatch);
+        // Lv3: ER20を６回に分けて与える
+            this.erApplyAndDispatch(
+                selfDisp, 
+                BattleUtil.getRandomInt(BundleEffect.#ER_VALUE_LEVEL3 - BundleEffect.#ER_VALUE_RANGE, BundleEffect.#ER_VALUE_LEVEL3 + BundleEffect.#ER_VALUE_RANGE), 
+                dispatch
+            );
         } else {
             console.error(`BundleEffect: 不正な拘束レベル: ${chara.wearLevel}`);
         }

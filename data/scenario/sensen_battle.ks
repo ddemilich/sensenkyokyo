@@ -749,6 +749,10 @@ class BattleSection {
                 enemyFirstPair.source.charaInstance.removeAction(enemyFirstPair.action);
                 continue;
             }
+            // 対象不適正の場合は、再選択。
+            if (!enemyFirstPair.action.selectedTarget) {
+                enemyFirstPair.action.decideTargetCharaDisplayData(enemyFirstPair.source, this.enemies, this.heroines);
+            }
             // 対象のアクションにChargeBurstがある場合は１つ見つけてキャンセルする
             const target = enemyFirstPair.action.selectedTarget;
             if (target) {

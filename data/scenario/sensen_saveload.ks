@@ -86,13 +86,13 @@ class SensenSaveData {
         // 基礎ステータス
         this.lambda_maxLp = lambda.maxLp;
         this.lambda_ap = lambda.ap.baseValue;
-        this.mu_maxLp = lambda.maxLp;
-        this.mu_ap = lambda.ap.baseValue;
+        this.mu_maxLp = mu.maxLp;
+        this.mu_ap = mu.ap.baseValue;
         // その他ステータス
         this.lambda_cr = lambda.cr;
         this.lambda_actionCount = lambda.maxActionCount.baseValue;
         this.mu_cr = mu.cr;
-        this.mu_actionCount = lambda.maxActionCount.baseValue;
+        this.mu_actionCount = mu.maxActionCount.baseValue;
         // カード
         this.lambda_card_ids = [];
         this.mu_card_ids = [];
@@ -150,10 +150,6 @@ if (f.sensenSystemData === undefined) {
             let saveData = SensenSaveData.deserialize(sf.sensenSaveData);
             tf.sensenData = saveData.extract();
         }
-        console.log(`${tf.sensenData.lambda.name}`);
-        console.log(`${tf.sensenData.lambda.currentAp}`);
-        console.log(`${tf.sensenData.mu.name}`);
-        console.log(`${tf.sensenData.mu.currentAp}`);
     [endscript]
 [endmacro]
 [macro name="sensen_save"]

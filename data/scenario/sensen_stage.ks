@@ -3,6 +3,20 @@
 [iscript]
 
 class SensenStage {
+    static NORMAL_REWARD_CARD_CLASSES = [
+        HeroineApUpCard,
+        HeroineCooldownCard,
+        HeroineMeditateCard,
+        HeroineLpUpCard,
+    ];
+    static RISK_REWARD_CARD_CLASSES = [
+        HeroineRebalanceCard,
+        HeroineLoversCard,
+        HeroineBerserkCard,
+        HeroineDopingCard,
+        HeroineWonderingSweetCard,
+        HeroineForbiddenFruitCard,
+    ];
     constructor() {
         this.progress = 0;
         this.progressBarX = 50;
@@ -162,6 +176,32 @@ class SensenStage {
     }
     battleSetup(lambda, mu, scenario, target) {
         // イベントから敵の数とか吸い出してthis.Battleを作り上げる
+    }
+
+    static selectRandomCardClass(list) {
+        const maxIndex = list.length - 1;
+        // 0 から リストの最大インデックス までのランダムな整数を取得
+        const randomIndex = BattleUtil.getRandomInt(0, maxIndex);
+        return list[randomIndex];
+    }
+
+    prepareRewards(lambda, mu) {
+        // lambda, risk, muのrewardを生成する。
+        const LambdaCardClass = SensenStage.selectRandomCardClass(SensenStage.NORMAL_REWARD_CARD_CLASSES);
+        this.lambdaReward = new LambdaCardClass(lambda, mu); 
+
+        const RiskCardClass = SensenStage.selectRandomCardClass(SensenStage.RISK_REWARD_CARD_CLASSES);
+        const isLambdaTarget = BattleUtil.getRandomInt(0, 1) === 0; 
+        if (isLambdaTarget) {
+            // Lambda (heroine) に効果が適用されるパターン
+            this.riskReward = new RiskCardClass(lambda, mu); 
+        } else {
+            // Mu (heroine) に効果が適用されるパターン
+            this.riskReward = new RiskCardClass(mu, lambda);
+        }
+
+        const MuCardClass = SensenStage.selectRandomCardClass(SensenStage.NORMAL_REWARD_CARD_CLASSES);
+        this.muReward = new MuCardClass(mu, lambda); 
     }
 }
 
@@ -364,6 +404,70 @@ window.SensenStageTwo = SensenStageTwo;
 [endmacro]
 [macro name="stage_battle_mainloop"]
     [battle_loop]
+[endmacro]
+[macro name="stage_reward"]
+    [iscript]
+        // 抽選
+        mp.stage.prepareRewards(tf.sensenData.lambda, tf.sensenData.mu);
+        tf.lambda_lp_text = `${tf.sensenData.lambda.lp}/${tf.sensenData.lambda.maxLp}`;
+        tf.mu_lp_text = `${tf.sensenData.mu.lp}/${tf.sensenData.mu.maxLp}`;
+    [endscript]
+    ;mp.stage
+    ;mp.target
+    [layopt layer="3" visible="true"]
+    [ptext layer="3" name="lambda_stat"    x="375" y="200" size="20" text="ラムダ" overwrite="true" edge="2px 0x000000" overwrite="true"]
+    [ptext layer="3" name="mu_stat"       x="635" y="200" size="20" text="ミュー" overwrite="true" edge="2px 0x000000" overwrite="true"]
+    [ptext layer="3" name="lambda_lp_name" x="375" y="230" size="16" text="体力(LP)" overwrite="true" edge="2px 0x000000" overwrite="true"]
+    [ptext layer="3" name="mu_lp_name"    x="635" y="230" size="16" text="体力(LP)" overwrite="true" edge="2px 0x000000" overwrite="true"]
+    [ptext layer="3" name="lambda_ap_name" x="375" y="250" size="16" text="攻撃力(AP)" overwrite="true" edge="2px 0x000000" overwrite="true"]
+    [ptext layer="3" name="mu_ap_name"    x="635" y="250" size="16" text="攻撃力(AP)" overwrite="true" edge="2px 0x000000" overwrite="true"]
+    [ptext layer="3" name="lambda_er_name" x="375" y="270" size="16" color="0xfc03db" text="快楽値(ER)" overwrite="true" edge="2px 0x000000" overwrite="true"]
+    [ptext layer="3" name="mu_er_name"    x="635" y="270" size="16" color="0xfc03db" text="快楽値(ER)" overwrite="true" edge="2px 0x000000" overwrite="true"]
+    [ptext layer="3" name="lambda_cr_name" x="375" y="290" size="16" color="0x3e8238" text="堕落値(CR)" overwrite="true" edge="2px 0x000000" overwrite="true"]
+    [ptext layer="3" name="mu_cr_name"    x="635" y="290" size="16" color="0x3e8238" text="堕落値(CR)" overwrite="true" edge="2px 0x000000" overwrite="true"]
+
+    [ptext layer="3" name="lambda_lp"  x="375" y="230" size="22" text="&tf.lambda_lp_text" width="180" align="right" edge="3px 0x000000" overwrite="true"]
+    [ptext layer="3" name="mu_lp"     x="635" y="230" size="22" text="&tf.mu_lp_text" width="180" align="right" edge="3px 0x000000" overwrite="true"]
+    [ptext layer="3" name="lambda_ap"  x="375" y="250" size="22" text="&tf.sensenData.lambda.currentAp" width="180" align="right" edge="3px 0x000000" overwrite="true"]
+    [ptext layer="3" name="mu_ap"     x="635" y="250" size="22" text="&tf.sensenData.mu.currentAp" width="180" align="right" edge="3px 0x000000" overwrite="true"]
+    [ptext layer="3" name="lambda_er"  x="375" y="270" size="22" color="0xfc03db" text="&tf.sensenData.lambda.er" width="180" align="right" edge="3px 0x000000" overwrite="true"]
+    [ptext layer="3" name="mu_er"     x="635" y="270" size="22" color="0xfc03db" text="&tf.sensenData.mu.er" width="180" align="right" edge="3px 0x000000" overwrite="true"]
+    [ptext layer="3" name="lambda_cr"  x="375" y="290" size="22" color="0x3e8238" text="&tf.sensenData.lambda.cr" width="180" align="right" edge="3px 0x000000" overwrite="true"]
+    [ptext layer="3" name="mu_cr"     x="635" y="290" size="22" color="0x3e8238" text="&tf.sensenData.mu.cr" width="180" align="right" edge="3px 0x000000" overwrite="true"]
+
+    [ptext layer="3" name="what_to_do" x="275" y="320" size="30" overwrite="true" text="３つの選択肢から１つ報酬を選んでください" edge="3px 0x000000" width="730" align="center"]
+
+    [glink color="btn_29_green" target="*end_stage_reward" size="20" text="&mp.stage.lambdaReward.getCardText()" x="275" y="370" width="240" height="280" exp="mp.stage.lambdaReward.apply()" enterse="open.mp3" leavese="close.mp3"]
+    [glink color="btn_29_red" target="*end_stage_reward" size="20" text="&mp.stage.riskReward.getCardText()" x="520" y="370" width="240" height="280" exp="mp.stage.riskReward.apply()" enterse="open.mp3" leavese="close.mp3"]
+    [glink color="btn_29_green" target="*end_stage_reward" size="20" text="&mp.stage.muReward.getCardText()" x="765" y="370" width="240" height="280" exp="mp.stage.muReward.apply()" enterse="open.mp3" leavese="close.mp3"]
+    [s]
+*end_stage_reward
+    [iscript]
+        tf.lambda_lp_text = `${tf.sensenData.lambda.lp}/${tf.sensenData.lambda.maxLp}`;
+        tf.mu_lp_text = `${tf.sensenData.mu.lp}/${tf.sensenData.mu.maxLp}`;
+    [endscript]
+    [ptext layer="3" name="lambda_stat"    x="375" y="200" size="20" text="ラムダ" overwrite="true" edge="2px 0x000000" overwrite="true"]
+    [ptext layer="3" name="mu_stat"       x="635" y="200" size="20" text="ミュー" overwrite="true" edge="2px 0x000000" overwrite="true"]
+    [ptext layer="3" name="lambda_lp_name" x="375" y="230" size="16" text="体力(LP)" overwrite="true" edge="2px 0x000000" overwrite="true"]
+    [ptext layer="3" name="mu_lp_name"    x="635" y="230" size="16" text="体力(LP)" overwrite="true" edge="2px 0x000000" overwrite="true"]
+    [ptext layer="3" name="lambda_ap_name" x="375" y="250" size="16" text="攻撃力(AP)" overwrite="true" edge="2px 0x000000" overwrite="true"]
+    [ptext layer="3" name="mu_ap_name"    x="635" y="250" size="16" text="攻撃力(AP)" overwrite="true" edge="2px 0x000000" overwrite="true"]
+    [ptext layer="3" name="lambda_er_name" x="375" y="270" size="16" color="0xfc03db" text="快楽値(ER)" overwrite="true" edge="2px 0x000000" overwrite="true"]
+    [ptext layer="3" name="mu_er_name"    x="635" y="270" size="16" color="0xfc03db" text="快楽値(ER)" overwrite="true" edge="2px 0x000000" overwrite="true"]
+    [ptext layer="3" name="lambda_cr_name" x="375" y="290" size="16" color="0x3e8238" text="堕落値(CR)" overwrite="true" edge="2px 0x000000" overwrite="true"]
+    [ptext layer="3" name="mu_cr_name"    x="635" y="290" size="16" color="0x3e8238" text="堕落値(CR)" overwrite="true" edge="2px 0x000000" overwrite="true"]
+
+    [ptext layer="3" name="lambda_lp"  x="375" y="230" size="22" text="&tf.lambda_lp_text" width="180" align="right" edge="3px 0x000000" overwrite="true"]
+    [ptext layer="3" name="mu_lp"     x="635" y="230" size="22" text="&tf.mu_lp_text" width="180" align="right" edge="3px 0x000000" overwrite="true"]
+    [ptext layer="3" name="lambda_ap"  x="375" y="250" size="22" text="&tf.sensenData.lambda.currentAp" width="180" align="right" edge="3px 0x000000" overwrite="true"]
+    [ptext layer="3" name="mu_ap"     x="635" y="250" size="22" text="&tf.sensenData.mu.currentAp" width="180" align="right" edge="3px 0x000000" overwrite="true"]
+    [ptext layer="3" name="lambda_er"  x="375" y="270" size="22" color="0xfc03db" text="&tf.sensenData.lambda.er" width="180" align="right" edge="3px 0x000000" overwrite="true"]
+    [ptext layer="3" name="mu_er"     x="635" y="270" size="22" color="0xfc03db" text="&tf.sensenData.mu.er" width="180" align="right" edge="3px 0x000000" overwrite="true"]
+    [ptext layer="3" name="lambda_cr"  x="375" y="290" size="22" color="0x3e8238" text="&tf.sensenData.lambda.cr" width="180" align="right" edge="3px 0x000000" overwrite="true"]
+    [ptext layer="3" name="mu_cr"     x="635" y="290" size="22" color="0x3e8238" text="&tf.sensenData.mu.cr" width="180" align="right" edge="3px 0x000000" overwrite="true"]
+    [glink color="btn_29_green" target="*end_stage_reward_confirm" size="20" text="OK" x="520" y="370" width="240" enterse="open.mp3" leavese="close.mp3"]
+    [s]
+*end_stage_reward_confirm
 [endmacro]
 [macro name="stage_battle_end"]
     [layopt layer="0" visible="false"]

@@ -85,9 +85,9 @@ class SensenStageEvent {
             }
         } else {
             if (this.isBig) {
-                msg = "ゆっくり休憩しよう。<br />最大LPを10%上昇させる。その後最大LPの50%回復する。<br />";
+                msg = "ゆっくり休憩しよう。<br />最大LPを5~10上昇させる。その後最大LPの50%回復する。<br />";
             } else {
-                msg = "少し休憩しよう。<br />最大LPを5%上昇させる。その後最大LPの20%回復する。<br />"
+                msg = "少し休憩しよう。<br />最大LPを2~5上昇させる。その後最大LPの20%回復する。<br />"
             }
         }
         if (this.hasTrap) {
@@ -109,12 +109,12 @@ class SensenStageEvent {
             if (this.isBig) {
                 msg = "安全な場所でゆっくり休憩した...<br >";
                 oldValue = lambda.maxLp;
-                addValue = Math.floor(lambda.maxLp * 0.1);
+                addValue = BattleUtil.getRandomInt(5, 10);
                 lambda.maxLp += addValue;
                 msg += `　ラムダの最大体力が${addValue}増加した。${oldValue}->${lambda.maxLp}<br />`;
 
                 oldValue = mu.maxLp;
-                addValue = Math.floor(mu.maxLp * 0.1);
+                addValue = BattleUtil.getRandomInt(5, 10);
                 mu.maxLp += addValue;
                 msg += `　ミューの最大体力が${addValue}増加した。${oldValue}->${lambda.maxLp}<br />`;
 
@@ -130,12 +130,12 @@ class SensenStageEvent {
             } else {
                 msg = "少し休憩した...<br >";
                 oldValue = lambda.maxLp;
-                addValue = Math.floor(lambda.maxLp * 0.05);
+                addValue = BattleUtil.getRandomInt(2, 5);
                 lambda.maxLp += addValue;
                 msg += `　ラムダの最大体力が${addValue}増加した。${oldValue} -> ${lambda.maxLp}<br />`;
 
                 oldValue = mu.maxLp;
-                addValue = Math.floor(mu.maxLp * 0.05);
+                addValue = BattleUtil.getRandomInt(2, 5);
                 mu.maxLp += addValue;
                 msg += `　ミューの最大体力が${addValue}増加した。${oldValue} -> ${lambda.maxLp}<br />`;
 

@@ -7,6 +7,7 @@
 [call storage="sensen_battle.ks"]
 [call storage="sensen_cgmode.ks"]
 [call storage="sensen_arena.ks"]
+[call storage="sensen_card.ks"]
 [call storage="sensen_event.ks"]
 [call storage="sensen_stage.ks"]
 [call storage="sensen_saveload.ks"]

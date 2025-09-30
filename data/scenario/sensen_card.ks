@@ -2,12 +2,12 @@
 ; カードクラス
 [iscript]
 class SensenCard {
+    static rank = 0;
     constructor(id, name, heroine, buddy) {
         this.id = id;
         this.name = name;
         this.heroine = heroine;
         this.buddy = buddy;
-        this.rank = 1;
     }
     getCardText() {
         return `${this.name}<br /><br />${this.getText()}`;
@@ -16,16 +16,35 @@ class SensenCard {
         // カードの説明
         return `${this.heroine.displayName}用カード。<br />特に効果なし。`;
     }
+    getRank() {
+        return this.constructor.rank; 
+    }
+    getButtonColor() {
+        const rank = this.getRank(); 
+        switch (rank) {
+            case 1:
+                return "btn_29_green";
+            case 2:
+                return "btn_29_blue";
+            case 3:
+                return "btn_29_purple";
+            case 4:
+                return "btn_29_red";
+            default:
+                return "btn_29_green";
+        }
+    }
+
     apply() {
         // 効果の適用
         return;
     }
 }
-
+// RANK1 START
 class HeroineApUpCard extends SensenCard {
+    static rank = 1;
     constructor(heroine, buddy) {
-        super(1, `攻撃Up`, heroine, buddy);
-        this.rank=1;
+        super(1, `攻撃Up小`, heroine, buddy);
     }
     getText() {
         return `${this.heroine.displayName}の攻撃力を2~5上昇させる。`;
@@ -37,8 +56,9 @@ class HeroineApUpCard extends SensenCard {
 window.HeroineApUpCard = HeroineApUpCard;
 
 class HeroineCooldownCard extends SensenCard {
+    static rank = 1;
     constructor(heroine, buddy) {
-        super(7, `クールダウン`, heroine, buddy);
+        super(2, `クールダウン`, heroine, buddy);
         this.rank=1;
     }
     getText() {
@@ -53,9 +73,9 @@ class HeroineCooldownCard extends SensenCard {
 window.HeroineCooldownCard = HeroineCooldownCard;
 
 class HeroineMeditateCard extends SensenCard {
+    static rank = 1;
     constructor(heroine, buddy) {
-        super(8, `冷静沈着`, heroine, buddy);
-        this.rank=1;
+        super(3, `冷静沈着`, heroine, buddy);
     }
     getText() {
         return `${this.heroine.displayName}の快楽値を半分にし、攻撃力を1増加させる。`;
@@ -69,9 +89,9 @@ class HeroineMeditateCard extends SensenCard {
 window.HeroineMeditateCard = HeroineMeditateCard;
 
 class HeroineLpUpCard extends SensenCard {
+    static rank = 1;
     constructor(heroine, buddy) {
-        super(2, `体力Up`, heroine, buddy);
-        this.rank=1;
+        super(4, `体力Up小`, heroine, buddy);
     }
     getText() {
         return `${this.heroine.displayName}の最大体力を3~6上昇させる。`;
@@ -82,10 +102,11 @@ class HeroineLpUpCard extends SensenCard {
 }
 window.HeroineLpUpCard = HeroineLpUpCard;
 
+// RANK2 START
 class HeroineRebalanceCard extends SensenCard {
+    static rank = 2;
     constructor(heroine, buddy) {
-        super(9, `リバランス`, heroine, buddy);
-        this.rank=2;
+        super(20, `リバランス`, heroine, buddy);
     }
     getText() {
         return `${this.heroine.displayName}の最大体力を7~13上昇させる。<br />代償として${this.buddy.displayName}の最大体力を10%減少させる。`;
@@ -104,9 +125,9 @@ class HeroineRebalanceCard extends SensenCard {
 window.HeroineRebalanceCard = HeroineRebalanceCard;
 
 class HeroineLoversCard extends SensenCard {
+    static rank = 2;
     constructor(heroine, buddy) {
-        super(10, `一緒に・・・しよ？`, heroine, buddy);
-        this.rank=2;
+        super(21, `一緒に・・・しよ？`, heroine, buddy);
     }
     getText() {
         return `${this.heroine.displayName}と${this.buddy.displayName}の最大体力を6~11上昇させる。<br />代償として${this.heroine.displayName}と${this.buddy.displayName}の快楽値を30上昇させる。`;
@@ -121,9 +142,9 @@ class HeroineLoversCard extends SensenCard {
 window.HeroineLoversCard = HeroineLoversCard;
 
 class HeroineBerserkCard extends SensenCard {
+    static rank = 2;
     constructor(heroine, buddy) {
-        super(3, `バーサーク`, heroine, buddy);
-        this.rank=2;
+        super(23, `バーサーク`, heroine, buddy);
     }
     getText() {
         return `${this.heroine.displayName}の攻撃力を5~10上昇させる。<br />代償として${this.heroine.displayName}の最大体力を10%減少させる。`;
@@ -141,25 +162,29 @@ class HeroineBerserkCard extends SensenCard {
 }
 window.HeroineBerserkCard = HeroineBerserkCard;
 
+// RANK3 START
 
 class HeroineDopingCard extends SensenCard {
+    static rank = 3;
     constructor(heroine, buddy) {
-        super(4, `ドーピング`, heroine, buddy);
+        super(40, `ドーピング`, heroine, buddy);
         this.rank=3;
     }
     getText() {
-        return `${this.heroine.displayName}の攻撃力を5~10%上昇させる。<br />代償として${this.heroine.displayName}の快楽値を100上昇させる。`;
+        return `${this.heroine.displayName}の攻撃力を1~20上昇させる。<br />代償として${this.heroine.displayName}の上昇した攻撃力の20倍の快楽値を上昇させる。`;
     }
     apply() {
-        this.heroine.ap.increaseBaseValue(Math.floor((100+BattleUtil.getRandomInt(5, 10))/100));
-        this.heroine.changeEr(100);
+        let amount = BattleUtil.getRandomInt(1, 20);
+        this.heroine.ap.increaseBaseValue(amount);
+        this.heroine.changeEr(20 * amount);
     }
 }
 window.HeroineDopingCard = HeroineDopingCard;
 
 class HeroineWonderingSweetCard extends SensenCard {
+    static rank = 3;
     constructor(heroine, buddy) {
-        super(5, `不思議なお菓子`, heroine, buddy);
+        super(41, `不思議なお菓子`, heroine, buddy);
         this.rank=3;
     }
     getText() {
@@ -172,11 +197,11 @@ class HeroineWonderingSweetCard extends SensenCard {
 }
 window.HeroineWonderingSweetCard = HeroineWonderingSweetCard;
 
-
+// RANK4 START
 class HeroineForbiddenFruitCard extends SensenCard {
+    static rank = 4;
     constructor(heroine, buddy) {
-        super(6, `禁断の果実`, heroine, buddy);
-        this.rank=4;
+        super(50, `禁断の果実`, heroine, buddy);
     }
     getText() {
         return `${this.heroine.displayName}のアクション回数を1回増やす。<br />代償として${this.heroine.displayName}の堕落値を30上昇させる。`;

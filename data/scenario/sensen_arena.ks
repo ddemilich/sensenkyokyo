@@ -18,7 +18,7 @@ class ArenaController {
         this.settingHeight = parseInt(720  / 2);
         this.settingX = this.getBgSelectX(8); 
         this.settingY = this.getBgSelectY(1);
-        this.LP = 300;
+        this.LP = 150;
         this.AP = 50;
         this.ER = 0;
         this.CR = 0;

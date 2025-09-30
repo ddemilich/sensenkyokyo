@@ -3,13 +3,11 @@
 [iscript]
 
 class SensenStage {
-    static NORMAL_REWARD_CARD_CLASSES = [
+    static REWARD_CARD_CLASSES = [
         HeroineApUpCard,
         HeroineCooldownCard,
         HeroineMeditateCard,
         HeroineLpUpCard,
-    ];
-    static RISK_REWARD_CARD_CLASSES = [
         HeroineRebalanceCard,
         HeroineLoversCard,
         HeroineBerserkCard,
@@ -17,7 +15,17 @@ class SensenStage {
         HeroineWonderingSweetCard,
         HeroineForbiddenFruitCard,
     ];
+    static RANK_RATES = [
+        { 1: 75, 2: 25, 3: 0, 4: 0 }, // 合計 100
+        { 1: 55, 2: 30, 3: 15, 4: 0 },  // 合計 100
+        { 1: 45, 2: 33, 3: 20, 4: 2 },  // 合計 100
+        { 1: 30, 2: 40, 3: 25, 4: 5 },  // 合計 100
+        { 1: 19, 2: 35, 3: 35, 4: 10 },  // 合計 100
+        { 1: 18, 2: 25, 3: 36, 4: 18 }  // 合計 100
+    ];
     constructor() {
+        this.stageIndex = 0;
+
         this.progress = 0;
         this.progressBarX = 50;
         this.progressBarY = 650;
@@ -185,29 +193,61 @@ class SensenStage {
         return list[randomIndex];
     }
 
-    prepareRewards(lambda, mu) {
-        // lambda, risk, muのrewardを生成する。
-        const LambdaCardClass = SensenStage.selectRandomCardClass(SensenStage.NORMAL_REWARD_CARD_CLASSES);
-        this.lambdaReward = new LambdaCardClass(lambda, mu); 
+    static drawRandomRank(stageIndex) {
+        // 配列のインデックスで排出率テーブルを取得
+        const rates = SensenStage.RANK_RATES[stageIndex];
+        console.warn(`${rates}`);
+        
+        if (!rates) return 1; 
+        
+        const total = 100;
+        let randomValue = BattleUtil.getRandomInt(1, total);
 
-        const RiskCardClass = SensenStage.selectRandomCardClass(SensenStage.RISK_REWARD_CARD_CLASSES);
-        const isLambdaTarget = BattleUtil.getRandomInt(0, 1) === 0; 
-        if (isLambdaTarget) {
-            // Lambda (heroine) に効果が適用されるパターン
-            this.riskReward = new RiskCardClass(lambda, mu); 
-        } else {
-            // Mu (heroine) に効果が適用されるパターン
-            this.riskReward = new RiskCardClass(mu, lambda);
+        let currentSum = 0;
+        for (let rank = 1; rank <= 4; rank++) {
+            currentSum += rates[rank] || 0;
+
+            if (randomValue <= currentSum) {
+                return rank;
+            }
         }
-
-        const MuCardClass = SensenStage.selectRandomCardClass(SensenStage.NORMAL_REWARD_CARD_CLASSES);
-        this.muReward = new MuCardClass(mu, lambda); 
+        return 1;
+    }
+    generateSingleReward(targetHeroine, buddyHeroine) {
+        // a. ランクの決定
+        const targetRank = SensenStage.drawRandomRank(this.stageIndex); 
+        
+        console.warn(`${targetRank}`);
+        // b. 決定したランクの候補リストを作成
+        const candidates = SensenStage.REWARD_CARD_CLASSES.filter(CardClass => 
+            CardClass.rank === targetRank
+        );
+        
+        // c. カードクラスの抽選 (候補がない場合はエラーログを出してフォールバック)
+        if (candidates.length === 0) {
+            console.error(`リワード生成: ランク ${targetRank} の候補が見つかりません。`);
+            // ここで代替処理（例: ランク1のカードで代替）を行うとより安全だが、
+            // 今は単純にランク1候補から選ぶことにする
+            const fallbackCandidates = SensenStage.REWARD_CARD_CLASSES.filter(CardClass => CardClass.rank === 1);
+            const CardClass = SensenStage.selectRandomCardClass(fallbackCandidates);
+            return new CardClass(targetHeroine, buddyHeroine);
+        }
+        
+        const CardClass = SensenStage.selectRandomCardClass(candidates);
+        
+        // d. インスタンス生成
+        return new CardClass(targetHeroine, buddyHeroine);
+    }
+    prepareRewards(lambda, mu) {
+        this.lambdaReward = this.generateSingleReward(lambda, mu);
+        this.muReward = this.generateSingleReward(mu, lambda);
     }
 }
 
 class SensenStageOne extends SensenStage {
     constructor() {
         super();
+        this.stageIndex = 2;
         this.fixedEventItems = [
             {
                 event: new SensenStageBossEvent(100),
@@ -261,6 +301,7 @@ window.SensenStageOne = SensenStageOne;
 class SensenStageTwo extends SensenStage {
     constructor() {
         super();
+        this.stageIndex = 3;
         this.fixedEventItems = [
             {
                 event: new SensenStageBossEventTwo(100),
@@ -435,13 +476,13 @@ window.SensenStageTwo = SensenStageTwo;
     [ptext layer="3" name="lambda_cr"  x="375" y="290" size="22" color="0x3e8238" text="&tf.sensenData.lambda.cr" width="180" align="right" edge="3px 0x000000" overwrite="true"]
     [ptext layer="3" name="mu_cr"     x="635" y="290" size="22" color="0x3e8238" text="&tf.sensenData.mu.cr" width="180" align="right" edge="3px 0x000000" overwrite="true"]
 
-    [ptext layer="3" name="what_to_do" x="275" y="320" size="30" overwrite="true" text="３つの選択肢から１つ報酬を選んでください" edge="3px 0x000000" width="730" align="center"]
+    [ptext layer="3" name="what_to_do" x="275" y="320" size="30" overwrite="true" text="報酬を選んでください" edge="3px 0x000000" width="730" align="center"]
 
-    [glink color="btn_29_green" target="*end_stage_reward" size="20" text="&mp.stage.lambdaReward.getCardText()" x="275" y="370" width="240" height="280" exp="mp.stage.lambdaReward.apply()" enterse="open.mp3" leavese="close.mp3"]
-    [glink color="btn_29_red" target="*end_stage_reward" size="20" text="&mp.stage.riskReward.getCardText()" x="520" y="370" width="240" height="280" exp="mp.stage.riskReward.apply()" enterse="open.mp3" leavese="close.mp3"]
-    [glink color="btn_29_green" target="*end_stage_reward" size="20" text="&mp.stage.muReward.getCardText()" x="765" y="370" width="240" height="280" exp="mp.stage.muReward.apply()" enterse="open.mp3" leavese="close.mp3"]
+    [glink color="&mp.stage.lambdaReward.getButtonColor()" target="*end_stage_reward" size="20" text="&mp.stage.lambdaReward.getCardText()" x="275" y="370" width="240" height="280" exp="mp.stage.lambdaReward.apply()" enterse="open.mp3" leavese="close.mp3"]
+    [glink color="&mp.stage.muReward.getButtonColor()" target="*end_stage_reward" size="20" text="&mp.stage.muReward.getCardText()" x="765" y="370" width="240" height="280" exp="mp.stage.muReward.apply()" enterse="open.mp3" leavese="close.mp3"]
     [s]
 *end_stage_reward
+    [free layer="3" name="what_to_do"]
     [iscript]
         tf.lambda_lp_text = `${tf.sensenData.lambda.lp}/${tf.sensenData.lambda.maxLp}`;
         tf.mu_lp_text = `${tf.sensenData.mu.lp}/${tf.sensenData.mu.maxLp}`;

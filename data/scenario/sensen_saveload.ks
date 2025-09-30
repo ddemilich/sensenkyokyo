@@ -77,8 +77,8 @@ class SensenSaveData {
             stage = sensenData.stage;
             stage_result = sensenData.stage_result;
         } else {
-            lambda = new HeroineLambda(300, 50);
-            mu = new HeroineMu(300, 50);
+            lambda = new HeroineLambda(150, 50);
+            mu = new HeroineMu(150, 50);
             stage = 1;
             stage_result = [false, false, false, false, false, false];
         }

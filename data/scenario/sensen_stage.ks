@@ -21,8 +21,46 @@ class SensenStage {
         { 1: 45, 2: 33, 3: 20, 4: 2 },  // 合計 100
         { 1: 30, 2: 40, 3: 25, 4: 5 },  // 合計 100
         { 1: 19, 2: 35, 3: 35, 4: 10 },  // 合計 100
-        { 1: 18, 2: 25, 3: 36, 4: 18 }  // 合計 100
+        { 1: 18, 2: 25, 3: 36, 4: 18 },  // 合計 100
+        { 1: 18, 2: 25, 3: 36, 4: 18 },  // 合計 100
+        { 1: 10, 2: 20, 3: 25, 4: 35 },
     ];
+
+    static selectRandomCardClass(list) {
+        const maxIndex = list.length - 1;
+        // 0 から リストの最大インデックス までのランダムな整数を取得
+        const randomIndex = BattleUtil.getRandomInt(0, maxIndex);
+        return list[randomIndex];
+    }
+
+    static drawRandomRank(stageIndex, isBoss) {
+        // 配列のインデックスで排出率テーブルを取得
+        const rates = SensenStage.RANK_RATES[stageIndex];
+        console.warn(`${rates}`);
+        
+        if (!rates) return 1; 
+        
+        const total = 100;
+        let randomValue = BattleUtil.getRandomInt(1, total);
+
+        let currentSum = 0;
+        for (let rank = 1; rank <= 4; rank++) {
+            currentSum += rates[rank] || 0;
+
+            if (randomValue <= currentSum) {
+                if (isBoss && rank < 4) {
+                    return rank + 1;
+                } else {
+                    return rank;
+                }
+            }
+        }
+        return 1;
+    }
+    static isBossEvent(event) {
+        return(event instanceof SensenStageBossEvent || event instanceof SensenStageBossEventTwo);
+    }
+    
     constructor() {
         this.stageIndex = 0;
 
@@ -173,10 +211,7 @@ class SensenStage {
         // 通常イベントとボスイベントで変更する。
         const selectedEventItem = this.ListedEventItems[this.selectedEventIndex];
         const selectedEvent = selectedEventItem.event;
-        if (
-            selectedEvent instanceof SensenStageBossEvent ||
-            selectedEvent instanceof SensenStageBossEventTwo
-        ) {
+        if (SensenStage.isBossEvent(selectedEvent)) {
             return "FuneralRites.wav";
         } else {
             return "LoseMe.wav";
@@ -186,36 +221,11 @@ class SensenStage {
         // イベントから敵の数とか吸い出してthis.Battleを作り上げる
     }
 
-    static selectRandomCardClass(list) {
-        const maxIndex = list.length - 1;
-        // 0 から リストの最大インデックス までのランダムな整数を取得
-        const randomIndex = BattleUtil.getRandomInt(0, maxIndex);
-        return list[randomIndex];
-    }
-
-    static drawRandomRank(stageIndex) {
-        // 配列のインデックスで排出率テーブルを取得
-        const rates = SensenStage.RANK_RATES[stageIndex];
-        console.warn(`${rates}`);
-        
-        if (!rates) return 1; 
-        
-        const total = 100;
-        let randomValue = BattleUtil.getRandomInt(1, total);
-
-        let currentSum = 0;
-        for (let rank = 1; rank <= 4; rank++) {
-            currentSum += rates[rank] || 0;
-
-            if (randomValue <= currentSum) {
-                return rank;
-            }
-        }
-        return 1;
-    }
     generateSingleReward(targetHeroine, buddyHeroine) {
         // a. ランクの決定
-        const targetRank = SensenStage.drawRandomRank(this.stageIndex); 
+        const selectedEventItem = this.ListedEventItems[this.selectedEventIndex];
+        const selectedEvent = selectedEventItem.event;
+        const targetRank = SensenStage.drawRandomRank(this.stageIndex, SensenStage.isBossEvent(selectedEvent)); 
         
         console.warn(`${targetRank}`);
         // b. 決定したランクの候補リストを作成
@@ -247,7 +257,7 @@ class SensenStage {
 class SensenStageOne extends SensenStage {
     constructor() {
         super();
-        this.stageIndex = 2;
+        this.stageIndex = 0;
         this.fixedEventItems = [
             {
                 event: new SensenStageBossEvent(100),
@@ -301,7 +311,7 @@ window.SensenStageOne = SensenStageOne;
 class SensenStageTwo extends SensenStage {
     constructor() {
         super();
-        this.stageIndex = 3;
+        this.stageIndex = 1;
         this.fixedEventItems = [
             {
                 event: new SensenStageBossEventTwo(100),

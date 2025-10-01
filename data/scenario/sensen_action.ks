@@ -98,10 +98,10 @@ class DefaultUltimate extends Action {
             });
         } else {
             // 能力値Up(30%~35%)
-            source.charaInstance.ap.increaseBaseValue(Math.floor(source.charaInstance.currentAp * (0.30 + (Math.random() * 0.05)))); 
-            source.charaInstance.maxLp += Math.floor(source.charaInstance.maxLp * (0.30 + (Math.random() * 0.05))); 
+            source.charaInstance.ap.increaseBaseValue(Math.floor(source.charaInstance.currentAp * (0.10 + (Math.random() * 0.05)))); 
+            source.charaInstance.maxLp += Math.floor(source.charaInstance.maxLp * (0.10 + (Math.random() * 0.05))); 
             // 50%回復
-            const healAmount = Math.floor(source.charaInstance.maxLp * 0.5);
+            const healAmount = source.charaInstance.maxLp;
             source.charaInstance.heal(healAmount);
             dispatch('ENEMY_HEAL_DISPLAY', {
                 source: source,
@@ -165,16 +165,10 @@ class EnemyFirstStrike extends Action {
                 });
             }
         } else {
-            // ApUp(10%~15%)
-            source.charaInstance.ap.increaseBaseValue(Math.floor(source.charaInstance.currentAp * (0.10 + (Math.random() * 0.05)))); 
-            // 20%回復
-            const healAmount = Math.floor(source.charaInstance.maxLp * 0.2);
-            source.charaInstance.heal(healAmount);
-            dispatch('ENEMY_HEAL_DISPLAY', {
+            source.charaInstance.changeSp(21);
+            dispatch('CHARA_SPBAR_REFRESH', {
                 source: source,
-                target: source,
-                amount: healAmount,
-                actionType: 'Ultimate'
+                amount: 21,
             });
         }
     }
@@ -220,16 +214,10 @@ class EnemyChargeBurst extends Action {
                 actionType: 'charge_burst'
             });
         } else {
-            // LPUp(10%~15%)
-            source.charaInstance.maxLp += Math.floor(source.charaInstance.maxLp * (0.30 + (Math.random() * 0.05))); 
-            // 50%回復
-            const healAmount = Math.floor(source.charaInstance.maxLp * 0.2);
-            source.charaInstance.heal(healAmount);
-            dispatch('ENEMY_HEAL_DISPLAY', {
+            source.charaInstance.changeSp(21);
+            dispatch('CHARA_SPBAR_REFRESH', {
                 source: source,
-                target: source,
-                amount: healAmount,
-                actionType: 'Ultimate'
+                amount: 21,
             });
         }
     }

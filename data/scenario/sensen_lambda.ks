@@ -70,7 +70,7 @@ class LambdaChargeBurst extends Action {
 
     execute(source, allEnemies, allHeroines, dispatch) {
         console.log(`[${source.charaInstance.name}] 溜め攻撃を実行！`);
-        const damage = Math.floor(source.charaInstance.currentAp * 0.25);
+        const damage = Math.floor(source.charaInstance.currentAp * 0.33);
 
         const availableTargets = allEnemies.filter(eDisp => !eDisp.charaInstance.isDefeated() && !eDisp.charaInstance.bundled);
         if (availableTargets.length > 0) {

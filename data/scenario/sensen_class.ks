@@ -881,6 +881,7 @@ class BossMount extends BossEnemy {
         super(`${BossMount.ENEMY_ID}_${label}`, lp, ap, label, width, height);
 
         this.displayName = "マウント";
+        this.maxActionCount.increaseBaseValue(1);
         console.log(`${this.displayName}はエネミーです。`);
     }
 }
@@ -919,14 +920,15 @@ class BossBind extends BossEnemy {
         super(`${BossBind.ENEMY_ID}_${label}`, lp, ap, label, width, height);
 
         this.displayName = "バインド";
+        this.maxActionCount.increaseBaseValue(1);
         console.log(`${this.displayName}はエネミーです。`);
     }
 }
 class CharacterBundle {
     constructor(captive, captor, centerX, centerY) {
-        this.lp = 3;
         this.captive = captive;
         this.captor = captor;
+        this.lp = 2 + this.captor.currentActionCount;
         if (this.captor.isBoss) {
             this.name = `${this.captive.name}_boss_bundle`;
         } else {

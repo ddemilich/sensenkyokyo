@@ -607,9 +607,9 @@ class BattleSection {
         const allHeroines = this.heroines;
         const allEnemies = this.enemies;
 
-        const heroineFirstStrikes = this.extractActionPairs('FirstStrike', allHeroines);
-        const heroineChargeBursts = this.extractActionPairs('ChargeBurst', allHeroines);
-        const heroineGuardCounters = this.extractActionPairs('GuardCounter', allHeroines);
+        const heroineFirstStrikes = this.extractActionPairs('FirstStrike', allHeroines, false);
+        const heroineChargeBursts = this.extractActionPairs('ChargeBurst', allHeroines, false);
+        const heroineGuardCounters = this.extractActionPairs('GuardCounter', allHeroines, false);
 
         const enemyFirstStrikes = this.extractActionPairs('FirstStrike', allEnemies);
         const enemyChargeBursts = this.extractActionPairs('ChargeBurst', allEnemies);
@@ -617,11 +617,11 @@ class BattleSection {
 
         const enemyUltimates = this.extractActionPairs('Ultimate', allEnemies);
 
-        const heroineConcentrate = this.extractActionPairs('Concentrate', allHeroines);
-        const heroineResist = this.extractActionPairs('Resist', allHeroines);
-        const heroineBreak = this.extractActionPairs('Break', allHeroines);
+        const heroineConcentrate = this.extractActionPairs('Concentrate', allHeroines, false);
+        const heroineResist = this.extractActionPairs('Resist', allHeroines, false);
+        const heroineBreak = this.extractActionPairs('Break', allHeroines, false);
 
-        const heroineSpeak = this.extractActionPairs('Speak', allHeroines);
+        const heroineSpeak = this.extractActionPairs('Speak', allHeroines, false);
 
         // 2. 反撃の事前効果を実行
         if (this.preExecuteActionPairs(heroineGuardCounters)) {
@@ -879,7 +879,7 @@ class BattleSection {
         } 
         return false;
     }
-    extractActionPairs(actionType, charaList) {
+    extractActionPairs(actionType, charaList, doRandom=true) {
         const extractedPairs = [];
         for (const charaDisp of charaList) {
             charaDisp.charaInstance.actions
@@ -888,7 +888,9 @@ class BattleSection {
                     extractedPairs.push({ action: action, source: charaDisp });
                 });
         }
-        extractedPairs.sort(() => Math.random() - 0.5);
+        if (doRandom) {
+            extractedPairs.sort(() => Math.random() - 0.5);
+        }
         return extractedPairs;
     }
     preExecuteActionPairs(actionPairs) {

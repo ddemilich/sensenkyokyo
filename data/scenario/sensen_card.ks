@@ -201,7 +201,7 @@ window.HeroineWonderingSweetCard = HeroineWonderingSweetCard;
 class HeroineForbiddenFruitCard extends SensenCard {
     static rank = 4;
     constructor(heroine, buddy) {
-        super(50, `禁断の果実`, heroine, buddy);
+        super(60, `禁断の果実`, heroine, buddy);
     }
     getText() {
         return `${this.heroine.displayName}のアクション回数を1回増やす。<br />代償として${this.heroine.displayName}の堕落値を30上昇させる。`;

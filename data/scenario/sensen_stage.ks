@@ -6,14 +6,22 @@ class SensenStage {
     static REWARD_CARD_CLASSES = [
         HeroineApUpCard,
         HeroineCooldownCard,
-        HeroineMeditateCard,
+        HeroineGoodForBoth,
         HeroineLpUpCard,
         HeroineRebalanceCard,
         HeroineLoversCard,
+        HeroineLpUpMiddleCard,
         HeroineBerserkCard,
+        HeroineApUpMiddleCard,
+        HeroineCooldownMiddleCard,
         HeroineDopingCard,
         HeroineWonderingSweetCard,
+        HeroineApUpBigCard,
+        HeroineCooldownBigCard,
+        HeroineLpUpBigCard,
         HeroineForbiddenFruitCard,
+        HeroineApUpExtreamCard,
+        HeroineLpUpExtreamCard,
     ];
     static RANK_RATES = [
         { 1: 75, 2: 25, 3: 0, 4: 0 }, // 合計 100
@@ -36,7 +44,6 @@ class SensenStage {
     static drawRandomRank(stageIndex, isBoss) {
         // 配列のインデックスで排出率テーブルを取得
         const rates = SensenStage.RANK_RATES[stageIndex];
-        console.warn(`${rates}`);
         
         if (!rates) return 1; 
         
@@ -222,13 +229,10 @@ class SensenStage {
     }
 
     generateSingleReward(targetHeroine, buddyHeroine) {
-        // a. ランクの決定
         const selectedEventItem = this.ListedEventItems[this.selectedEventIndex];
         const selectedEvent = selectedEventItem.event;
         const targetRank = SensenStage.drawRandomRank(this.stageIndex, SensenStage.isBossEvent(selectedEvent)); 
         
-        console.warn(`${targetRank}`);
-        // b. 決定したランクの候補リストを作成
         const candidates = SensenStage.REWARD_CARD_CLASSES.filter(CardClass => 
             CardClass.rank === targetRank
         );

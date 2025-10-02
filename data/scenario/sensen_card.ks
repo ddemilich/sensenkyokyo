@@ -23,15 +23,17 @@ class SensenCard {
         const rank = this.getRank(); 
         switch (rank) {
             case 1:
-                return "btn_29_green";
+                return "btn_29_black";
             case 2:
-                return "btn_29_blue";
+                return "btn_29_green";
             case 3:
+                return "btn_29_blue";
+            case 4:
                 return "btn_29_purple";
             case 4:
                 return "btn_29_red";
             default:
-                return "btn_29_green";
+                return "btn_29_black";
         }
     }
 
@@ -41,6 +43,7 @@ class SensenCard {
     }
 }
 // RANK1 START
+// powerRate = 1.0
 class HeroineApUpCard extends SensenCard {
     static rank = 1;
     constructor(heroine, buddy) {
@@ -58,8 +61,7 @@ window.HeroineApUpCard = HeroineApUpCard;
 class HeroineCooldownCard extends SensenCard {
     static rank = 1;
     constructor(heroine, buddy) {
-        super(2, `クールダウン`, heroine, buddy);
-        this.rank=1;
+        super(2, `冷却`, heroine, buddy);
     }
     getText() {
         return `${this.heroine.displayName}の快楽値を半分にし、最大体力を2増加させる。`;
@@ -72,21 +74,20 @@ class HeroineCooldownCard extends SensenCard {
 }
 window.HeroineCooldownCard = HeroineCooldownCard;
 
-class HeroineMeditateCard extends SensenCard {
+class HeroineGoodForBoth extends SensenCard {
     static rank = 1;
     constructor(heroine, buddy) {
-        super(3, `冷静沈着`, heroine, buddy);
+        super(3, `いいとこどり`, heroine, buddy);
     }
     getText() {
-        return `${this.heroine.displayName}の快楽値を半分にし、攻撃力を1増加させる。`;
+        return `${this.heroine.displayName}の攻撃力を2上昇させ、${this.buddy.displayName}の体力を3上昇させる。`;
     }
     apply() {
-        let amount = Math.floor(this.heroine.er / 2);
-        this.heroine.changeEr(-amount);
-        this.heroine.ap.increaseBaseValue(1);
+        this.heroine.ap.increaseBaseValue(2);
+        this.buddy.maxLp += 3;
     }
 }
-window.HeroineMeditateCard = HeroineMeditateCard;
+window.HeroineGoodForBoth = HeroineGoodForBoth;
 
 class HeroineLpUpCard extends SensenCard {
     static rank = 1;
@@ -103,6 +104,7 @@ class HeroineLpUpCard extends SensenCard {
 window.HeroineLpUpCard = HeroineLpUpCard;
 
 // RANK2 START
+// powerRate = 1.5
 class HeroineRebalanceCard extends SensenCard {
     static rank = 2;
     constructor(heroine, buddy) {
@@ -141,6 +143,20 @@ class HeroineLoversCard extends SensenCard {
 }
 window.HeroineLoversCard = HeroineLoversCard;
 
+class HeroineLpUpMiddleCard extends SensenCard {
+    static rank = 2;
+    constructor(heroine, buddy) {
+        super(22, `体力Up中`, heroine, buddy);
+    }
+    getText() {
+        return `${this.heroine.displayName}の最大体力を4~9上昇させる。`;
+    }
+    apply() {
+        this.heroine.maxLp += BattleUtil.getRandomInt(4, 9);
+    }
+}
+window.HeroineLpUpMiddleCard = HeroineLpUpMiddleCard;
+
 class HeroineBerserkCard extends SensenCard {
     static rank = 2;
     constructor(heroine, buddy) {
@@ -162,7 +178,39 @@ class HeroineBerserkCard extends SensenCard {
 }
 window.HeroineBerserkCard = HeroineBerserkCard;
 
+class HeroineApUpMiddleCard extends SensenCard {
+    static rank = 2;
+    constructor(heroine, buddy) {
+        super(24, `攻撃Up中`, heroine, buddy);
+    }
+    getText() {
+        return `${this.heroine.displayName}の攻撃力を3~7上昇させる。`;
+    }
+    apply() {
+        this.heroine.ap.increaseBaseValue(BattleUtil.getRandomInt(3, 7));
+    }
+}
+window.HeroineApUpMiddleCard = HeroineApUpMiddleCard;
+
+class HeroineCooldownMiddleCard extends SensenCard {
+    static rank = 2;
+    constructor(heroine, buddy) {
+        super(25, `冷静沈着`, heroine, buddy);
+        this.rank=1;
+    }
+    getText() {
+        return `${this.heroine.displayName}の快楽値を75%減少し、最大体力を3増加させる。`;
+    }
+    apply() {
+        let amount = Math.floor(this.heroine.er * 0.75);
+        this.heroine.changeEr(-amount);
+        this.heroine.maxLp += 3;
+    }
+}
+window.HeroineCooldownMiddleCard = HeroineCooldownMiddleCard;
+
 // RANK3 START
+// powerRate = 3.0
 
 class HeroineDopingCard extends SensenCard {
     static rank = 3;
@@ -197,7 +245,54 @@ class HeroineWonderingSweetCard extends SensenCard {
 }
 window.HeroineWonderingSweetCard = HeroineWonderingSweetCard;
 
+class HeroineApUpBigCard extends SensenCard {
+    static rank = 3;
+    constructor(heroine, buddy) {
+        super(42, `攻撃Up大`, heroine, buddy);
+    }
+    getText() {
+        return `${this.heroine.displayName}の攻撃力を6~15上昇させる。`;
+    }
+    apply() {
+        this.heroine.ap.increaseBaseValue(BattleUtil.getRandomInt(6, 15));
+    }
+}
+window.HeroineApUpBigCard = HeroineApUpBigCard;
+
+class HeroineCooldownBigCard extends SensenCard {
+    static rank = 3;
+    constructor(heroine, buddy) {
+        super(43, `神経透徹`, heroine, buddy);
+        this.rank=1;
+    }
+    getText() {
+        return `${this.heroine.displayName}の快楽値を100%減少し、最大体力を6増加させる。`;
+    }
+    apply() {
+        let amount = Math.floor(this.heroine.er * 1.0);
+        this.heroine.changeEr(-amount);
+        this.heroine.maxLp += 6;
+    }
+}
+window.HeroineCooldownBigCard = HeroineCooldownBigCard;
+
+class HeroineLpUpBigCard extends SensenCard {
+    static rank = 3;
+    constructor(heroine, buddy) {
+        super(44, `体力Up大`, heroine, buddy);
+    }
+    getText() {
+        return `${this.heroine.displayName}の最大体力を9~18上昇させる。`;
+    }
+    apply() {
+        this.heroine.maxLp += BattleUtil.getRandomInt(9, 18);
+    }
+}
+window.HeroineLpUpBigCard = HeroineLpUpBigCard;
+
 // RANK4 START
+// powerRate = 7.5
+
 class HeroineForbiddenFruitCard extends SensenCard {
     static rank = 4;
     constructor(heroine, buddy) {
@@ -212,6 +307,35 @@ class HeroineForbiddenFruitCard extends SensenCard {
     }
 }
 window.HeroineForbiddenFruitCard = HeroineForbiddenFruitCard;
+
+class HeroineApUpExtreamCard extends SensenCard {
+    static rank = 4;
+    constructor(heroine, buddy) {
+        super(61, `攻撃Up絶大`, heroine, buddy);
+    }
+    getText() {
+        return `${this.heroine.displayName}の攻撃力を15~36上昇させる。`;
+    }
+    apply() {
+        this.heroine.ap.increaseBaseValue(BattleUtil.getRandomInt(6, 15));
+    }
+}
+window.HeroineApUpExtreamCard = HeroineApUpExtreamCard;
+
+class HeroineLpUpExtreamCard extends SensenCard {
+    static rank = 3;
+    constructor(heroine, buddy) {
+        super(62, `体力Up絶大`, heroine, buddy);
+    }
+    getText() {
+        return `${this.heroine.displayName}の最大体力を21~42上昇させる。<br />その後最大体力を10%上昇させる。`;
+    }
+    apply() {
+        this.heroine.maxLp += BattleUtil.getRandomInt(9, 18);
+        this.heroine.maxLp += Math.floor(this.heroine.maxLp * 0.1);
+    }
+}
+window.HeroineLpUpExtreamCard = HeroineLpUpExtreamCard;
 
 [endscript]
 [return]

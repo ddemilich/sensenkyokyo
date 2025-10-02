@@ -621,7 +621,7 @@ class BattleSection {
         const heroineResist = this.extractActionPairs('Resist', allHeroines, false);
         const heroineBreak = this.extractActionPairs('Break', allHeroines, false);
 
-        const heroineSpeak = this.extractActionPairs('Speak', allHeroines, false);
+        const heroineSpeak = this.extractActionPairs('Speak', allHeroines);
 
         // 2. 反撃の事前効果を実行
         if (this.preExecuteActionPairs(heroineGuardCounters)) {
@@ -1090,7 +1090,7 @@ window.BattleSection = BattleSection;
     [anim name="&mp.heroine.lpbarName()" left="&mp.heroine.lpbarX(mp.x)" top="&mp.heroine.lpbarY(mp.y)" time="0"]
     [anim name="&mp.heroine.lpbarActiveName()" left="&mp.heroine.lpbarActiveX(mp.x)" top="&mp.heroine.lpbarY(mp.y)" time="0"]
     [anim name="&mp.heroine.lpbarText()" left="&mp.heroine.lpbarX(mp.x)" top="&mp.heroine.lpbarY(mp.y)" time="0"]
-    [anim name="&mp.heroine.spbarName()" left="&mp.heroine.spbarX(mp.x)" top="&mp.heroine.spbarY(mp.y)" time="0"]
+    [anim name="&mp.heroine.spbarName()" left="&mp.heroine.spbarX(mp.x, mp.sp)" top="&mp.heroine.spbarY(mp.y)" time="0"]
     [anim name="&mp.heroine.erbarName()" left="&mp.heroine.erbarX(mp.x, mp.er)" top="&mp.heroine.erbarY(mp.y)" time="0"]
     [wa]
 [endmacro]

@@ -175,10 +175,13 @@ class Character {
     lpbarActiveWidth() {
         if (this.isDefeated()) {
             return 1;
-        } else {
-            let liferate = this.lp / this.maxLp;
-            return parseInt(this.lpbarWidth * liferate);
         }
+        let liferate = this.lp / this.maxLp;
+        const lpWidth = Math.floor(this.lpbarWidth * liferate);
+        if (lpWidth == 0) {
+            return 1;
+        }
+        return lpWidth;
     }
     getLpbarImagePath() {
         return `chara/bar/lpbar_max.png`;
@@ -195,19 +198,26 @@ class Character {
     spbarName() {
         return `${this.name}_spbar`;
     }
-    spbarWidth() {
-        if (this.sp==0) {
-            return 1;
-        } else {
-            let liferate = this.sp / this.maxSp;
-            return parseInt(this.lpbarWidth * liferate);
+    spbarWidth(current = -1) {
+        let baseSp = this.sp;
+        if (current != -1) {
+            baseSp = current;
         }
+        if (baseSp==0) {
+            return 1;
+        }
+        let liferate = baseSp / this.maxSp;
+        const spWidth = Math.floor(this.lpbarWidth * liferate);
+        if (spWidth == 0) {
+            return 1;
+        }
+        return spWidth;
     }
-    spbarX(x) {
+    spbarX(x, current=-1) {
         if (this.lpbarLeftToRight) {
             return String(parseInt(x) + this.lpbarMargin);
         } else {
-            return String(parseInt(x) + this.lpbarMargin + (this.lpbarWidth - this.spbarWidth()));
+            return String(parseInt(x) + this.lpbarMargin + (this.lpbarWidth - this.spbarWidth(current)));
         }
     }
     spbarY(y) {
@@ -705,13 +715,18 @@ class Heroine extends Character {
         }
         if (baseEr==0) {
             return 1;
-        } else {
-            let errate = baseEr / 100;
-            if (errate > 1.0) {
-                errate = 1.0;
-            }
-            return Math.floor(this.lpbarWidth * errate);
         }
+
+        let errate = baseEr / 100;
+        if (errate > 1.0) {
+            errate = 1.0;
+        }
+        const erWidth = Math.floor(this.lpbarWidth * errate);
+        if (erWidth == 0) {
+            return 1;
+        }
+        return erWidth;
+    
     }
     erbarX(x, current=-1) {
         return String(parseInt(x) + this.lpbarMargin + (this.lpbarWidth - this.erbarWidth(current)));

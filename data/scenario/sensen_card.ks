@@ -37,7 +37,7 @@ class SensenCard {
                 return "btn_29_blue";
             case 4:
                 return "btn_29_purple";
-            case 4:
+            case 5:
                 return "btn_29_red";
             default:
                 return "btn_29_black";
@@ -109,6 +109,34 @@ class HeroineLpUpCard extends SensenCard {
     }
 }
 window.HeroineLpUpCard = HeroineLpUpCard;
+
+class HeroineBuffApCard extends SensenCard {
+    static rank = 1;
+    constructor(heroine, buddy) {
+        super(5, `気合`, heroine, buddy);
+    }
+    getText() {
+        return `次の戦闘の最初のターン${this.heroine.displayName}の攻撃力を10上昇させる。`;
+    }
+    apply() {
+        this.heroine.applyApBuff("HeroineBuffApCard", 10);
+    }
+}
+window.HeroineBuffApCard = HeroineBuffApCard;
+
+class HeroineBuffSpCard extends SensenCard {
+    static rank = 1;
+    constructor(heroine, buddy) {
+        super(6, `戦闘準備`, heroine, buddy);
+    }
+    getText() {
+        return `次の戦闘の最初のターン${this.heroine.displayName}のSPが50多い状態から始まる。`;
+    }
+    apply() {
+        this.heroine.changeSp(50);
+    }
+}
+window.HeroineBuffSpCard = HeroineBuffSpCard;
 
 // RANK2 START
 // powerRate = 1.5
@@ -216,6 +244,34 @@ class HeroineCooldownMiddleCard extends SensenCard {
 }
 window.HeroineCooldownMiddleCard = HeroineCooldownMiddleCard;
 
+class HeroineBuffMiddleApCard extends SensenCard {
+    static rank = 2;
+    constructor(heroine, buddy) {
+        super(26, `激情`, heroine, buddy);
+    }
+    getText() {
+        return `次の戦闘の最初のターン${this.heroine.displayName}の攻撃力を15上昇させる。`;
+    }
+    apply() {
+        this.heroine.applyApBuff("HeroineBuffMiddleApCard", 15);
+    }
+}
+window.HeroineBuffMiddleApCard = HeroineBuffMiddleApCard;
+
+class HeroineBuffMiddleSpCard extends SensenCard {
+    static rank = 2;
+    constructor(heroine, buddy) {
+        super(27, `作戦会議`, heroine, buddy);
+    }
+    getText() {
+        return `次の戦闘の最初のターン${this.heroine.displayName}のSPが75多い状態から始まる。`;
+    }
+    apply() {
+        this.heroine.changeSp(75);
+    }
+}
+window.HeroineBuffMiddleSpCard = HeroineBuffMiddleSpCard;
+
 // RANK3 START
 // powerRate = 3.0
 
@@ -246,7 +302,7 @@ class HeroineWonderingSweetCard extends SensenCard {
         return `${this.heroine.displayName}の最大体力を5~10%上昇させる。<br />代償として${this.heroine.displayName}の快楽値を50上昇させる。`;
     }
     apply() {
-        this.heroine.maxLp += (Math.floor((100+BattleUtil.getRandomInt(5, 10))/100));
+        this.heroine.maxLp += Math.floor((this.heroine.maxLp * BattleUtil.getRandomInt(5, 10))/100);
         this.heroine.changeEr(50);
     }
 }
@@ -297,6 +353,35 @@ class HeroineLpUpBigCard extends SensenCard {
 }
 window.HeroineLpUpBigCard = HeroineLpUpBigCard;
 
+class HeroineBuffBigApCard extends SensenCard {
+    static rank = 3;
+    constructor(heroine, buddy) {
+        super(45, `憤怒`, heroine, buddy);
+    }
+    getText() {
+        return `次の戦闘の最初のターン${this.heroine.displayName}の攻撃力を15上昇させ、アクション数を1増加させる。`;
+    }
+    apply() {
+        this.heroine.applyApBuff("HeroineBuffBigApCard", 15);
+        this.heroine.applyActionCountBuff("HeroineBuffBigApCard", 1);
+    }
+}
+window.HeroineBuffBigApCard = HeroineBuffBigApCard;
+
+class HeroineBuffBigSpCard extends SensenCard {
+    static rank = 3;
+    constructor(heroine, buddy) {
+        super(46, `六韜三略`, heroine, buddy);
+    }
+    getText() {
+        return `次の戦闘の最初のターン${this.heroine.displayName}と${this.buddy.displayName}のSPが75多い状態から始まる。`;
+    }
+    apply() {
+        this.heroine.changeSp(75);
+        this.buddy.changeSp(75);
+    }
+}
+window.HeroineBuffBigSpCard = HeroineBuffBigSpCard;
 // RANK4 START
 // powerRate = 7.5
 
@@ -344,5 +429,19 @@ class HeroineLpUpExtreamCard extends SensenCard {
 }
 window.HeroineLpUpExtreamCard = HeroineLpUpExtreamCard;
 
+class HeroineBuffExtreamApCard extends SensenCard {
+    static rank = 4;
+    constructor(heroine, buddy) {
+        super(63, `怒髪天`, heroine, buddy);
+    }
+    getText() {
+        return `次の戦闘の最初のターン${this.heroine.displayName}の攻撃力を25上昇させ、アクション数を2増加させる。`;
+    }
+    apply() {
+        this.heroine.applyApBuff("HeroineBuffExtreamApCard", 25);
+        this.heroine.applyActionCountBuff("HeroineBuffExtreamApCard", 2);
+    }
+}
+window.HeroineBuffExtreamApCard = HeroineBuffExtreamApCard;
 [endscript]
 [return]

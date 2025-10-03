@@ -87,7 +87,7 @@ class SensenStageEvent {
             if (this.isBig) {
                 msg = "ゆっくり休憩しよう。<br />最大体力の５０%回復する。<br />";
             } else {
-                msg = "少し休憩しよう。<br />最大体力の５０%回復する。<br />"
+                msg = "少し休憩しよう。<br />最大体力の２０%回復する。<br />"
             }
         }
         if (this.hasTrap) {

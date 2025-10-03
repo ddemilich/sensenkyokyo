@@ -4,24 +4,35 @@
 
 class SensenStage {
     static REWARD_CARD_CLASSES = [
+        // rank1
         HeroineApUpCard,
         HeroineCooldownCard,
         HeroineGoodForBoth,
         HeroineLpUpCard,
+        HeroineBuffApCard,
+        HeroineBuffSpCard,
+        // rank2
         HeroineRebalanceCard,
         HeroineLoversCard,
         HeroineLpUpMiddleCard,
         HeroineBerserkCard,
         HeroineApUpMiddleCard,
         HeroineCooldownMiddleCard,
+        HeroineBuffMiddleApCard,
+        HeroineBuffMiddleSpCard,
+        // rank3
         HeroineDopingCard,
         HeroineWonderingSweetCard,
         HeroineApUpBigCard,
         HeroineCooldownBigCard,
         HeroineLpUpBigCard,
+        HeroineBuffBigApCard,
+        HeroineBuffBigSpCard,
+        // rank4
         HeroineForbiddenFruitCard,
         HeroineApUpExtreamCard,
         HeroineLpUpExtreamCard,
+        HeroineBuffExtreamApCard,
     ];
     static RANK_RATES = [
         { 1: 75, 2: 25, 3: 0, 4: 0 }, // 合計 100

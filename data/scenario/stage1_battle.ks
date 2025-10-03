@@ -77,7 +77,6 @@
 *back_to_stage1_battle_end
 [cm]
 [stage_reward stage="&tf.sensenStage" cond="!(tf.sensenData.lambda.isLosed && tf.sensenData.mu.isLosed)"]
-*stage1_rewarded
 [stage_battle_end]
 [sensen_header bg="stage1.png" bgm="stage_event.mp3"]
 [stage_progress_bar_show stage="&tf.sensenStage"]

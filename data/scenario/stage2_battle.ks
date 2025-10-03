@@ -64,7 +64,7 @@
 ; battleがなければ終了
 [jump target="*event_completed" cond="!tf.sensenStage.hasBattleEvent()"]
 [stage_progress_bar_hide stage="&tf.sensenStage"]
-[stage_battle_setup scenario="stage2_battle.ks" target="*back_to_stage1_battle_end"]
+[stage_battle_setup scenario="stage2_battle.ks" target="*back_to_stage2_battle_end"]
 [stage_battle_mainloop]
 [s]
 
@@ -74,8 +74,9 @@
 [stage_progress_bar_refresh stage="&tf.sensenStage"]
 [jump target="*stand_end"]
 
-*back_to_stage1_battle_end
+*back_to_stage2_battle_end
 [cm]
+[stage_reward stage="&tf.sensenStage" cond="!(tf.sensenData.lambda.isLosed && tf.sensenData.mu.isLosed)"]
 [stage_battle_end]
 [sensen_header bg="stage2.png" bgm="stage_event.mp3"]
 [stage_progress_bar_show stage="&tf.sensenStage"]

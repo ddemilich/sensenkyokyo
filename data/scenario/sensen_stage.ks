@@ -229,9 +229,9 @@ class SensenStage {
         const selectedEventItem = this.ListedEventItems[this.selectedEventIndex];
         const selectedEvent = selectedEventItem.event;
         if (SensenStage.isBossEvent(selectedEvent)) {
-            return "FuneralRites.wav";
+            return "FuneralRites.mp3";
         } else {
-            return "LoseMe.wav";
+            return "LoseMe.mp3";
         }
     }
     battleSetup(lambda, mu, scenario, target) {

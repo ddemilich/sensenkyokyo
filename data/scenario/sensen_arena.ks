@@ -284,7 +284,7 @@ window.ArenaController = ArenaController;
     [endscript]
     [chara_config pos_mode="false"]
     [bg storage="&tf.ArenaController.getSettingBg()" time="100"]
-    [playbgm storage="LoseMe.wav" loop="true" restart="false" volume="10"]
+    [playbgm storage="LoseMe.mp3" loop="true" restart="false" volume="10"]
     [layopt layer="0" visible="true"]
     [layopt layer="1" visible="true"]
     [layopt layer="2" visible="true"]

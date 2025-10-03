@@ -9,8 +9,15 @@ class SensenCard {
         this.heroine = heroine;
         this.buddy = buddy;
     }
+    getRankStar() {
+        let starText = "";
+        for (let i=0; i<this.constructor.rank; i++) {
+            starText += "★";
+        }
+        return starText;
+    }
     getCardText() {
-        return `${this.name}<br /><br />${this.getText()}`;
+        return `${this.getRankStar()}<br /><br />${this.name}<br /><br />${this.getText()}`;
     }
     getText() {
         // カードの説明

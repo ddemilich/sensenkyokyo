@@ -252,5 +252,154 @@ class BuddyBonding extends Effect {
 }
 window.BuddyBonding = BuddyBonding;
 
+class InsaneGas extends Effect {
+    constructor(duration = -1) {
+        super('ガス噴射', duration, true);
+    }
+
+    applyEffect(selfDisp, allEnemies, allHeroines, dispatch) {
+       
+        super.applyEffect(selfDisp, allEnemies, allHeroines, dispatch);
+        let mount = selfDisp.charaInstance;
+
+        // bundle中は発動しない
+        if (mount.bundled || mount.isDefeated()) {
+            return;
+        }
+
+        let lplossRate = (1 - mount.lp / mount.maxLp);
+        // ヒロインのERを上昇させる
+
+        let targets = allHeroines.filter(hDisp => !hDisp.charaInstance.bundled);
+        if (targets.length > 0) {
+            // ER上昇値 = 1 + (1 - マウントのLP/マウントの最大LP) * 20
+            const erAmount = 1 + Math.floor(lplossRate * 20);
+            targets.forEach(hDisp => {
+               hDisp.charaInstance.applyErValue(erAmount);
+            });
+            // イベント発行
+            dispatch('MOUNT_INSANE_GAS_ER', {
+                source: selfDisp,
+                targets: targets,
+                amount: erAmount,
+                actionType: 'InsaneGas'
+            });
+        }
+        if (lplossRate >= 0.5) {
+            let targets = allEnemies.filter(eDisp => !eDisp.charaInstance.isDefeated() && !eDisp.charaInstance.bundled);
+            // 敵全体のSPを上昇させる
+            if (targets.length > 0) {
+                // SP回復値 = 1 + (1 - マウントのLP/マウントの最大LP) * 50
+                let spAmount = 1 + Math.floor(lplossRate * 50);
+                targets.forEach(eDisp => {
+                    eDisp.charaInstance.changeSp(spAmount);
+                    dispatch('CHARA_SPBAR_REFRESH', {
+                        source: eDisp,
+                        amount: spAmount,
+                    });
+                });
+            }
+        }
+
+        if (lplossRate >= 0.75) {
+            let targets = allEnemies.filter(eDisp => !eDisp.charaInstance.isDefeated() && !eDisp.charaInstance.bundled);
+            // 敵全体のLPを回復させる
+            if (targets.length > 0) {
+                // LP回復値 = 1 + (マウントの最大LP * 0.1)
+                let lpAmount = 1 + Math.floor(mount.maxLp * 0.1);
+                targets.forEach(eDisp => {
+                    eDisp.charaInstance.heal(lpAmount);
+                    dispatch('ENEMY_HEAL_DISPLAY', {
+                        source: selfDisp,
+                        target: eDisp,
+                        amount: lpAmount,
+                        actionType: 'InsaneGas'
+                    });
+                });
+            }
+        }
+
+    }
+}
+window.InsaneGas = InsaneGas;
+
+class QueensOrder extends Effect {
+    constructor(duration = -1) {
+        super('女王の秩序', duration, true);
+    }
+
+    applyEffect(selfDisp, allEnemies, allHeroines, dispatch) {
+        super.applyEffect(selfDisp, allEnemies, allHeroines, dispatch);
+        let bind = selfDisp.charaInstance;
+
+        // bundle中は発動しない
+        if (bind.bundled || bind.isDefeated()) {
+            return;
+        }
+
+        let lplossRate = (1 - bind.lp / bind.maxLp);
+
+        let targets = allEnemies.filter(eDisp => !eDisp.charaInstance.isDefeated());
+        if (targets.length == 1) {
+            // レッサーバインダー２匹を召喚する。  
+            for (let i=0; i<2; i++) {
+                const enemyInstance = EnemyFactory.createEnemy(
+                    "e23", 
+                    Math.floor(bind.maxLp / 2), 
+                    Math.floor(bind.currentAp), 
+                    // ちょっと大きくする
+                    Math.floor(bind.width/2 * 1.1), 
+                    Math.floor(bind.height * 1.1)
+                );
+                // 最初からspが高い
+                enemyInstance.sp = 50;
+                const enemyDisplayData = new CharaDisplayData(
+                    enemyInstance,
+                    (selfDisp.x - 1280),
+                    selfDisp.y,
+                );
+                allEnemies.push(enemyDisplayData);
+                dispatch('ENEMY_APPEAR', { enemyDisp: enemyDisplayData});
+            }
+        } else {
+            // LPの昇順（小さい順）にソートする
+            targets.sort((a, b) => a.charaInstance.lp - b.charaInstance.lp);
+            // ソート後、配列の最初の要素が最もLPの小さいターゲットとなる
+            const weakestTarget = targets[0];
+            let lpAmount = 1 + Math.floor(bind.maxLp * 0.07);
+            weakestTarget.charaInstance.heal(lpAmount);
+            dispatch('ENEMY_HEAL_DISPLAY', {
+                source: selfDisp,
+                target: weakestTarget,
+                amount: lpAmount,
+                actionType: 'QueensOrder'
+            });
+        }
+        // 生成された子も対象に含める
+        let retargets = allEnemies.filter(eDisp => !eDisp.charaInstance.isDefeated() && !eDisp.charaInstance.bundled);
+        if (lplossRate >= 0.75) {
+            retargets.forEach(eDisp => {
+                eDisp.charaInstance.applyActionCountBuff('QueensOrder', 1);
+                let spAmount = Math.floor(eDisp.charaInstance.maxSp * 0.2);
+                eDisp.charaInstance.changeSp(spAmount);
+                dispatch('ENEMY_POWERUP', {
+                    source: eDisp,
+                    amount: spAmount,
+                });
+            })
+        } else if (lplossRate >= 0.5) {
+            const randomIndex = Math.floor(Math.random() * retargets.length);
+            const targetEnemyDisp = retargets[randomIndex]
+            targetEnemyDisp.charaInstance.applyActionCountBuff('QueensOrder', 1);
+            let spAmount = Math.floor(targetEnemyDisp.charaInstance.maxSp * 0.2);
+            targetEnemyDisp.charaInstance.changeSp(spAmount);
+            dispatch('ENEMY_POWERUP', {
+                source: targetEnemyDisp,
+                amount: spAmount,
+            });
+        }
+    }
+}
+window.QueensOrder = QueensOrder;
 [endscript]
 [return]

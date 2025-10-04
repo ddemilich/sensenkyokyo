@@ -78,6 +78,10 @@ class BattleSection {
             eventName: 'ENEMY_DESTROY',
             jumpLabel: '*battle_enemy_destroy'
         },
+        MOUNT_INSANE_GAS_ER: {
+            eventName: 'MOUNT_INSANE_GAS_ER',
+            jumpLabel: '*battle_mount_insane_gas_er'
+        },
         HEROINE_LEAVE_BUNDLE: {
             eventName: 'HEROINE_LEAVE_BUNDLE',
             jumpLabel: '*battle_heroine_leave_bundle'
@@ -173,6 +177,10 @@ class BattleSection {
         HEROINE_SP_GRANTED: {
             eventName: 'HEROINE_SP_GRANTED',
             jumpLabel: '*battle_heroine_sp_granted'
+        },
+        ENEMY_POWERUP: {
+            eventName: 'ENEMY_POWERUP',
+            jumpLabel: '*battle_enemy_powerup'
         },
         BATTLE_WIN: {
             eventName: 'BATTLE_WIN',
@@ -491,6 +499,7 @@ class BattleSection {
         for (const enemyDisp of this.enemies) {
             this.processCharacterEffects(enemyDisp);
         }
+        this.repositionEnemies();
     }
 
     processEnemyActionDecisionPhase() {
@@ -1155,6 +1164,36 @@ window.BattleSection = BattleSection;
     [cm]
 [endmacro]
 
+[macro name="gas_heroine_loop"]
+    ;mp.targets
+    ;mp.amount
+    [iscript]
+        tf.heroine_select_loop_index = 0;
+    [endscript]
+*gas_heroine_loop_start
+    [jump target="*gas_heroine_loop_end" cond="!(tf.heroine_select_loop_index < mp.targets.length)"]
+    [er_apply chara="&mp.targets[tf.heroine_select_loop_index].charaInstance" erValue="&mp.amount" current="&mp.targets[tf.heroine_select_loop_index].charaInstance.er" x="&mp.targets[tf.heroine_select_loop_index].x" y="&mp.targets[tf.heroine_select_loop_index].y"]
+    [iscript]
+        tf.heroine_select_loop_index++;
+    [endscript]
+    [jump target="*gas_heroine_loop_start"]
+*gas_heroine_loop_end
+    [wa]
+[endmacro]
+
+[macro name="mount_insane_gas"]
+    ;mp.mount
+    ;mp.targets
+    ;mp.amount
+    [anim name="&mp.mount.charaInstance.name" left="+=25" time="100" effect="easeInCirc"][wa]
+    [image layer="8" name="gas_effect" folder="fgimage" storage="chara/effects/InsaneGas.webp" reflect="true" wait="false" left="&tf.currentEvent.params.target.x" top="&tf.currentEvent.params.target.y" width="&tf.currentEvent.params.target.charaInstance.width"]
+    [playse storage="MountGas.mp3" loop="false"]
+    [anim name="gas_effect" width="2560" top="-=640" left="-=640" height="2560" time="250"][wa]
+    [gas_heroine_loop targets="&mp.targets" amount="&mp.amount"]
+    [free layer="8" name="gas_effect"]
+    [anim name="&mp.mount.charaInstance.name" left="-=25" time="100" effect="easeInCirc"][wa]
+[endmacro]
+
 [macro name="action_undo_button"]
     ;mp.target
     ;mp.heroine
@@ -1577,6 +1616,9 @@ window.BattleSection = BattleSection;
 *battle_enemy_destroy
     [enemy_destroy enemy="&tf.currentEvent.params.enemy"]
     [jump target="*process_battle_events_start"]
+*battle_mount_insane_gas_er
+    [mount_insane_gas mount="&tf.currentEvent.params.source" targets="&tf.currentEvent.params.targets" amount="&tf.currentEvent.params.amount"]
+    [jump target="*process_battle_events_start"]
 *battle_heroine_leave_bundle
     [bundle_cancel bundle="&tf.currentEvent.params.heroine.bundleInstance"]
     [playse storage="BundleLeave.mp3" loop="false"]
@@ -1762,6 +1804,12 @@ window.BattleSection = BattleSection;
     [spbar_refresh chara="&tf.currentEvent.params.source.charaInstance" x="&tf.currentEvent.params.source.x" y="&tf.currentEvent.params.source.y" time="0"]
     [jump target="*process_battle_events_start"]
 *battle_heroine_sp_granted
+    [image layer="8" name="sbpar_charge" folder="fgimage" storage="chara/effects/ChargeSp.webp" left="&tf.currentEvent.params.source.x" top="&tf.currentEvent.params.source.y" width="&tf.currentEvent.params.source.charaInstance.width"]
+    [spbar_refresh chara="&tf.currentEvent.params.source.charaInstance" x="&tf.currentEvent.params.source.x" y="&tf.currentEvent.params.source.y" time="300"]
+    [wa]
+    [free layer="8" name="sbpar_charge"]
+    [jump target="*process_battle_events_start"]
+*battle_enemy_powerup
     [image layer="8" name="sbpar_charge" folder="fgimage" storage="chara/effects/ChargeSp.webp" left="&tf.currentEvent.params.source.x" top="&tf.currentEvent.params.source.y" width="&tf.currentEvent.params.source.charaInstance.width"]
     [spbar_refresh chara="&tf.currentEvent.params.source.charaInstance" x="&tf.currentEvent.params.source.x" y="&tf.currentEvent.params.source.y" time="300"]
     [wa]

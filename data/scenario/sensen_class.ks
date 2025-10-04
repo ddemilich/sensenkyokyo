@@ -852,7 +852,7 @@ class BossEnemy extends Enemy {
             width = parseInt(width * 2);
         }
         // lpとapを増やす
-        let bossLp = Math.floor(lp * 2.0);
+        let bossLp = Math.floor(lp * 2.5);
         let bossAp = Math.floor(ap * 1.5);
 
         super(name, bossLp, bossAp, label, width, height);
@@ -897,6 +897,9 @@ class BossMount extends BossEnemy {
 
         this.displayName = "マウント";
         this.maxActionCount.increaseBaseValue(1);
+
+        this.activeEffects.push(new InsaneGas());
+
         console.log(`${this.displayName}はエネミーです。`);
     }
 }
@@ -936,6 +939,8 @@ class BossBind extends BossEnemy {
 
         this.displayName = "バインド";
         this.maxActionCount.increaseBaseValue(1);
+        
+        this.activeEffects.push(new QueensOrder());
         console.log(`${this.displayName}はエネミーです。`);
     }
 }

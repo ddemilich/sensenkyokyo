@@ -1,6 +1,6 @@
 ;一番最初に呼び出されるファイル
 
-[title name="SENSENKYOKYO プレイアブルデモ v0.1"]
+[title name="SENSENKYOKYO プレイアブルデモ v0.2"]
 
 [stop_keyconfig]
 

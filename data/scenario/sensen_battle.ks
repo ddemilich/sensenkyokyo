@@ -1327,6 +1327,21 @@ window.BattleSection = BattleSection;
     [free layer="9" name="&mp.chara.lpDiffName()" wait="true" time="300"]
     [wa]
 [endmacro]
+[macro name="heal_to_enemy"]
+    ;mp.chara
+    ;mp.healValue
+    ;mp.x
+    ;mp.y
+    ;回復量表示
+    [ptext layer="9" color="0x21e43f" name="&mp.chara.lpDiffName()" text="&mp.healValue" x="&mp.chara.lpDiffX(mp.x, true)" y="&mp.chara.lpDiffY(mp.y, true)" width="&mp.chara.width" size="40" align="center" edge="4px 0x000000"]
+    [anim name="&mp.chara.lpDiffName()" top="-=10" time="100"][wa]
+    [anim name="&mp.chara.lpDiffName()" top="+=10" effect="easeOutElastic" time="400"][wa]
+    [anim name="&mp.chara.lpbarActiveName()" width="&mp.chara.lpbarActiveWidth()" left="&mp.chara.lpbarActiveX(mp.x)" time="300"]
+    [ptext layer="3" name="&mp.chara.lpbarText()" color="white" text="&mp.chara.lp" size="12" x="&mp.chara.lpbarX(mp.x)" y="&mp.chara.lpbarY(mp.y)" width="&mp.chara.lpbarWidth" align="center" edge="2px 0x000000" overwrite="true"]
+    [anim name="&mp.chara.spbarName()" width="&mp.chara.spbarWidth()" left="&mp.chara.spbarX(mp.x)" time="300"]
+    [free layer="9" name="&mp.chara.lpDiffName()" wait="true" time="300"]
+    [wa]
+[endmacro]
 [macro name="guard_effect"]
     ;mp.chara
     ;mp.x
@@ -1515,7 +1530,7 @@ window.BattleSection = BattleSection;
 *battle_enemy_heal_display
     [anim name="&tf.currentEvent.params.source.charaInstance.name" left="+=25" time="100" effect="easeInCirc"][wa]
     [playse storage="UltimateHeal.mp3"]
-    [heal_to chara="&tf.currentEvent.params.target.charaInstance" healValue="&tf.currentEvent.params.amount" x="&tf.currentEvent.params.target.x" y="&tf.currentEvent.params.target.y"]
+    [heal_to_enemy chara="&tf.currentEvent.params.target.charaInstance" healValue="&tf.currentEvent.params.amount" x="&tf.currentEvent.params.target.x" y="&tf.currentEvent.params.target.y"]
     [anim name="&tf.currentEvent.params.source.charaInstance.name" left="-=25" time="100" effect="easeInCirc"][wa]
     [jump target="*process_battle_events_start"]
 *battle_enemy_guard_action

@@ -86,7 +86,16 @@ class DefaultUltimate extends Action {
 
         if (this.selectedTarget) {
             console.log(`対象決定: [${this.selectedTarget.charaInstance.name}]`);
-
+            
+            // 30%回復
+            const healAmount = Math.floor(source.charaInstance.maxLp * 0.3);
+            source.charaInstance.heal(healAmount);
+            dispatch('ENEMY_HEAL_DISPLAY', {
+                source: source,
+                target: source,
+                amount: healAmount,
+                actionType: 'Ultimate'
+            });
             // Bundleオブジェクトを生成
             this.selectedTarget.enterBundle(source.charaInstance);
             console.log(`[${source.charaInstance.name}] が [${this.selectedTarget.charaInstance.name}] を拘束！`);
@@ -94,13 +103,13 @@ class DefaultUltimate extends Action {
             dispatch('ENEMY_ENTER_BUNDLE', {
                 source: source,
                 target: this.selectedTarget,
-                actionType: 'ultimate'
+                actionType: 'Ultimate'
             });
         } else {
             // 能力値Up(30%~35%)
             source.charaInstance.ap.increaseBaseValue(Math.floor(source.charaInstance.currentAp * (0.10 + (Math.random() * 0.05)))); 
             source.charaInstance.maxLp += Math.floor(source.charaInstance.maxLp * (0.10 + (Math.random() * 0.05))); 
-            // 50%回復
+            // 100%回復
             const healAmount = source.charaInstance.maxLp;
             source.charaInstance.heal(healAmount);
             dispatch('ENEMY_HEAL_DISPLAY', {

@@ -11,6 +11,7 @@ class SensenStage {
         HeroineLpUpCard,
         HeroineBuffApCard,
         HeroineBuffSpCard,
+        HeroineAlittleThingCard,
         // rank2
         HeroineRebalanceCard,
         HeroineLoversCard,
@@ -20,6 +21,7 @@ class SensenStage {
         HeroineCooldownMiddleCard,
         HeroineBuffMiddleApCard,
         HeroineBuffMiddleSpCard,
+        HeroineAlwaysApprovedCard,
         // rank3
         HeroineDopingCard,
         HeroineWonderingSweetCard,
@@ -28,6 +30,7 @@ class SensenStage {
         HeroineLpUpBigCard,
         HeroineBuffBigApCard,
         HeroineBuffBigSpCard,
+        HeroineCantStopFallingCard,
         // rank4
         HeroineForbiddenFruitCard,
         HeroineApUpExtreamCard,
@@ -266,6 +269,21 @@ class SensenStage {
         this.lambdaReward = this.generateSingleReward(lambda, mu);
         this.muReward = this.generateSingleReward(mu, lambda);
     }
+    getRerollCount() {
+        const selectedEventItem = this.ListedEventItems[this.selectedEventIndex];
+        const selectedEvent = selectedEventItem.event;
+        return selectedEvent.reroll;
+    }
+    getRerollButtonText() {
+        return `引き直す(残り${this.getRerollCount()}回)`;
+    }
+    doReroll() {
+        const selectedEventItem = this.ListedEventItems[this.selectedEventIndex];
+        const selectedEvent = selectedEventItem.event;
+        if (selectedEvent.reroll > 0) {
+            selectedEvent.reroll -= 1;
+        }
+    }
 }
 
 class SensenStageOne extends SensenStage {
@@ -471,6 +489,7 @@ window.SensenStageTwo = SensenStageTwo;
     [battle_loop]
 [endmacro]
 [macro name="stage_reward"]
+*end_stage_reward_reroll
     [iscript]
         // 抽選
         mp.stage.prepareRewards(tf.sensenData.lambda, tf.sensenData.mu);
@@ -500,10 +519,11 @@ window.SensenStageTwo = SensenStageTwo;
     [ptext layer="3" name="lambda_cr"  x="375" y="290" size="22" color="0x3e8238" text="&tf.sensenData.lambda.cr" width="180" align="right" edge="3px 0x000000" overwrite="true"]
     [ptext layer="3" name="mu_cr"     x="635" y="290" size="22" color="0x3e8238" text="&tf.sensenData.mu.cr" width="180" align="right" edge="3px 0x000000" overwrite="true"]
 
-    [ptext layer="3" name="what_to_do" x="275" y="320" size="30" overwrite="true" text="報酬を選んでください" edge="3px 0x000000" width="730" align="center"]
+    [ptext layer="3" name="what_to_do" x="275" y="320" size="30" overwrite="true" text="報酬を選んでください" edge="3px 0x000000" width="730" align="center" overwrite="true"]
 
-    [glink color="&mp.stage.lambdaReward.getButtonColor()" target="*end_stage_reward" size="20" text="&mp.stage.lambdaReward.getCardText()" x="275" y="370" width="240" height="280" exp="mp.stage.lambdaReward.apply()" enterse="open.mp3" leavese="close.mp3"]
-    [glink color="&mp.stage.muReward.getButtonColor()" target="*end_stage_reward" size="20" text="&mp.stage.muReward.getCardText()" x="765" y="370" width="240" height="280" exp="mp.stage.muReward.apply()" enterse="open.mp3" leavese="close.mp3"]
+    [glink color="&mp.stage.lambdaReward.getButtonColor()" target="*end_stage_reward" size="20" text="&mp.stage.lambdaReward.getCardText()" x="275" y="370" width="240" height="240" exp="mp.stage.lambdaReward.apply()" enterse="open.mp3" leavese="close.mp3"]
+    [glink color="&mp.stage.muReward.getButtonColor()" target="*end_stage_reward" size="20" text="&mp.stage.muReward.getCardText()" x="765" y="370" width="240" height="240" exp="mp.stage.muReward.apply()" enterse="open.mp3" leavese="close.mp3"]
+    [glink color="btn_29_purple" target="*end_stage_reward_reroll" size="24" text="&mp.stage.getRerollButtonText()" exp="mp.stage.doReroll()" x="470" y="650" width="340" enterse="open.mp3" leavese="close.mp3" cond="mp.stage.getRerollCount() > 0"]
     [s]
 *end_stage_reward
     [free layer="3" name="what_to_do"]

@@ -139,7 +139,7 @@ class ArenaController {
         mu.er = this.ER;
         lambda.cr = this.CR;
         mu.cr = this.CR;
-        this.Battle = new BattleSection(lambda, mu, this.enemyList, this.enemyLevel, scenario, target, this.enemySp, [this.enemyFirstRate, this.enemyChargeRate, this.enemyGuardRate]);
+        this.Battle = new BattleSection(lambda, mu, this.enemyList, this.enemyLevel, scenario, target, this.enemySp, [this.enemyFirstRate, this.enemyChargeRate, this.enemyGuardRate], true);
     }
 }
 window.ArenaController = ArenaController;

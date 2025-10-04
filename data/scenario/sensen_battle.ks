@@ -261,7 +261,8 @@ class BattleSection {
     currentPhase = null; // 現在のフェイズ名
     isBattleFinished = false; // 戦闘が終了したかどうかのフラグ
     
-    constructor(l, m, enemyIdList, enemyLevel, scenario, target, enemyDefaultSp=0, weight=[4,2,1]) {
+    constructor(l, m, enemyIdList, enemyLevel, scenario, target, enemyDefaultSp=0, weight=[4,2,1], isArena=false) {
+        this.isArena = isArena;
         // プレイヤーキャラクターをメンバ変数に格納
         this.lambda = new CharaDisplayData(l, BattleSection.#HEROINE_START_X, BattleSection.#HEROINE_START_Y);
         this.mu = new CharaDisplayData(m, BattleSection.#HEROINE_START_X, BattleSection.#HEROINE_START_Y);
@@ -977,6 +978,15 @@ class BattleSection {
             return "逃げる";
         }
     }
+    showBackButton() {
+        if (this.isBattleFinished) {
+            return true;
+        }
+        if (this.isArena) {
+            return true;
+        }
+        return false;
+    }
     forceCleanup() {
         // ヒロインのエフェクトをすべて解除
         this.heroines.forEach(heroineDisp => {
@@ -1005,7 +1015,7 @@ window.BattleSection = BattleSection;
 
 ; 終了・あるいは中断ボタン
 [macro name="battle_end_button"]
-    [glink color="btn_29_green" text="&tf.sensenBattle.getBackButtonText()" size="24" exp="tf.sensenBattle.forceCleanup()" width="&tf.sensenBattle.backButtonWidth" x="&tf.sensenBattle.backButtonX" y="&tf.sensenBattle.backButtonY" storage="&tf.sensenBattle.backStorage" target="&tf.sensenBattle.backTarget" ]
+    [glink color="btn_29_green" text="&tf.sensenBattle.getBackButtonText()" size="24" exp="tf.sensenBattle.forceCleanup()" width="&tf.sensenBattle.backButtonWidth" x="&tf.sensenBattle.backButtonX" y="&tf.sensenBattle.backButtonY" storage="&tf.sensenBattle.backStorage" target="&tf.sensenBattle.backTarget" cond="tf.sensenBattle.showBackButton()"]
 [endmacro]
 
 ; 敵の登場

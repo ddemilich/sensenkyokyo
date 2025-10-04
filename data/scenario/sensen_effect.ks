@@ -353,6 +353,10 @@ class QueensOrder extends Effect {
                 );
                 // 最初からspが高い
                 enemyInstance.sp = 50;
+                // エロ目
+                enemyInstance.firstRate = 1;
+                enemyInstance.chargeRate = 3;
+                enemyInstance.guardRate = 1;
                 const enemyDisplayData = new CharaDisplayData(
                     enemyInstance,
                     (selfDisp.x - 1280),

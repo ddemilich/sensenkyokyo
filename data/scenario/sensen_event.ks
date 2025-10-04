@@ -8,13 +8,16 @@ class SensenStageEvent {
         this.isBig = false;
         this.isBigTrap = false;
         this.enemyCount = 0;
+        this.reroll = 0;
 
         if (Math.random() * 100 < progress * 0.2) {
             this.hasBattle = false;
         }
         if (this.hasBattle) {
+            this.reroll++;
             if (Math.random() * 100 < progress * 0.8) {
                 this.isBig = true;
+                this.reroll++;
             }
             if (this.isBig) {
                 this.enemyCount = BattleUtil.getRandomInt(5, 6);
@@ -28,8 +31,10 @@ class SensenStageEvent {
         }
         if (Math.random() * 100 < progress * 0.5) {
             this.hasTrap = true;
+            this.reroll++;
             if (Math.random() * 100 < progress * 0.8) {
                 this.isBigTrap = true;
+                this.reroll++;
             }
         }
     }
@@ -216,6 +221,7 @@ class SensenStageBossEvent extends SensenStageEvent {
         this.isBig = false;
         this.isBigTrap = false;
         this.enemyCount = 6;
+        this.reroll += 2;
     }
     getProgressPoint() {
         return 0;
@@ -244,6 +250,7 @@ class SensenStageBossEventTwo extends SensenStageEvent {
         this.isBig = false;
         this.isBigTrap = false;
         this.enemyCount = 6;
+        this.reroll += 2;
     }
     getProgressPoint() {
         return 0;
@@ -272,6 +279,7 @@ class SensenStageFixedEventE11 extends SensenStageEvent {
         this.isBig = false;
         this.isBigTrap = false;
         this.enemyCount = 4;
+        this.reroll += 1;
     }
     getProgressPoint() {
         return 0;
@@ -303,6 +311,7 @@ class SensenStageFixedEventE12 extends SensenStageEvent {
         this.isBig = false;
         this.isBigTrap = false;
         this.enemyCount = 4;
+        this.reroll += 1;
     }
     getProgressPoint() {
         return 0;
@@ -334,6 +343,7 @@ class SensenStageFixedEventE13 extends SensenStageEvent {
         this.isBig = false;
         this.isBigTrap = false;
         this.enemyCount = 4;
+        this.reroll += 1;
     }
     getProgressPoint() {
         return 0;
@@ -365,6 +375,7 @@ class SensenStageFixedEventE21 extends SensenStageEvent {
         this.isBig = false;
         this.isBigTrap = false;
         this.enemyCount = 2;
+        this.reroll += 1;
     }
     getProgressPoint() {
         return 0;
@@ -396,6 +407,7 @@ class SensenStageFixedEventE22 extends SensenStageEvent {
         this.isBig = false;
         this.isBigTrap = false;
         this.enemyCount = 3;
+        this.reroll += 1;
     }
     getProgressPoint() {
         return 0;
@@ -427,6 +439,7 @@ class SensenStageFixedEventE23 extends SensenStageEvent {
         this.isBig = false;
         this.isBigTrap = false;
         this.enemyCount = 4;
+        this.reroll += 1;
     }
     getProgressPoint() {
         return 0;

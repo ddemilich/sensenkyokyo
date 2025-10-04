@@ -27,7 +27,7 @@ def resize_images_in_folder(target_dir):
             print(f"フォルダを作成しました: {d}")
 
     # 処理対象の拡張子
-    target_extensions = ('.webp')
+    target_extensions = ('.png', '.webp')
     
     print("-" * 30)
     print(f"フォルダ '{target_dir}' の画像処理を開始します。")

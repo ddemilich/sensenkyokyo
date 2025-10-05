@@ -991,7 +991,8 @@ class BattleSection {
         // ヒロインのエフェクトをすべて解除
         this.heroines.forEach(heroineDisp => {
             heroineDisp.charaInstance.clearAllTemporaryStatuses();
-            heroineDisp.charaInstance.removeActions(); 
+            heroineDisp.charaInstance.removeActions();
+            heroineDisp.charaInstance.bundled = false;
         });
         // 敵を工場に返却
         this.enemies.forEach(enemyDisp => {

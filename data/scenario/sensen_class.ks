@@ -763,7 +763,7 @@ class Heroine extends Character {
         return erAmount;
     }
     getDodgeRate() {
-        if (this.bundled) {
+        if (this.bundled || this.pose == 'knockout') {
             // 拘束中は回避しない
             return 0.0;
         }
@@ -852,7 +852,7 @@ class BossEnemy extends Enemy {
             width = parseInt(width * 2);
         }
         // lpとapを増やす
-        let bossLp = Math.floor(lp * 2.5);
+        let bossLp = Math.floor(lp * 5.0);
         let bossAp = Math.floor(ap * 1.5);
 
         super(name, bossLp, bossAp, label, width, height);

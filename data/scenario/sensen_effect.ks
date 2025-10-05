@@ -75,8 +75,8 @@ class StepByStepEffect extends Effect {
 window.StepByStepEffect = StepByStepEffect;
 
 class BundleEffect extends Effect {
-    static #ER_VALUE_LEVEL2 = 15;
-    static #ER_VALUE_LEVEL3 = 25;
+    static #ER_VALUE_LEVEL2 = 10;
+    static #ER_VALUE_LEVEL3 = 20;
     static #ER_VALUE_RANGE  = 5;
 
     constructor(enemy, duration = -1) {
@@ -272,8 +272,8 @@ class InsaneGas extends Effect {
 
         let targets = allHeroines.filter(hDisp => !hDisp.charaInstance.bundled);
         if (targets.length > 0) {
-            // ER上昇値 = 1 + (1 - マウントのLP/マウントの最大LP) * 20
-            const erAmount = 1 + Math.floor(lplossRate * 20);
+            // ER上昇値 = 1 + (1 - マウントのLP/マウントの最大LP) * 30
+            const erAmount = 1 + Math.floor(lplossRate * 30);
             targets.forEach(hDisp => {
                hDisp.charaInstance.applyErValue(erAmount);
             });
@@ -289,8 +289,8 @@ class InsaneGas extends Effect {
             let targets = allEnemies.filter(eDisp => !eDisp.charaInstance.isDefeated() && !eDisp.charaInstance.bundled);
             // 敵全体のSPを上昇させる
             if (targets.length > 0) {
-                // SP回復値 = 1 + (1 - マウントのLP/マウントの最大LP) * 50
-                let spAmount = 1 + Math.floor(lplossRate * 50);
+                // SP回復値 = 1 + (1 - マウントのLP/マウントの最大LP) * 30
+                let spAmount = 1 + Math.floor(lplossRate * 30);
                 targets.forEach(eDisp => {
                     eDisp.charaInstance.changeSp(spAmount);
                     dispatch('CHARA_SPBAR_REFRESH', {
@@ -345,7 +345,7 @@ class QueensOrder extends Effect {
             for (let i=0; i<2; i++) {
                 const enemyInstance = EnemyFactory.createEnemy(
                     "e23", 
-                    Math.floor(bind.maxLp / 2), 
+                    Math.floor(bind.maxLp / 4), 
                     Math.floor(bind.currentAp), 
                     // ちょっと大きくする
                     Math.floor(bind.width/2 * 1.1), 
@@ -370,7 +370,7 @@ class QueensOrder extends Effect {
             targets.sort((a, b) => a.charaInstance.lp - b.charaInstance.lp);
             // ソート後、配列の最初の要素が最もLPの小さいターゲットとなる
             const weakestTarget = targets[0];
-            let lpAmount = 1 + Math.floor(bind.maxLp * 0.07);
+            let lpAmount = 1 + Math.floor(bind.maxLp * 0.03);
             weakestTarget.charaInstance.heal(lpAmount);
             dispatch('ENEMY_HEAL_DISPLAY', {
                 source: selfDisp,
@@ -384,7 +384,7 @@ class QueensOrder extends Effect {
         if (lplossRate >= 0.75) {
             retargets.forEach(eDisp => {
                 eDisp.charaInstance.applyActionCountBuff('QueensOrder', 1);
-                let spAmount = Math.floor(eDisp.charaInstance.maxSp * 0.2);
+                let spAmount = Math.floor(eDisp.charaInstance.maxSp * 0.1);
                 eDisp.charaInstance.changeSp(spAmount);
                 dispatch('ENEMY_POWERUP', {
                     source: eDisp,
@@ -395,7 +395,7 @@ class QueensOrder extends Effect {
             const randomIndex = Math.floor(Math.random() * retargets.length);
             const targetEnemyDisp = retargets[randomIndex]
             targetEnemyDisp.charaInstance.applyActionCountBuff('QueensOrder', 1);
-            let spAmount = Math.floor(targetEnemyDisp.charaInstance.maxSp * 0.2);
+            let spAmount = Math.floor(targetEnemyDisp.charaInstance.maxSp * 0.1);
             targetEnemyDisp.charaInstance.changeSp(spAmount);
             dispatch('ENEMY_POWERUP', {
                 source: targetEnemyDisp,

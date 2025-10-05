@@ -249,7 +249,7 @@ class SensenStageBossEventTwo extends SensenStageEvent {
         this.hasTrap = false;
         this.isBig = false;
         this.isBigTrap = false;
-        this.enemyCount = 6;
+        this.enemyCount = 3;
         this.reroll += 2;
     }
     getProgressPoint() {
